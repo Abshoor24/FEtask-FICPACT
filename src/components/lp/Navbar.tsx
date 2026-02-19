@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import QuestButton from "../Button";
 
 export default function Navbar() {
   const scrollTo = (id: string) => {
@@ -38,9 +39,11 @@ export default function Navbar() {
           </nav>
 
           {/* CTA */}
-          <button className="bg-[#7C3BED] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#6a32d9] transition">
-            Mulai Quest
-          </button>
+          <QuestButton
+          label="Mulai Quest"
+          className="text-sm font-medium px-5 py-2" 
+          onClick={() => ("/")}
+          />
         </div>
       </div>
     </header>
