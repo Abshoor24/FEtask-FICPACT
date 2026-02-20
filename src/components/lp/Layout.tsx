@@ -13,9 +13,9 @@ function Layout() {
       <div className='min-h-screen'>
         <Navbar/>
           <Sec1 />
-          <Sec2 />
-          <Sec3 />
           <Sec4 />
+          <Sec3 />
+          <Sec2 />
           <Sec5 />
         <Footer/>
       </div>

@@ -1,6 +1,13 @@
+"use client";
+
 import React from "react";
 
 export default function Footer() {
+
+   const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <footer className="w-full bg-white border-t">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -9,12 +16,12 @@ export default function Footer() {
           
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#7C3BED] flex items-center justify-center text-white font-bold">
-                T
-              </div>
-              <span className="font-semibold text-lg">TaskQuest</span>
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo("home")}>
+            <div className="w-8 h-8 rounded-lg bg-[#7C3BED] flex items-center justify-center text-white font-bold">
+              T
             </div>
+            <span className="font-semibold text-lg">TaskQuest</span>
+          </div>
             <p className="text-sm text-green-700 max-w-xs leading-relaxed">
               Platform produktivitas gamifikasi pertama di Indonesia khusus
               untuk pelajar dan mahasiswa yang ambisius.
@@ -51,9 +58,7 @@ export default function Footer() {
               {["🔗", "🌐", "▶️"].map((icon, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full bg-green-50 text-green-700
-                  flex items-center justify-center cursor-pointer
-                  hover:bg-[#7C3BED] hover:text-white transition"
+                  className="w-10 h-10 rounded-full bg-green-50 text-green-700 flex items-center justify-center cursor-pointer hover:bg-[#7C3BED] hover:text-white transition"
                 >
                   {icon}
                 </div>

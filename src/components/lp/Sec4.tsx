@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Sec4() {
   return (
-    <section className="w-full bg-white py-20">
+    <section className="w-full bg-white py-20" id="fitur">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
 

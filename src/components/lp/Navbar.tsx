@@ -15,7 +15,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo("home")}>
             <div className="w-8 h-8 rounded-lg bg-[#7C3BED] flex items-center justify-center text-white font-bold">
               T
             </div>
@@ -27,14 +27,14 @@ export default function Navbar() {
             <button onClick={() => scrollTo("fitur")} className="hover:text-[#7C3BED] transition">
               Fitur
             </button>
-            <button onClick={() => scrollTo("mana")} className="hover:text-[#7C3BED] transition">
-              Mana
+            <button onClick={() => scrollTo("ai-sage")} className="hover:text-[#7C3BED] transition">
+              AI 
             </button>
-            <button onClick={() => scrollTo("peringkat")} className="hover:text-[#7C3BED] transition">
-              Papan Peringkat
+            <button onClick={() => scrollTo("focus")} className="hover:text-[#7C3BED] transition">
+              Focus
             </button>
-            <button onClick={() => scrollTo("komunitas")} className="hover:text-[#7C3BED] transition">
-              Komunitas
+            <button onClick={() => scrollTo("join-us")} className="hover:text-[#7C3BED] transition">
+              Join Us
             </button>
           </nav>
 

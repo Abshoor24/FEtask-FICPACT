@@ -6,17 +6,17 @@ export default function Sec3() {
   return (
     <section
       id="ai-sage"
-      className="w-full bg-[#F7FAF8] py-24 overflow-hidden min-h-screen" 
+      className="w-full bg-[#F7FAF8] overflow-hidden min-h-screen flex items-center"
     >
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          
+
           {/* LEFT – AI CARD */}
-          <div className="relative">
+          <div className="relative flex justify-center">
             {/* Glow background */}
             <div className="absolute -inset-6 bg-linear-to-br from-green-200/60 to-transparent blur-3xl rounded-full" />
 
-            <div className="relative bg-white rounded-3xl shadow-2xl p-8">
+            <div className="relative bg-white rounded-3xl shadow-2xl p-8 max-w-7xl">
               {/* Header */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full bg-green-400 flex items-center justify-center text-white text-xl shadow">
@@ -31,7 +31,7 @@ export default function Sec3() {
               </div>
 
               {/* Insight bubble */}
-              <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 mb-4">
+              <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 mb-4 text-center">
                 Berdasarkan data minggu lalu, kekuatan fokusmu meningkat
                 <span className="text-green-600 font-semibold">
                   {" "}
@@ -41,8 +41,8 @@ export default function Sec3() {
               </div>
 
               {/* Recommendation bubble */}
-              <div className="bg-green-100 border border-green-300 rounded-xl p-4 text-sm text-green-800 mb-8">
-                Selesaikan <strong>{"Boss Task"}</strong> Kalkulus sekarang
+              <div className="bg-green-100 border border-green-300 rounded-xl p-4 text-sm text-green-800 mb-8 text-center">
+                Selesaikan <strong>Boss Task</strong> Kalkulus sekarang
                 untuk mendapatkan <strong>+50 XP Bonus Kecepatan!</strong>
               </div>
 
@@ -56,7 +56,7 @@ export default function Sec3() {
           </div>
 
           {/* RIGHT – TEXT CONTENT */}
-          <div className="space-y-6">
+          <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
               Nasihat Sang Bijak{" "}
               <span className="text-[#7C3BED]">AI</span>
@@ -70,32 +70,20 @@ export default function Sec3() {
 
             {/* Feature list */}
             <ul className="space-y-4 pt-4">
-              <li className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-green-400 text-white flex items-center justify-center text-sm">
-                  ✓
-                </span>
-                <span className="font-medium text-gray-800">
-                  Analisis Waktu Produktif
-                </span>
-              </li>
-
-              <li className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-green-400 text-white flex items-center justify-center text-sm">
-                  ✓
-                </span>
-                <span className="font-medium text-gray-800">
-                  Rekomendasi Istirahat (MP Recovery)
-                </span>
-              </li>
-
-              <li className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-green-400 text-white flex items-center justify-center text-sm">
-                  ✓
-                </span>
-                <span className="font-medium text-gray-800">
-                  Prediksi Burn-out
-                </span>
-              </li>
+              {[
+                "Analisis Waktu Produktif",
+                "Rekomendasi Istirahat (MP Recovery)",
+                "Prediksi Burn-out",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-3">
+                  <span className="w-6 h-6 rounded-full bg-green-400 text-white flex items-center justify-center text-sm">
+                    ✓
+                  </span>
+                  <span className="font-medium text-gray-800">
+                    {item}
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
 

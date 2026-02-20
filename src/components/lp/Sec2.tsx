@@ -5,13 +5,14 @@ import React from "react";
 export default function Sec2() {
   return (
     <section
-      id="power-of-3"
-      className="w-full bg-[#F4FBF6] py-20 min-h-screen"
+      id="focus"
+      className="w-full bg-[#F4FBF6] min-h-screen flex items-center justify-center"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        
+      {/* WRAPPER CENTER */}
+      <div className="w-full max-w-7xl px-6 flex flex-col items-center">
+
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        <div className="text-center max-w-2xl mb-14">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
             The Power of 3
           </h2>
@@ -22,10 +23,10 @@ export default function Sec2() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          
-          {/* Card 1 - High Priority */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-green-400 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full place-items-center">
+
+          {/* Card 1 */}
+          <div className="bg-white rounded-2xl p-6 border-2 border-green-400 shadow-sm w-full max-w-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                 🛡️
@@ -54,8 +55,8 @@ export default function Sec2() {
             </div>
           </div>
 
-          {/* Card 2 - Medium */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+          {/* Card 2 */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm w-full max-w-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
                 ⚡
@@ -83,8 +84,8 @@ export default function Sec2() {
             </div>
           </div>
 
-          {/* Card 3 - Daily */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+          {/* Card 3 */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm w-full max-w-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
                 📘
