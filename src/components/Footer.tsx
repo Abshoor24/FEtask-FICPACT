@@ -20,7 +20,7 @@ export default function Footer() {
             <div className="w-8 h-8 rounded-lg bg-[#7C3BED] flex items-center justify-center text-white font-bold">
               T
             </div>
-            <span className="font-semibold text-lg">TaskQuest</span>
+            <span className="font-semibold text-lg text-black">TaskQuest</span>
           </div>
             <p className="text-sm text-green-700 max-w-xs leading-relaxed">
               Platform produktivitas gamifikasi pertama di Indonesia khusus
@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* Navigasi */}
           <div className="space-y-3">
-            <h4 className="font-semibold">Navigasi</h4>
+            <h4 className="font-semibold text-black">Navigasi</h4>
             <ul className="space-y-2 text-sm text-green-700">
               <li className="hover:text-[#7C3BED] cursor-pointer">Beranda</li>
               <li className="hover:text-[#7C3BED] cursor-pointer">Cara Kerja</li>
@@ -41,7 +41,7 @@ export default function Footer() {
 
           {/* Dukungan */}
           <div className="space-y-3">
-            <h4 className="font-semibold">Dukungan</h4>
+            <h4 className="font-semibold text-black">Dukungan</h4>
             <ul className="space-y-2 text-sm text-green-700">
               <li className="hover:text-[#7C3BED] cursor-pointer">Pusat Bantuan</li>
               <li className="hover:text-[#7C3BED] cursor-pointer">Kebijakan Privasi</li>
@@ -53,7 +53,7 @@ export default function Footer() {
 
           {/* Media Sosial */}
           <div className="space-y-3">
-            <h4 className="font-semibold">Media Sosial</h4>
+            <h4 className="font-semibold text-black">Media Sosial</h4>
             <div className="flex gap-4">
               {["🔗", "🌐", "▶️"].map((icon, i) => (
                 <div
