@@ -2,8 +2,15 @@
 
 import React from "react";
 import QuestButton from "../Button";
+import dynamic from "next/dynamic";
 
 export default function Sec1() {
+
+  const RotatingText = dynamic(
+    () => import("../RotatingText"),
+    { ssr: false }
+  )
+
   return (
     <section
       id="home"
@@ -15,11 +22,28 @@ export default function Sec1() {
           {/* LEFT */}
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-              Ubah Tugas Jadi
-              <span className="block text-[#7C3BED]">
-                Petualangan Epik
-              </span>
-            </h1>
+    Ubah Tugas Jadi{" "}
+    <span className="inline-flex align-middle">
+      <RotatingText
+        texts={["Fokus", "Produktif", "Disiplin", "Naik Level"]}
+        mainClassName="
+          px-3 py-1
+          bg-[#7C3BED] text-white
+          rounded-lg
+          inline-flex items-center justify-center
+          text-4xl md:text-5xl lg:text-6xl
+        "
+        staggerFrom="last"
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "-120%" }}
+        staggerDuration={0.03}
+        splitLevelClassName="overflow-hidden"
+        transition={{ type: "spring", damping: 28, stiffness: 350 }}
+        rotationInterval={2200}
+      />
+    </span>
+  </h1>
 
             <p className="max-w-xl text-gray-600 leading-relaxed">
               Selesaikan quest harian, naikkan level IPK-mu, dan jadilah legenda
@@ -28,8 +52,8 @@ export default function Sec1() {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <QuestButton
-                label="▶ Mulai Quest Kamu"
-                className="text-sm font-semibold px-10 py-4"
+                label="Mulai Quest Kamu"
+                className="text-sm font-bold px-10 py-4"
                 onClick={() => {}}
               />
 

@@ -10,7 +10,7 @@ import Sec4 from './Sec4'
 function Layout() {
   return (
     <>
-      <div className='min-h-screen bg-white'>
+      <div className='min-h-screen bg-[#F7FAF8]'>
         <Navbar/>
           <Sec1 />
           <Sec4 />

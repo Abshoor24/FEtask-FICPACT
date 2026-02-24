@@ -13,14 +13,7 @@ export default function Navbar() {
     <header className="sticky top-3 z-50 flex justify-center">
       
       {/* GLASS CONTAINER */}
-      <div className="
-        w-[95%] max-w-6xl
-        rounded-2xl
-        backdrop-blur-xl
-        bg-white/10
-        border border-white/20
-        shadow-lg
-      ">
+      <div className="w-[95%] max-w-6xl rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-lg">
         <div className="px-6 py-1">
           <div className="flex h-14 items-center justify-between">
             
