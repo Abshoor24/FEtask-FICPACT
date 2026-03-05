@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 import {
   LayoutGrid,
@@ -9,7 +10,6 @@ import {
   Briefcase,
 //   Folder,
   Plus,
-  Settings,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -25,9 +25,10 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const menuItems: MenuItem[] = [
-    { name: "All Tasks", icon: LayoutGrid, path: "/" },
+    { name: "All Tasks", icon: LayoutGrid, path: "/dashboard" },
     { name: "Today", icon: Calendar, path: "/today" },
     { name: "Upcoming", icon: Clock, path: "/upcoming" },
+    { name: "Profile", icon: User, path: "/profile" },
   ];
 
   const categories: MenuItem[] = [
@@ -122,11 +123,12 @@ export default function Sidebar() {
       </div>
 
       {/* USER */}
-      <div className="pt-4 border-t">
+      <Link href="/profile">
+                  <div className="pt-4 border-t">
         <div className="flex items-center justify-between px-3 py-3 rounded-xl bg-[#7C3BED]/5">
           <div className="flex items-center gap-3">
             <Image
-              src="https://i.pravatar.cc/40"
+              src="/amba1.jpg"
               width={40}
               height={40}
               alt="User"
@@ -134,15 +136,15 @@ export default function Sidebar() {
             />
             <div>
               <p className="text-sm font-semibold text-gray-900">
-                Alex Rivera
+                MASAmbaaaa
               </p>
               <p className="text-xs text-gray-500">Pro Account</p>
             </div>
           </div>
-
-          <Settings size={18} className="text-gray-500 cursor-pointer" />
         </div>
       </div>
+      </Link>
+
     </aside>
   );
 }
