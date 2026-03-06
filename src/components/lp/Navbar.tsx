@@ -2,6 +2,7 @@
 
 import React from "react";
 import QuestButton from "../Button";
+import Link from "next/link";
 
 export default function Navbar() {
   const scrollTo = (id: string) => {
@@ -56,12 +57,14 @@ export default function Navbar() {
               </button>
             </nav>
 
-            {/* CTA */}
-            <QuestButton
+            <Link href={"/auth/login"}>
+              <QuestButton
               label="Mulai Quest"
               className="px-5 py-2 text-sm font-medium"
               onClick={() => "/"}
             />
+            </Link>
+            
           </div>
         </div>
       </div>

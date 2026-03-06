@@ -3,6 +3,7 @@
 import React from "react";
 import QuestButton from "../Button";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 export default function Sec1() {
 
@@ -51,11 +52,13 @@ export default function Sec1() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <QuestButton
-                label="Mulai Quest Kamu"
-                className="text-sm font-bold px-10 py-4"
-                onClick={() => {}}
-              />
+              <Link href="/auth/login">
+                <QuestButton
+                  label="Mulai Quest Kamu"
+                  className="text-sm font-bold px-10 py-4"
+                  onClick={() => {}}
+                />
+              </Link>
 
               <button className="px-10 py-4 rounded-full border border-gray-300 font-semibold text-gray-700 transition hover:border-[#7C3BED] hover:text-[#7C3BED]">
                 👥 Lihat Guild

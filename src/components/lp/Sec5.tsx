@@ -2,6 +2,7 @@
 
 import React from "react";
 import QuestButton from "../Button";
+import Link from "next/link";
 
 export default function Sec5() {
   return (
@@ -30,13 +31,15 @@ export default function Sec5() {
               organized, gamified success. Start your free quest today.
             </p>
 
-            <QuestButton
+          <Link href="/auth/login">
+             <QuestButton
               label="Mulai Quest"
               className="px-8 py-3 text-sm font-medium"
               onClick={() => {
-                // router.push("/") nanti
               }}
             />
+          </Link>
+           
 
             <p className="text-xs text-white/60">
               No credit card required • Free forever for individuals
