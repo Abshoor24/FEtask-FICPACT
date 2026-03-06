@@ -2,8 +2,23 @@ import { ArrowLeft, HelpCircle, Mail, Zap } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
+import { useForgotPassword } from "@/data/hooks/useAuth";
+import { useForm } from "@tanstack/react-form";
+import { forgotPasswordSchema } from "@/common/validations/authValidation";
 
 export default function ForgotPasswordRightSection() {
+  const { mutate: forgotPasswordMutate } = useForgotPassword();
+  const form = useForm({
+    defaultValues: {
+      email: '',
+    },
+    validators: {
+      onSubmit: forgotPasswordSchema
+    },
+    onSubmit: ({ value }) => {
+      forgotPasswordMutate(value.email)
+    }
+  })
   return (
     <div className="flex-1 bg-white px-6 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-12 flex flex-col justify-center min-h-150 lg:min-h-screen">
       <motion.div
@@ -24,27 +39,41 @@ export default function ForgotPasswordRightSection() {
         </motion.div>
 
         {/* Form */}
-        <motion.form className="space-y-5 sm:space-y-6" variants={fadeUp}>
+        <motion.form onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit(e);
+        }} className="space-y-5 sm:space-y-6" variants={fadeUp}>
           {/* Email Input */}
-          <div className="space-y-1.5 sm:space-y-2">
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-slate-700"
-            >
-              Email Universitas
-            </label>
-            <div className="relative">
-              <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
-              </div>
-              <input
-                id="email"
-                type="email"
-                placeholder="nama@mahasiswa.univ.ac.id"
-                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-3.5 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
-              />
-            </div>
-          </div>
+          <form.Field name="email">
+            {(field) => {
+              return (
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-slate-700"
+                  >
+                    Email Universitas
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
+                    </div>
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      type="email"
+                      placeholder="nama@mahasiswa.univ.ac.id"
+                      className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-3.5 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    />
+                  </div>
+                </div>
+              )
+            }}
+          </form.Field>
 
           {/* Submit Button with 3D Effect */}
           <div className="relative pt-2">

@@ -37,6 +37,13 @@ export function useVerifyAccount() {
     })
 }
 
+export function useForgotPassword() {
+    return useMutation({
+        mutationKey: ["forgot_password"],
+        mutationFn: (email: string) => authService.forgotPassword(email),
+    })
+}
+
 export function useResendVerificationToken() {
     return useMutation({
         mutationKey: ["resend_verification_token"],

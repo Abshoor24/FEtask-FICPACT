@@ -13,5 +13,9 @@ export const registerSchema = loginSchema.extend({
     path: ["confirmPassword"],
 });
 
+export const forgotPasswordSchema = z.object({
+    email: z.string().email({ message: "Email tidak valid" }),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>
 export type RegisterSchema = z.infer<typeof registerSchema>

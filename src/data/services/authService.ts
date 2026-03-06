@@ -53,6 +53,16 @@ class AuthService {
         });
     }
 
+    public async forgotPassword(email: string) {
+        return await apiClient({
+            url: "/auth/forgot-password",
+            method: "POST",
+            data: {
+                email
+            } ,
+        });
+    }
+
     public async resendVerificationToken() {
         return await apiClient({
             url: "/auth/resend-verification-code",
