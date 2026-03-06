@@ -1,3 +1,4 @@
-interface Session {
-    
+interface SessionModel {
+    id: string;
+    isverified: boolean;
 }

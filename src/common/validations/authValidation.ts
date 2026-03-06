@@ -7,6 +7,10 @@ export const loginSchema = z.object({
 
 export const registerSchema = loginSchema.extend({
     name: z.string().min(2, { message: "Nama minimal 2 karakter" }),
+    confirmPassword: z.string().min(6, { message: "Password minimal 6 karakter" }),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Password dan Confirm Password harus sama",
+    path: ["confirmPassword"],
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>

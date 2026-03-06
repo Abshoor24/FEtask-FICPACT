@@ -29,3 +29,17 @@ export function useRegister() {
         mutationFn: (data: RegisterSchema) => authService.register(data.name, data.email, data.password),
     })
 }
+
+export function useVerifyAccount() {
+    return useMutation({
+        mutationKey: ["verify_account"],
+        mutationFn: () => authService.verifyAccount(),
+    })
+}
+
+export function useResendVerificationToken() {
+    return useMutation({
+        mutationKey: ["resend_verification_token"],
+        mutationFn: () => authService.resendVerificationToken(),
+    })
+}

@@ -20,6 +20,9 @@ export async function proxy(request: NextRequest) {
         if (!session) {
             return NextResponse.redirect(new URL("/auth/login", request.url));
         }
+        if (!session.data.isverified) {
+            return NextResponse.redirect(new URL("/auth/verify", request.url));
+        }
     }
 
 

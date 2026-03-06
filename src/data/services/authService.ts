@@ -12,9 +12,9 @@ class AuthService {
     //     }
     // }
 
-    public async checkSession(token: string | undefined) {
+    public async checkSession(token: string | undefined)  {
         try {
-            return await apiClient({
+            return await apiClient<{data: SessionModel}>({
                 url: "/user/session",
                 method: "GET",
                 headers: {
@@ -27,27 +27,34 @@ class AuthService {
     }
 
     public async login(email: string, password: string) {
-        try {
             return await apiClient({
                 url: "/auth/login",
                 method: "POST",
                 data: { email, password },
             });
-        } catch (error) {
-            console.error(error);
-        }
+  
     }
 
     public async register(name: string, email: string, password: string) {
-        try {
             return await apiClient({
                 url: "/auth/register",
                 method: "POST",
                 data: { name, email, password },
             });
-        } catch (error) {
-            console.error(error);
-        }
+    }
+
+    public async verifyAccount(){
+        return await apiClient({
+            url: "/auth/verify-account",
+            method: "POST",
+        });
+    }
+
+    public async resendVerificationToken() {
+        return await apiClient({
+            url: "/auth/resend-verification-code",
+            method: "POST",
+        });
     }
 }
 
