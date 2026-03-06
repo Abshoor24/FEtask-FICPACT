@@ -43,10 +43,13 @@ class AuthService {
             });
     }
 
-    public async verifyAccount(){
+    public async verifyAccount(token: string) {
         return await apiClient({
             url: "/auth/verify-account",
             method: "POST",
+            data: {
+                token
+            } ,
         });
     }
 

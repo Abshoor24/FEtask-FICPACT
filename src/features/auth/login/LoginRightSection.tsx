@@ -145,7 +145,7 @@ export default function LoginRightSection() {
               className="relative w-full py-3.5 bg-violet-600 text-white rounded-xl font-bold text-base hover:bg-violet-700 transition hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
             >
               <Sword className="w-5 h-5" />
-              Mulai Quest
+              {isPending ? "Memasuki Dunia..." : "Mulai Quest"}
             </button>
           </div>
         </motion.form>

@@ -1,4 +1,4 @@
 interface SessionModel {
     id: string;
-    isverified: boolean;
+    isVerified: boolean;
 }

@@ -4,11 +4,42 @@ import { Sparkles } from 'lucide-react'
 import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { fadeUp, stagger } from '@/components/motion'
+import { useResendVerificationToken, useVerifyAccount } from '@/data/hooks/useAuth';
 
 export default function VerifyRightSection() {
+  const {mutate: verifyMutate, isPending: isLoading} = useVerifyAccount();
+  const {mutate: resendMutate, isPending: isResending} = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [resendCooldown, setResendCooldown] = useState<number>(0);
+  const [canResend, setCanResend] = useState<boolean>(true);
 
+    React.useEffect(() => {
+    const lastResendTime = localStorage.getItem('lastResendTime');
+    if (lastResendTime) {
+      const elapsed = Date.now() - parseInt(lastResendTime);
+      const remaining = Math.max(0, 300 - Math.floor(elapsed / 1000)); // 300 detik = 5 menit
+      
+      if (remaining > 0) {
+        setResendCooldown(remaining);
+        setCanResend(false);
+      }
+    }
+  }, []);
+
+    React.useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => {
+        setResendCooldown(resendCooldown - 1);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    } else if (resendCooldown === 0 && !canResend) {
+      setCanResend(true);
+      localStorage.removeItem('lastResendTime');
+    }
+  }, [resendCooldown, canResend]);
+  
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single character
     
@@ -44,15 +75,26 @@ export default function VerifyRightSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join('');
-    console.log('Verification code:', code);
-    // Add your verification logic here
+    verifyMutate(code);
   };
 
   const handleResend = () => {
-    console.log('Resending verification code...');
-    // Add your resend logic here
+    if (!canResend || isResending) return;
+    
+    // Set cooldown 5 menit (300 detik)
+    setResendCooldown(300);
+    setCanResend(false);
+    localStorage.setItem('lastResendTime', Date.now().toString());
+    
+    resendMutate();
   };
 
+  // Format waktu mm:ss
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
   return (
     <div className="flex-1 bg-white px-6 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-12 flex flex-col justify-center min-h-125 lg:min-h-screen">
       <motion.div 
@@ -103,10 +145,21 @@ export default function VerifyRightSection() {
                 type="submit"
                 className="relative w-full py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl font-bold text-base transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
               >
-                Verifikasi & Mulai Quest
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  <>
+                            Verifikasi & Mulai Quest
                 <Sparkles className="w-5 h-5" />
+                  </>
+                )}
               </button>
             </div>
+
+            {/* Resend Code Link */}
 
             {/* Resend Code Link */}
             <div className="text-center">
@@ -116,9 +169,20 @@ export default function VerifyRightSection() {
               <button
                 type="button"
                 onClick={handleResend}
-                className="text-violet-600 hover:text-violet-700 font-bold text-base transition-colors duration-200"
+                disabled={!canResend || isResending}
+                className={`font-bold text-base transition-colors duration-200 ${
+                  canResend && !isResending
+                    ? 'text-violet-600 hover:text-violet-700 cursor-pointer'
+                    : 'text-slate-400 cursor-not-allowed'
+                }`}
               >
-                Kirim Ulang Kode
+                {isResending ? (
+                  'Mengirim...'
+                ) : !canResend ? (
+                  `Kirim Ulang dalam ${formatTime(resendCooldown)}`
+                ) : (
+                  'Kirim Ulang Kode'
+                )}
               </button>
             </div>
           </div>

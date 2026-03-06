@@ -33,7 +33,7 @@ export function useRegister() {
 export function useVerifyAccount() {
     return useMutation({
         mutationKey: ["verify_account"],
-        mutationFn: () => authService.verifyAccount(),
+        mutationFn: (token: string) => authService.verifyAccount(token),
     })
 }
 
