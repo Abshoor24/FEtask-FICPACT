@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authService } from "./data/services/auth.service";
+import { authService } from "./data/services/authService";
 
 export async function proxy(request: NextRequest) {
     const pathName = request.nextUrl.pathname

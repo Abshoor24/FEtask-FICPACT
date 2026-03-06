@@ -25,6 +25,30 @@ class AuthService {
             console.error(error);
         }
     }
+
+    public async login(email: string, password: string) {
+        try {
+            return await apiClient({
+                url: "/auth/login",
+                method: "POST",
+                data: { email, password },
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    public async register(name: string, email: string, password: string) {
+        try {
+            return await apiClient({
+                url: "/auth/register",
+                method: "POST",
+                data: { name, email, password },
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 export const authService = new AuthService();
