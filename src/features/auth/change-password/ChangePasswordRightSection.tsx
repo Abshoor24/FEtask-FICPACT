@@ -4,12 +4,14 @@ import { ArrowLeft, ArrowRight, Check, Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
+import SuccessModal from "@/components/SuccessModal";
 
 export default function ChangePasswordRightSection() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Password validation rules
   const hasMinLength = password.length >= 8;
@@ -20,6 +22,9 @@ export default function ChangePasswordRightSection() {
     e.preventDefault();
     // Add your password change logic here
     console.log("Password change submitted");
+    
+    // Show success modal
+    setIsModalOpen(true);
   };
 
   return (
@@ -171,6 +176,16 @@ export default function ChangePasswordRightSection() {
           </a>
         </motion.div>
       </motion.div>
+
+      {/* Success Modal */}
+      <SuccessModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Berhasil Diperbarui!"
+        description="Kata sandi kamu sudah aman. Sekarang, mari kembali ke petualanganmu!"
+        buttonText="Lanjut ke Dashboard"
+        redirectTo="/dashboard"
+      />
     </div>
   );
 }
