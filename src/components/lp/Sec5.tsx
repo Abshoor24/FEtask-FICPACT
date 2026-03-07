@@ -4,7 +4,11 @@ import React from "react";
 import QuestButton from "../Button";
 import Link from "next/link";
 
-export default function Sec5() {
+interface Props {
+  session: SessionModel | null;
+}
+
+export default function Sec5({ session }: Props) {
   return (
     <section
       id="join-us"
@@ -13,7 +17,6 @@ export default function Sec5() {
       {/* CENTER WRAPPER */}
       <div className="w-full max-w-7xl px-6 flex justify-center">
         <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl px-8 py-16 md:px-16 text-center text-white bg-linear-to-br from-[#7C3BED] via-[#6D28D9] to-[#4C1D95]">
-
           {/* Decorative glow */}
           <div className="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-black/20 blur-3xl" />
@@ -31,15 +34,23 @@ export default function Sec5() {
               organized, gamified success. Start your free quest today.
             </p>
 
-          <Link href="/auth/login">
-             <QuestButton
-              label="Mulai Quest"
-              className="px-8 py-3 text-sm font-medium"
-              onClick={() => {
-              }}
-            />
-          </Link>
-           
+            {session ? (
+              <Link href="/dashboard">
+                <QuestButton
+                  label="Lanjutkan perjalanan kamu"
+                  className="px-8 py-3 text-sm font-medium"
+                  onClick={() => {}}
+                />
+              </Link>
+            ) : (
+              <Link href="/auth/login">
+                <QuestButton
+                  label="Mulai Quest"
+                  className="px-8 py-3 text-sm font-medium"
+                  onClick={() => {}}
+                />
+              </Link>
+            )}
 
             <p className="text-xs text-white/60">
               No credit card required • Free forever for individuals
