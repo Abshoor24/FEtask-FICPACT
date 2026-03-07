@@ -4,7 +4,11 @@ import React from "react";
 import QuestButton from "../Button";
 import Link from "next/link";
 
-export default function Navbar() {
+interface Props {
+  session: SessionModel | null;
+}
+
+export default function Navbar({ session }: Props) {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -57,14 +61,23 @@ export default function Navbar() {
               </button>
             </nav>
 
-            <Link href={"/auth/login"}>
-              <QuestButton
-              label="Mulai Quest"
-              className="px-5 py-2 text-sm font-medium"
-              onClick={() => "/"}
-            />
-            </Link>
-            
+            {session ? (
+              <Link href={"/dashboard"}>
+                <QuestButton
+                  label="Lanjutkan Quest"
+                  className="px-5 py-2 text-sm font-medium"
+                  onClick={() => "/"}
+                />
+              </Link>
+            ) : (
+              <Link href={"/auth/login"}>
+                <QuestButton
+                  label="Mulai Quest"
+                  className="px-5 py-2 text-sm font-medium"
+                  onClick={() => "/"}
+                />
+              </Link>
+            )}
           </div>
         </div>
       </div>

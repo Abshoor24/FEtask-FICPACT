@@ -5,12 +5,12 @@ import QuestButton from "../Button";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
-export default function Sec1() {
+interface Props {
+  session: SessionModel | null;
+}
 
-  const RotatingText = dynamic(
-    () => import("../RotatingText"),
-    { ssr: false }
-  )
+export default function Sec1({ session }: Props) {
+  const RotatingText = dynamic(() => import("../RotatingText"), { ssr: false });
 
   return (
     <section
@@ -19,32 +19,31 @@ export default function Sec1() {
     >
       <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
           {/* LEFT */}
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-    Ubah Tugas Jadi{" "}
-    <span className="inline-flex align-middle">
-      <RotatingText
-        texts={["Fokus", "Produktif", "Disiplin", "Naik Level"]}
-        mainClassName="
+              Ubah Tugas Jadi{" "}
+              <span className="inline-flex align-middle">
+                <RotatingText
+                  texts={["Fokus", "Produktif", "Disiplin", "Naik Level"]}
+                  mainClassName="
           px-3 py-1
           bg-[#7C3BED] text-white
           rounded-lg
           inline-flex items-center justify-center
           text-4xl md:text-5xl lg:text-6xl
         "
-        staggerFrom="last"
-        initial={{ y: "100%" }}
-        animate={{ y: 0 }}
-        exit={{ y: "-120%" }}
-        staggerDuration={0.03}
-        splitLevelClassName="overflow-hidden"
-        transition={{ type: "spring", damping: 28, stiffness: 350 }}
-        rotationInterval={2200}
-      />
-    </span>
-  </h1>
+                  staggerFrom="last"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-120%" }}
+                  staggerDuration={0.03}
+                  splitLevelClassName="overflow-hidden"
+                  transition={{ type: "spring", damping: 28, stiffness: 350 }}
+                  rotationInterval={2200}
+                />
+              </span>
+            </h1>
 
             <p className="max-w-xl text-gray-600 leading-relaxed">
               Selesaikan quest harian, naikkan level IPK-mu, dan jadilah legenda
@@ -52,13 +51,23 @@ export default function Sec1() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link href="/auth/login">
-                <QuestButton
-                  label="Mulai Quest Kamu"
-                  className="text-sm font-bold px-10 py-4"
-                  onClick={() => {}}
-                />
-              </Link>
+              {session ? (
+                <Link href="/dashboard">
+                  <QuestButton
+                    label="Lanjutkan perjalanan kamu"
+                    className="text-sm font-bold px-10 py-4"
+                    onClick={() => {}}
+                  />
+                </Link>
+              ) : (
+                <Link href="/auth/login">
+                  <QuestButton
+                    label="Mulai Quest Kamu"
+                    className="text-sm font-bold px-10 py-4"
+                    onClick={() => {}}
+                  />
+                </Link>
+              )}
 
               <button className="px-10 py-4 rounded-full border border-gray-300 font-semibold text-gray-700 transition hover:border-[#7C3BED] hover:text-[#7C3BED]">
                 👥 Lihat Guild
@@ -68,13 +77,19 @@ export default function Sec1() {
 
           {/* RIGHT CARD */}
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md md:max-w-lg bg-white rounded-3xl p-8 shadow-2xl">
-              <div className="relative bg-green-50 rounded-2xl p-6 h-64 flex flex-col justify-center">
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white px-5 py-2 rounded-full shadow text-sm font-semibold">
+            <div className="relative w-full max-w-md md:max-w-lg bg-white rounded-3xl p-8 shadow-2xl rotate-3">
+              <div className="relative bg-green-50 rounded-2xl p-6 h-64 flex flex-col justify-center overflow-hidden">
+                {/* Background Image Samar */}
+                <div
+                  className="absolute inset-0 bg-center bg-no-repeat bg-cover opacity-8 pointer-events-none"
+                  style={{ backgroundImage: "url('/student.png')" }}
+                ></div>
+
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white px-5 py-2 rounded-full shadow text-sm font-semibold z-10">
                   ⭐ LEVEL UP! 14
                 </div>
 
-                <div className="mt-20">
+                <div className="mt-20 z-10">
                   <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden">
                     <div className="h-full w-[85%] bg-[#7C3BED] rounded-full" />
                   </div>
@@ -83,11 +98,10 @@ export default function Sec1() {
                   </p>
                 </div>
 
-                <div className="absolute inset-0 rounded-2xl border-2 border-green-100 pointer-events-none" />
+                <div className="absolute inset-0 rounded-2xl border-2 border-green-100 pointer-events-none z-10" />
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
