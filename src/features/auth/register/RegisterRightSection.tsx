@@ -27,15 +27,15 @@ export default function RegisterRightSection() {
       onChange: registerSchema,
     },
     onSubmit: ({ value }) => {
-      console.log(value);
+      registerMutate(value);
     },
   });
 
   React.useEffect(() => {
     if (isSuccess === true) {
-      console.log("JALAN")
+      router.push("/dashboard");
     }
-  }, [isSuccess]);
+  }, [isSuccess, router]);
 
   return (
     <div className="flex-1 bg-neutral-100 p-6 lg:p-12 flex items-center justify-center">
@@ -194,7 +194,7 @@ export default function RegisterRightSection() {
               type="submit"
               className="relative w-full py-4 bg-violet-600 text-white rounded-xl font-bold text-base hover:bg-violet-700 transition hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
             >
-              Daftar &amp; Mulai Quest
+              {isPending ? "Loading..." : "Daftar & Mulai Ques"}
             </button>
           </div>
         </motion.form>
