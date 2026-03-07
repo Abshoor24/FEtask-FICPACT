@@ -3,41 +3,40 @@ import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
-import { useForm } from '@tanstack/react-form'
+import { useForm } from "@tanstack/react-form";
 import { loginSchema } from "@/common/validations/authValidation";
 import { useLogin } from "@/data/hooks/useAuth";
 import FieldInfo from "@/components/FieldInfo";
 import { useRouter } from "next/navigation";
 
 export default function LoginRightSection() {
-  const router = useRouter()
-  const { mutate: loginMutate, isPending, isSuccess } = useLogin()
+  const router = useRouter();
+  const { mutate: loginMutate, isPending, isSuccess } = useLogin();
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:8080/auth/google"
-  }
+    window.location.href = "http://localhost:8080/auth/google";
+  };
 
   const form = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validators: {
-      onSubmit: loginSchema
+      onSubmit: loginSchema,
     },
     onSubmit: ({ value }) => {
       loginMutate({
         email: value.email,
         password: value.password,
-      })
-    }
-  })
+      });
+    },
+  });
 
   React.useEffect(() => {
     if (isSuccess === true) {
-      router.push('/dashboard')
+      router.push("/dashboard");
     }
-  }, [isSuccess])
-
+  }, [isSuccess, router]);
 
   return (
     <div className="flex-1 bg-white p-6 lg:p-12 flex items-center justify-center">
@@ -60,33 +59,37 @@ export default function LoginRightSection() {
         {/* Login Form */}
         <motion.form
           onSubmit={(e) => {
-            e.preventDefault(),
-              e.stopPropagation(),
-              form.handleSubmit()
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
           }}
-          className="space-y-6" variants={fadeUp}>
+          className="space-y-6"
+          variants={fadeUp}
+        >
           {/* Email Input */}
           <form.Field name="email">
             {(field) => {
-              return (<div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Email Universitas
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    type="email"
-                    placeholder="nama@universitas.ac.id"
-                    className="w-full text-slate-700 pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition"
-                  />
+              return (
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Email Universitas
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      type="email"
+                      placeholder="nama@universitas.ac.id"
+                      className="w-full text-slate-700 pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition"
+                    />
+                  </div>
+                  <FieldInfo field={field} />
                 </div>
-                <FieldInfo field={field} />
-              </div>)
+              );
             }}
           </form.Field>
 
@@ -119,9 +122,9 @@ export default function LoginRightSection() {
                       className="w-full text-slate-700 pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition"
                     />
                   </div>
-                  <FieldInfo  field={field} />
+                  <FieldInfo field={field} />
                 </div>
-              )
+              );
             }}
           </form.Field>
 
