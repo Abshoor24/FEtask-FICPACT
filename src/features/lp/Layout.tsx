@@ -1,11 +1,11 @@
-import React from "react";
 import Navbar from "./Navbar";
-import Footer from "../Footer";
+import Footer from "../../components/Footer";
 import Sec1 from "./Sec1";
 import Sec2 from "./Sec2";
 import Sec3 from "./Sec3";
 import Sec5 from "./Sec5";
 import Sec4 from "./Sec4";
+import { SessionModel } from "@/data/models/sessionModel";
 
 interface Props {
   session: SessionModel | null;

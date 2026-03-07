@@ -10,7 +10,7 @@ export default function ChangePasswordPage() {
       <ChangePasswordLeftSection />
 
       {/* Right Side - Change Password Form */}
-      <ChangePasswordRightSection />
+    <ChangePasswordRightSection />
     </div>
   );
 }

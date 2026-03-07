@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import QuestButton from "../Button";
+import QuestButton from "../../components/Button";
 import Link from "next/link";
+import { SessionModel } from "@/data/models/sessionModel";
 
 interface Props {
   session: SessionModel | null;

@@ -1,4 +1,4 @@
-import Layout from "@/components/lp/Layout";
+import Layout from "@/features/lp/Layout";
 import { authService } from "@/data/services/authService";
 import { cookies } from "next/headers";
 
