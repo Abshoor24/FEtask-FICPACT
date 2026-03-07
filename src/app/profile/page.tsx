@@ -1,11 +1,11 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-import ProfileHeader from "@/components/profile/ProfileHeader";
-import ProfileStats from "@/components/profile/ProfileStats";
-import InsightCard from "@/components/profile/InsightCard";
-import AchievementCard from "@/components/profile/AchievementCard";
-import FolderProgress from "@/components/profile/FolderProgress";
+import ProfileHeader from "@/features/profile/ProfileHeader";
+import ProfileStats from "@/features/profile/ProfileStats";
+import InsightCard from "@/features/profile/InsightCard";
+import AchievementCard from "@/features/profile/AchievementCard";
+import FolderProgress from "@/features/profile/FolderProgress";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 

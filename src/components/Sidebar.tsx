@@ -8,7 +8,7 @@ import {
   Clock,
   User,
   Briefcase,
-//   Folder,
+  Folder,
   Plus,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -26,6 +26,7 @@ export default function Sidebar() {
 
   const menuItems: MenuItem[] = [
     { name: "All Tasks", icon: LayoutGrid, path: "/dashboard" },
+    { name: "Folders", icon: Folder, path: "/dashboard/folder" },
     { name: "Today", icon: Calendar, path: "/today" },
     { name: "Upcoming", icon: Clock, path: "/upcoming" },
     { name: "Profile", icon: User, path: "/profile" },
@@ -38,7 +39,6 @@ export default function Sidebar() {
 
   return (
     <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
-      
       {/* TOP */}
       <div>
         {/* Logo */}
@@ -66,7 +66,7 @@ export default function Sidebar() {
                   "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition",
                   active
                     ? "bg-[#7C3BED]/10 text-[#7C3BED]"
-                    : "text-gray-600 hover:bg-gray-100"
+                    : "text-gray-600 hover:bg-gray-100",
                 )}
               >
                 <Icon size={18} />
@@ -124,27 +124,26 @@ export default function Sidebar() {
 
       {/* USER */}
       <Link href="/profile">
-                  <div className="pt-4 border-t">
-        <div className="flex items-center justify-between px-3 py-3 rounded-xl bg-[#7C3BED]/5">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/amba1.jpg"
-              width={40}
-              height={40}
-              alt="User"
-              className="w-9 h-9 rounded-full"
-            />
-            <div>
-              <p className="text-sm font-semibold text-gray-900">
-                MASAmbaaaa
-              </p>
-              <p className="text-xs text-gray-500">Pro Account</p>
+        <div className="pt-4 border-t">
+          <div className="flex items-center justify-between px-3 py-3 rounded-xl bg-[#7C3BED]/5">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/amba1.jpg"
+                width={40}
+                height={40}
+                alt="User"
+                className="w-9 h-9 rounded-full"
+              />
+              <div>
+                <p className="text-sm font-semibold text-gray-900">
+                  MASAmbaaaa
+                </p>
+                <p className="text-xs text-gray-500">Pro Account</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </Link>
-
     </aside>
   );
 }

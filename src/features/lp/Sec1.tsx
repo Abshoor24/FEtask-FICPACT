@@ -1,16 +1,17 @@
 "use client";
 
 import React from "react";
-import QuestButton from "../Button";
+import QuestButton from "../../components/Button";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { SessionModel } from "@/data/models/sessionModel";
 
 interface Props {
   session: SessionModel | null;
 }
 
 export default function Sec1({ session }: Props) {
-  const RotatingText = dynamic(() => import("../RotatingText"), { ssr: false });
+  const RotatingText = dynamic(() => import("../../components/RotatingText"), { ssr: false });
 
   return (
     <section

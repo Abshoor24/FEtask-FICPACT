@@ -5,8 +5,8 @@ import { useState } from "react";
 
 import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
-import AddTaskDrawer from "../AddTaskDrawer";
-import AddTaskButton from "../AddTaskBtn";
+import AddTaskButton from "@/components/AddTaskBtn";
+import AddTaskDrawer from "@/components/AddTaskDrawer";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
