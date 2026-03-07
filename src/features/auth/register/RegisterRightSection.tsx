@@ -1,12 +1,42 @@
-import { Lock, Mail, User } from 'lucide-react'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { fadeUp, stagger } from '@/components/motion'
+import { Lock, Mail, User } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { fadeUp, stagger } from "@/components/motion";
+import { useForm } from "@tanstack/react-form";
+import { registerSchema } from "@/common/validations/authValidation";
+import FieldInfo from "@/components/FieldInfo";
+import { useRegister } from "@/data/hooks/useAuth";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterRightSection() {
-    const loginWithGoogle = () => {
-    window.location.href = "http://localhost:8080/auth/google"
-  }
+  const { mutate: registerMutate, isPending, isSuccess } = useRegister();
+  const router = useRouter();
+  const loginWithGoogle = () => {
+    window.location.href = "http://localhost:8080/auth/google";
+  };
+
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      password: "",
+      email: "",
+      confirmPassword: "",
+    },
+    validators: {
+      onChange: registerSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log(value);
+    },
+  });
+
+  React.useEffect(() => {
+    if (isSuccess === true) {
+      console.log("JALAN")
+    }
+  }, [isSuccess]);
+
   return (
     <div className="flex-1 bg-neutral-100 p-6 lg:p-12 flex items-center justify-center">
       <motion.div
@@ -17,74 +47,128 @@ export default function RegisterRightSection() {
       >
         {/* Header */}
         <motion.div className="flex flex-col gap-1" variants={fadeUp}>
-          <h2 className="text-2xl font-bold text-slate-900">
-            Buat Akun Baru
-          </h2>
+          <h2 className="text-2xl font-bold text-slate-900">Buat Akun Baru</h2>
           <p className="text-slate-500 text-base">
             Mulailah perjalanan akademismu dengan cara baru.
           </p>
         </motion.div>
 
         {/* Form */}
-        <motion.form className="flex flex-col gap-5" variants={fadeUp}>
+        <motion.form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="flex flex-col gap-5"
+          variants={fadeUp}
+        >
           {/* Nama Lengkap */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
-              Nama Lengkap
-            </label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Budi Santoso"
-                className="w-full pl-11 pr-4 text-slate-700  py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
-              />
-            </div>
-          </div>
+          <form.Field name="name">
+            {(field) => {
+              return (
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-semibold text-slate-700">
+                    Nama Lengkap
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      type="text"
+                      placeholder="Budi Santoso"
+                      className="w-full pl-11 pr-4 text-slate-700  py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
+                    />
+                  </div>
+                  <FieldInfo field={field} />
+                </div>
+              );
+            }}
+          </form.Field>
 
           {/* Email Universitas */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
-              Email Universitas
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="email"
-                placeholder="budi@mhs.kampus.ac.id"
-                className="w-full pl-11 pr-4 text-slate-700 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
-              />
-            </div>
-          </div>
+          <form.Field name="email">
+            {(field) => {
+              return (
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-semibold text-slate-700">
+                    Email Universitas
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      name={field.name}
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      type="email"
+                      placeholder="budi@mhs.kampus.ac.id"
+                      className="w-full pl-11 pr-4 text-slate-700 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
+                    />
+                  </div>
+                  <FieldInfo field={field} />
+                </div>
+              );
+            }}
+          </form.Field>
 
           {/* Kata Sandi & Konfirmasi - Side by Side */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-slate-700">
-                Kata Sandi
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-3 text-slate-700 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-slate-700">
-                Konfirmasi Kata Sandi
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full text-slate-700 pl-10 pr-3 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
-                />
-              </div>
-            </div>
+            <form.Field name="password">
+              {(field) => {
+                return (
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold text-slate-700">
+                      Kata Sandi
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        name={field.name}
+                        id={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        type="password"
+                        placeholder="••••••••"
+                        className="w-full pl-10 pr-3 text-slate-700 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
+                      />
+                    </div>
+                    <FieldInfo field={field} />
+                  </div>
+                );
+              }}
+            </form.Field>
+            <form.Field name="confirmPassword">
+              {(field) => {
+                return (
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold text-slate-700">
+                      Konfirmasi Kata Sandi
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        name={field.name}
+                        id={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        className="w-full text-slate-700 pl-10 pr-3 py-3.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent transition text-base"
+                      />
+                    </div>
+                    <FieldInfo field={field} />
+                  </div>
+                );
+              }}
+            </form.Field>
           </div>
 
           {/* Terms & Conditions */}
@@ -94,10 +178,7 @@ export default function RegisterRightSection() {
               id="terms"
               className="mt-0.5 w-4 h-4 text-violet-600 border-slate-300 rounded focus:ring-violet-600 flex-0"
             />
-            <label
-              htmlFor="terms"
-              className="text-sm text-slate-500 leading-5"
-            >
+            <label htmlFor="terms" className="text-sm text-slate-500 leading-5">
               Saya setuju dengan{" "}
               <a href="#" className="text-violet-600 hover:underline">
                 Syarat &amp; Ketentuan
@@ -128,12 +209,16 @@ export default function RegisterRightSection() {
         </motion.div>
 
         {/* Google Button */}
-        <motion.button initial="hidden"
+        <motion.button
+          initial="hidden"
           onClick={() => loginWithGoogle()}
           animate="show"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }} className="w-full py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 transition flex items-center justify-center gap-3" variants={fadeUp}>
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="w-full py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 transition flex items-center justify-center gap-3"
+          variants={fadeUp}
+        >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
@@ -156,7 +241,10 @@ export default function RegisterRightSection() {
         </motion.button>
 
         {/* Login Link */}
-        <motion.p className="text-center text-sm text-slate-500" variants={fadeUp}>
+        <motion.p
+          className="text-center text-sm text-slate-500"
+          variants={fadeUp}
+        >
           Sudah punya guild?{" "}
           <Link
             href="/auth/login"
@@ -167,5 +255,5 @@ export default function RegisterRightSection() {
         </motion.p>
       </motion.div>
     </div>
-  )
+  );
 }
