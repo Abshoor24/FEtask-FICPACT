@@ -1,4 +1,3 @@
-// Quest Model - Quest types and interfaces only
 
 export interface Quest {
     id: string;
@@ -12,7 +11,6 @@ export interface Quest {
     completedAt?: string;
 }
 
-// API Request/Response types
 export interface CreateQuestRequest {
     name: string;
     description?: string;
