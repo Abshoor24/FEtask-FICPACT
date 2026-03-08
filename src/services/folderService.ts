@@ -11,8 +11,8 @@ import { Quest } from "@/data/models/questModel";
 
 class FolderService {
     // Get all folders for current user
-    public async getAll(): Promise<FolderWithStats[]> {
-        return await apiClient<FolderWithStats[]>({
+    public async getAll(): Promise<{ data: FolderWithStats[] }> {
+        return await apiClient<{ data: FolderWithStats[] }>({
             url: "/folders",
             method: "GET",
         });
