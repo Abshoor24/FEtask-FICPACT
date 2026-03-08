@@ -1,4 +1,5 @@
 import { apiClient } from "@/common/libs/api-client";
+import { SessionModel } from "../models/sessionModel";
 
 class AuthService {
     // public async loginWithGoogle() {

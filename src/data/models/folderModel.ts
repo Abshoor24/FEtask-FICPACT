@@ -1,4 +1,5 @@
 // Folder Model - QuestFolder types and interfaces
+import { Quest } from "./questModel";
 
 export enum FolderStatus {
     PENDING = "PENDING",
@@ -26,6 +27,7 @@ export interface CreateQuestFolderRequest {
     description?: string | null;
     icon?: string;
     color?: string;
+    endedAt: string;
 }
 
 export interface UpdateQuestFolderRequest {
@@ -42,4 +44,5 @@ export interface FolderWithStats extends QuestFolder {
     taskCount: number;
     completedCount: number;
     pendingCount: number;
+    quests: Quest[];
 }
