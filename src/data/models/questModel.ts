@@ -26,6 +26,15 @@ export interface UpdateQuestRequest {
     completedAt?: string;
 }
 
+export interface AllQuestResponse {
+    key: string
+    quests: QuestWithStatus[]
+}
+
+export interface QuestWithStatus extends Quest {
+    status: "ONGOING" | "FAILED" | "COMPLETED";
+}
+
 // Extended types for UI
 export interface QuestWithFolder extends Quest {
     folder: {

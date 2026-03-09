@@ -1,17 +1,17 @@
 // Quest Service - Quest operations using class pattern
 
 import { apiClient } from "@/common/libs/api-client";
-import { CreateQuestSchema } from "@/common/validations/questValidation";
 import {
     Quest,
     CreateQuestRequest,
     UpdateQuestRequest,
+    AllQuestResponse,
 } from "@/data/models/questModel";
 
 class QuestService {
     // Get all quests for current user
-    public async getAll(): Promise<Quest[]> {
-        return await apiClient<Quest[]>({
+    public async getAll(): Promise<{ data: AllQuestResponse[] }> {
+        return await apiClient<{ data: AllQuestResponse[] }>({
             url: "/quests",
             method: "GET",
         });

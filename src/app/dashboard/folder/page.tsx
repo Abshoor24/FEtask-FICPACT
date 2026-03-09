@@ -1,4 +1,4 @@
-import FolderContent from "@/features/dashbord/folder/FolderContent";
+import FolderContent from "@/features/dashboard/folder/FolderContent";
 
 export default function FolderPage() {
   return <FolderContent />;

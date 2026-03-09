@@ -22,11 +22,7 @@ export default function TaskItem({
         </p>
 
         <div className="mt-1 flex gap-2 text-xs">
-          {priority && (
-            <span className="rounded bg-red-100 px-2 py-0.5 text-red-600">
-              {priority} Priority
-            </span>
-          )}
+          
           <span className="rounded bg-purple-100 px-2 py-0.5 text-purple-600">
             {tag}
           </span>

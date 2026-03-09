@@ -7,9 +7,21 @@ import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
 import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
+import { useGetUserQuests } from "@/data/hooks/useQuest";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
+
+  const { data } = useGetUserQuests()
+  const todayQuests = data?.data.find((d) => d.key === "TODAY")
+
+  const questRemaining = todayQuests?.quests.length ?? 0
+  const successQuests =
+    todayQuests?.quests.filter((q) => q.status === "COMPLETED").length ?? 0
+
+  const percent = questRemaining
+    ? Math.round((successQuests / questRemaining) * 100)
+    : 0
 
   return (
     <>
@@ -20,7 +32,7 @@ export default function DashboardContent() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">All Tasks</h1>
             <p className="text-sm text-gray-500">
-              You have 7 tasks remaining for today
+              You have {questRemaining} tasks remaining for today
             </p>
           </div>
 
@@ -46,24 +58,24 @@ export default function DashboardContent() {
               Daily Completion Goal
             </p>
             <span className="text-sm font-semibold text-[#7C3BED]">
-              65%
+              {percent}%
             </span>
           </div>
 
           <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-            <div className="h-full w-[65%] bg-[#7C3BED] rounded-full" />
+            <div className={`w-[${percent}%] h-full bg-[#7C3BED] rounded-full`} />
           </div>
 
           <div className="mt-4 flex justify-between text-sm">
             <p className="text-gray-500">
-              13 of 20 tasks completed
+              {successQuests} of {questRemaining} tasks completed
             </p>
             <div className="flex gap-4">
               <span className="font-semibold text-green-600">
-                12 Done
+                {successQuests} Done
               </span>
               <span className="font-semibold text-purple-600">
-                8 Left
+                {Number(questRemaining) - Number(successQuests)} Left
               </span>
             </div>
           </div>
@@ -76,34 +88,19 @@ export default function DashboardContent() {
           + Add a new task in All Tasks...
         </div>
 
-        <TaskSection title="Today">
-          <TaskItem
-            title="Review Q4 Marketing Proposal"
-            tag="WORK"
-            priority="High"
-          />
-          <TaskItem
-            title="Buy ergonomic office chair"
-            tag="PERSONAL"
-          />
-          <TaskItem
-            title="Team sync for project Alpha"
-            tag="WORK"
-            completed
-          />
-        </TaskSection>
-
-        <TaskSection title="Tomorrow">
-          <TaskItem
-            title="Prepare presentation for Stakeholders"
-            tag="WORK"
-            priority="Medium"
-          />
-          <TaskItem
-            title="Grocery shopping for weekend trip"
-            tag="PERSONAL"
-          />
-        </TaskSection>
+        {data?.data?.map((data) => (
+          <TaskSection key={data.key} title={data.key}>
+            {data.quests.map((quest) => (
+              <TaskItem
+                key={quest.id}
+                title={quest.name}
+                tag={quest.status}
+                priority={"Medium"}
+                completed={quest.status === "COMPLETED"}
+              />
+            ))}
+          </TaskSection>
+        ))}
       </div>
 
       <AddTaskDrawer

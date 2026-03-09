@@ -1,10 +1,10 @@
 "use client";
 
-import ProfileHeader from "@/features/dashbord/profile/ProfileHeader";
-import ProfileStats from "@/features/dashbord/profile/ProfileStats";
-import InsightCard from "@/features/dashbord/profile/InsightCard";
-import AchievementCard from "@/features/dashbord/profile/AchievementCard";
-import FolderProgress from "@/features/dashbord/profile/FolderProgress";
+import ProfileHeader from "@/features/dashboard/profile/ProfileHeader";
+import ProfileStats from "@/features/dashboard/profile/ProfileStats";
+import InsightCard from "@/features/dashboard/profile/InsightCard";
+import AchievementCard from "@/features/dashboard/profile/AchievementCard";
+import FolderProgress from "@/features/dashboard/profile/FolderProgress";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 
