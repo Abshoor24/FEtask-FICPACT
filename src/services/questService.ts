@@ -1,6 +1,7 @@
 // Quest Service - Quest operations using class pattern
 
 import { apiClient } from "@/common/libs/api-client";
+import { CreateQuestSchema } from "@/common/validations/questValidation";
 import {
     Quest,
     CreateQuestRequest,

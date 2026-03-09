@@ -12,10 +12,10 @@ export interface Quest {
 }
 
 export interface CreateQuestRequest {
-    name: string;
+    title: string;
     description?: string;
     folderId: string;
-    deadLineAt: string;
+    deadline: string;
 }
 
 export interface UpdateQuestRequest {

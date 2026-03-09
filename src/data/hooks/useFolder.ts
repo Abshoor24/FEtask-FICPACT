@@ -9,6 +9,12 @@ export function useCreateFolder() {
     })
 }
 
+export function useGetUserAvailableFolders() {
+    return useQuery({
+        queryFn: () => folderService.getUserAvailableFolders(),
+        queryKey: ["get_user_available_folders"],
+    })
+}
 
 export function useGetAllFolders() {
     return useQuery({

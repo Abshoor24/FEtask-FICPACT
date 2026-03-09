@@ -18,6 +18,13 @@ class FolderService {
         });
     }
 
+    public async getUserAvailableFolders(): Promise<{ data: QuestFolder[] }> {
+        return await apiClient<{ data: QuestFolder[] }>({
+            url: `/folders/user/available`,
+            method: "GET",
+        })
+    }
+
     // Get folder by ID with quests
     public async getById(folderId: string): Promise<QuestFolder> {
         return await apiClient<QuestFolder>({
