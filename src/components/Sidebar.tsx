@@ -29,7 +29,7 @@ export default function Sidebar() {
     { name: "Folders", icon: Folder, path: "/dashboard/folder" },
     { name: "Today", icon: Calendar, path: "/today" },
     { name: "Upcoming", icon: Clock, path: "/upcoming" },
-    { name: "Profile", icon: User, path: "/profile" },
+    { name: "Achievements", icon: User, path: "/dashboard/achievement" },
   ];
 
   const categories: MenuItem[] = [
@@ -123,7 +123,7 @@ export default function Sidebar() {
       </div>
 
       {/* USER */}
-      <Link href="/profile">
+      <Link href="/dashboard/profile">
         <div className="pt-4 border-t">
           <div className="flex items-center justify-between px-3 py-3 rounded-xl bg-[#7C3BED]/5">
             <div className="flex items-center gap-3">
