@@ -66,6 +66,13 @@ class AuthService {
             method: "POST",
         });
     }
+
+    public async logout() {
+        return await apiClient({
+            url: "/auth/logout",
+            method: "POST",
+        });
+    }
 }
 
 export const authService = new AuthService();
