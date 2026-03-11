@@ -4,7 +4,7 @@ import { Bell, Search, Star } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="w-full h-[72px] bg-[#F3F4F6] border-b flex items-center justify-between px-6 md:px-10">
+    <header className="w-full h-18 bg-[#F3F4F6] border-b flex items-center justify-between px-6 md:px-10">
       
       {/* SEARCH */}
       <div className="relative w-full max-w-md">

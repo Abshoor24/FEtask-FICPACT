@@ -10,6 +10,7 @@ import {
   Briefcase,
   Folder,
   Plus,
+  LogOut,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -123,25 +124,21 @@ export default function Sidebar() {
       </div>
 
       {/* USER */}
-      <Link href="/dashboard/profile">
-        <div className="pt-4 border-t">
-          <div className="flex items-center justify-between px-3 py-3 rounded-xl bg-[#7C3BED]/5">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/amba1.jpg"
-                width={40}
-                height={40}
-                alt="User"
-                className="w-9 h-9 rounded-full"
-              />
-              <div>
-                <p className="text-sm font-semibold text-gray-900">
-                  MASAmbaaaa
-                </p>
-                <p className="text-xs text-gray-500">Pro Account</p>
-              </div>
-            </div>
+      <Link href={"/dashboard/profile"}>
+        <div className="flex items-center justify-between px-5 py-3 rounded-xl bg-[#7C3BED]/5">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/amba1.jpg"
+              width={40}
+              height={40}
+              alt="User"
+              className="w-9 h-9 rounded-full"
+            />
+
+            <p className="text-sm font-semibold text-gray-900">MASAmbaaaa</p>
           </div>
+
+          <LogOut size={16} className="text-gray-400" />
         </div>
       </Link>
     </aside>
