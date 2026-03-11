@@ -16,6 +16,13 @@ class QuestService {
             method: "GET",
         });
     }
+    
+    public async updateCompletedQuest(questId: string): Promise<Quest> {
+        return await apiClient<Quest>({
+            url: `/quests/${questId}/complete`,
+            method: "PUT",
+        });
+    }
 
     // Get quests by folder
     public async getByFolder(folderId: string): Promise<Quest[]> {
@@ -67,7 +74,6 @@ class QuestService {
         });
     }
 
-    // ============ UTILITY METHODS ============
 
     // Check if quest is overdue
     public isOverdue(quest: Quest): boolean {

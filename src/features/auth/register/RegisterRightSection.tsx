@@ -22,6 +22,7 @@ export default function RegisterRightSection() {
       password: "",
       email: "",
       confirmPassword: "",
+      terms: false,
     },
     validators: {
       onChange: registerSchema,
@@ -172,20 +173,34 @@ export default function RegisterRightSection() {
           </div>
 
           {/* Terms & Conditions */}
-          <div className="flex items-start gap-3 py-1">
-            <input
-              type="checkbox"
-              id="terms"
-              className="mt-0.5 w-4 h-4 text-violet-600 border-slate-300 rounded focus:ring-violet-600 flex-0"
-            />
-            <label htmlFor="terms" className="text-sm text-slate-500 leading-5">
-              Saya setuju dengan{" "}
-              <a href="#" className="text-violet-600 hover:underline">
-                Syarat &amp; Ketentuan
-              </a>{" "}
-              serta Kebijakan Privasi TaskQuest.
-            </label>
-          </div>
+          {/* Terms & Conditions */}
+          <form.Field name="terms">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <div className="flex items-start gap-3 py-1">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    checked={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 text-violet-600 border-slate-300 rounded focus:ring-violet-600 flex-shrink-0"
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm text-slate-500 leading-5"
+                  >
+                    Saya setuju dengan{" "}
+                    <a href="#" className="text-violet-600 hover:underline">
+                      Syarat &amp; Ketentuan
+                    </a>{" "}
+                    serta Kebijakan Privasi TaskQuest.
+                  </label>
+                </div>
+                <FieldInfo field={field} />
+              </div>
+            )}
+          </form.Field>
 
           {/* Submit Button with 3D Effect */}
           <div className="relative">

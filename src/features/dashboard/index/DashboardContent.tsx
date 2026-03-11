@@ -1,28 +1,37 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
 import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
-import { useGetUserQuests } from "@/data/hooks/useQuest";
+import {
+  useGetUserQuests,
+  useUpdateCompletedQuest,
+} from "@/data/hooks/useQuest";
+import EmptyTask from "./EmptyTask";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
-
-  const { data } = useGetUserQuests()
-  const todayQuests = data?.data.find((d) => d.key === "TODAY")
-
-  const questRemaining = todayQuests?.quests.length ?? 0
+  const { data } = useGetUserQuests();
+  const { mutate: updateCompletedQuest, isSuccess } = useUpdateCompletedQuest();
+  const hasNoQuests = !data?.data || data.data.length === 0;
+  const todayQuests = data?.data.find((d) => d.key === "TODAY");
+  const questRemaining = todayQuests?.quests.length ?? 0;
   const successQuests =
-    todayQuests?.quests.filter((q) => q.status === "COMPLETED").length ?? 0
+    todayQuests?.quests.filter((q) => q.status === "COMPLETED").length ?? 0;
 
   const percent = questRemaining
     ? Math.round((successQuests / questRemaining) * 100)
-    : 0
-
+    : 0;
+  const handleClick = (questId: string) => {
+    updateCompletedQuest(questId);
+  };
+  // React.useEffect(() => {
+    
+  // },[isSuccess])
   return (
     <>
       <div className="h-full overflow-y-auto px-10 py-8">
@@ -63,7 +72,9 @@ export default function DashboardContent() {
           </div>
 
           <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-            <div className={`w-[${percent}%] h-full bg-[#7C3BED] rounded-full`} />
+            <div
+              className={`w-[${percent}%] h-full bg-[#7C3BED] rounded-full`}
+            />
           </div>
 
           <div className="mt-4 flex justify-between text-sm">
@@ -88,25 +99,30 @@ export default function DashboardContent() {
           + Add a new task in All Tasks...
         </div>
 
-        {data?.data?.map((data) => (
-          <TaskSection key={data.key} title={data.key}>
-            {data.quests.map((quest) => (
-              <TaskItem
-                key={quest.id}
-                title={quest.name}
-                tag={quest.status}
-                priority={"Medium"}
-                completed={quest.status === "COMPLETED"}
-              />
-            ))}
-          </TaskSection>
-        ))}
+        {hasNoQuests ? (
+          <EmptyTask onAdd={() => setOpen(true)} />
+        ) : (
+          data?.data?.map((data) => (
+            <TaskSection key={data.key} title={data.key}>
+              {data.quests.map((quest) => (
+                <TaskItem
+                  key={quest.id}
+                  onClick={() => {
+                    if (quest.status === "COMPLETED") return;
+                    handleClick(quest.id);
+                  }}
+                  title={quest.name}
+                  tag={quest.status}
+                  priority={"Medium"}
+                  completed={quest.status === "COMPLETED"}
+                />
+              ))}
+            </TaskSection>
+          ))
+        )}
       </div>
 
-      <AddTaskDrawer
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

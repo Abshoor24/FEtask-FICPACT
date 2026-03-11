@@ -1,3 +1,4 @@
+import { useUpdateCompletedQuest } from "@/data/hooks/useQuest";
 
 
 
@@ -5,13 +6,16 @@ export default function TaskItem({
   title,
   tag,
   priority,
+  onClick,
   completed,
 }: {
   title: string;
   tag: string;
   priority?: "High" | "Medium";
   completed?: boolean;
+  onClick?: () => void;
 }) {
+  
   return (
     <div className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm mb-3">
       <input type="checkbox" checked={completed} readOnly className="w-5 h-5" />

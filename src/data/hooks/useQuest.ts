@@ -17,3 +17,9 @@ export function useGetUserQuests() {
         staleTime: 1000,
     })
 }
+export function useUpdateCompletedQuest() {
+    return useMutation({
+        mutationFn: (questId: string) => questService.updateCompletedQuest(questId),
+        mutationKey: ["update_completed_quest"],
+    })
+}
