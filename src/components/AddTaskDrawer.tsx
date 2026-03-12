@@ -101,7 +101,7 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
                         required
                       />
                       {field.state.meta.errors?.map((err) => (
-                        <p className="text-red-500 text-xs">{err?.message}</p>
+                        <p key={err?.message} className="text-red-500 text-xs">{err?.message}</p>
                       ))}
                     </div>
                   )}

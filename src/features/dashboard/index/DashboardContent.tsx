@@ -7,6 +7,7 @@ import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
 import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
+import VoiceCommand from "@/components/VoiceCommand";
 import {
   useGetUserQuests,
   useUpdateCompletedQuest,
@@ -15,8 +16,11 @@ import EmptyTask from "./EmptyTask";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
+
   const { data } = useGetUserQuests();
-  const { mutate: updateCompletedQuest, isSuccess } = useUpdateCompletedQuest();
+  const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
+
   const hasNoQuests = !data?.data || data.data.length === 0;
   const todayQuests = data?.data.find((d) => d.key === "TODAY");
   const questRemaining = todayQuests?.quests.length ?? 0;
@@ -26,12 +30,11 @@ export default function DashboardContent() {
   const percent = questRemaining
     ? Math.round((successQuests / questRemaining) * 100)
     : 0;
+
   const handleClick = (questId: string) => {
     updateCompletedQuest(questId);
   };
-  // React.useEffect(() => {
-    
-  // },[isSuccess])
+
   return (
     <>
       <div className="h-full overflow-y-auto px-10 py-8">
@@ -56,11 +59,15 @@ export default function DashboardContent() {
               />
             </div>
 
-            {/* ADD TASK BUTTON */}
-            <AddTaskButton onClick={() => setOpen(true)} />
+            {/* ADD TASK BUTTON + VOICE BUTTON */}
+            <AddTaskButton
+              onClick={() => setOpen(true)}
+              onVoiceClick={() => setVoiceOpen(true)}
+            />
           </div>
         </div>
 
+        {/* ================= PROGRESS ================= */}
         <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium text-gray-700">
@@ -92,6 +99,7 @@ export default function DashboardContent() {
           </div>
         </div>
 
+        {/* ================= QUICK ADD ================= */}
         <div
           onClick={() => setOpen(true)}
           className="mb-6 cursor-pointer rounded-xl border-2 border-dashed bg-white p-4 text-sm text-gray-400 transition hover:border-[#7C3BED] hover:text-[#7C3BED]"
@@ -99,6 +107,7 @@ export default function DashboardContent() {
           + Add a new task in All Tasks...
         </div>
 
+        {/* ================= TASK LIST ================= */}
         {hasNoQuests ? (
           <EmptyTask onAdd={() => setOpen(true)} />
         ) : (
@@ -122,7 +131,9 @@ export default function DashboardContent() {
         )}
       </div>
 
+      {/* ================= DRAWERS & MODALS ================= */}
       <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
+      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} />
     </>
   );
 }
