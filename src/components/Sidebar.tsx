@@ -15,6 +15,7 @@ import {
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Image from "next/image";
+import { useLogout } from "@/data/hooks/useAuth";
 
 interface MenuItem {
   name: string;
@@ -37,6 +38,8 @@ export default function Sidebar() {
     { name: "Personal", icon: User, path: "/personal" },
     { name: "Work", icon: Briefcase, path: "/work" },
   ];
+
+  const { mutate: logout } = useLogout();
 
   return (
     <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
@@ -124,23 +127,30 @@ export default function Sidebar() {
       </div>
 
       {/* USER */}
-      <Link href={"/dashboard/profile"}>
-        <div className="flex items-center justify-between px-5 py-3 rounded-xl bg-[#7C3BED]/5">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/amba1.jpg"
-              width={40}
-              height={40}
-              alt="User"
-              className="w-9 h-9 rounded-full"
-            />
+<div className="flex items-center justify-between px-5 py-3 rounded-xl bg-[#7C3BED]/5">
 
-            <p className="text-sm font-semibold text-gray-900">MASAmbaaaa</p>
-          </div>
+  <Link href="/dashboard/profile" className="flex items-center gap-3">
+    <Image
+      src="/amba1.jpg"
+      width={40}
+      height={40}
+      alt="User"
+      className="w-9 h-9 rounded-full"
+    />
 
-          <LogOut size={16} className="text-gray-400" />
-        </div>
-      </Link>
+    <p className="text-sm font-semibold text-gray-900">
+      MASAmbaaaa
+    </p>
+  </Link>
+
+  <div
+    onClick={() => logout()}
+    className="cursor-pointer flex items-center gap-2"
+  >
+    <LogOut size={16} className="text-gray-400" />
+  </div>
+
+</div>
     </aside>
   );
 }

@@ -50,3 +50,15 @@ export function useResendVerificationToken() {
         mutationFn: () => authService.resendVerificationToken(),
     })
 }
+
+export function useLogout() {
+    return useMutation({
+        mutationKey: ["auth_logout"],
+        mutationFn: () => authService.logout(),
+        onSuccess: () => {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+            alert("Logout successful");
+        }
+    })
+}
