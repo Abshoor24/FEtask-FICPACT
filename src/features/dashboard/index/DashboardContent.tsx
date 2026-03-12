@@ -117,13 +117,18 @@ export default function DashboardContent() {
                 <TaskItem
                   key={quest.id}
                   onClick={() => {
-                    if (quest.status === "COMPLETED") return;
+                    if (
+                      quest.status === "COMPLETED" ||
+                      quest.status === "FAILED"
+                    )
+                      return;
                     handleClick(quest.id);
                   }}
                   title={quest.name}
                   tag={quest.status}
                   priority={"Medium"}
                   completed={quest.status === "COMPLETED"}
+                  failed={quest.status === "FAILED"}
                 />
               ))}
             </TaskSection>
