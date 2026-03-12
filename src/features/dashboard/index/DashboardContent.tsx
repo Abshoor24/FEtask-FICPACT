@@ -7,7 +7,7 @@ import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
 import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
-import VoiceCommand from "@/components/VoiceCommand";
+import VoiceCommand from "@/components/VoiceCommand/index";
 import {
   useGetUserQuests,
   useUpdateCompletedQuest,
