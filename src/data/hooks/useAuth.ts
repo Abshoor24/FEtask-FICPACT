@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { authService } from "../services/authService";
 import { LoginSchema, RegisterSchema } from "@/common/validations/authValidation";
+import { authService } from "@/services/authService";
 
 // export function useLoginGoole() {
 //     return useMutation({

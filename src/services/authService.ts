@@ -12,6 +12,14 @@ class AuthService {
     //         console.error(error);
     //     }
     // }
+    // 
+    public async logout() {
+        return await apiClient({
+            url: "/auth/logout",
+            method: "POST",
+        });
+    }
+    
 
     public async checkSession(token: string | undefined) {
         return await apiClient<{ data: SessionModel }>({
@@ -67,12 +75,7 @@ class AuthService {
         });
     }
 
-    public async logout() {
-        return await apiClient({
-            url: "/auth/logout",
-            method: "POST",
-        });
-    }
+
 }
 
 export const authService = new AuthService();
