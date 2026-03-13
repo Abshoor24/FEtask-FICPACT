@@ -11,14 +11,14 @@ import { Quest } from "@/data/models/questModel";
 
 class FolderService {
     // Get all folders for current user
-    public async getAll(): Promise<{ data: FolderWithStats[] }> {
+    public async getAll(): Promise<{ data: FolderWithStats[] } | null> {
         return await apiClient<{ data: FolderWithStats[] }>({
             url: "/folders",
             method: "GET",
         });
     }
 
-    public async getUserAvailableFolders(): Promise<{ data: QuestFolder[] }> {
+    public async getUserAvailableFolders(): Promise<{ data: QuestFolder[] } | null> {
         return await apiClient<{ data: QuestFolder[] }>({
             url: `/folders/user/available`,
             method: "GET",
@@ -26,7 +26,7 @@ class FolderService {
     }
 
     // Get folder by ID with quests
-    public async getById(folderId: string): Promise<QuestFolder> {
+    public async getById(folderId: string): Promise<QuestFolder | null> {
         return await apiClient<QuestFolder>({
             url: `/folders/${folderId}`,
             method: "GET",
@@ -34,7 +34,7 @@ class FolderService {
     }
 
     // Create new folder
-    public async create(data: CreateQuestFolderRequest): Promise<QuestFolder> {
+    public async create(data: CreateQuestFolderRequest): Promise<QuestFolder | null> {
         return await apiClient<QuestFolder>({
             url: "/folders",
             method: "POST",
@@ -46,7 +46,7 @@ class FolderService {
     public async update(
         folderId: string,
         data: UpdateQuestFolderRequest
-    ): Promise<QuestFolder> {
+    ): Promise<QuestFolder | null> {
         return await apiClient<QuestFolder>({
             url: `/folders/${folderId}`,
             method: "PUT",
@@ -55,7 +55,7 @@ class FolderService {
     }
 
     // Delete folder
-    public async delete(folderId: string): Promise<void> {
+    public async delete(folderId: string): Promise<void | null> {
         return await apiClient<void>({
             url: `/folders/${folderId}`,
             method: "DELETE",
