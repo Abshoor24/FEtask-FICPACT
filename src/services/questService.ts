@@ -11,7 +11,7 @@ import {
 
 class QuestService {
     // Get all quests for current user
-    public async getAll(): Promise<{ data: AllQuestResponse[] }> {
+    public async getAll(): Promise<{ data: AllQuestResponse[] } | null> {
         return await apiClient<{ data: AllQuestResponse[] }>({
             url: "/quests",
             method: "GET",
@@ -27,7 +27,7 @@ class QuestService {
         });
     }
 
-    public async updateCompletedQuest(questId: string): Promise<Quest> {
+    public async updateCompletedQuest(questId: string) {
         return await apiClient<Quest>({
             url: `/quests/${questId}/complete`,
             method: "PUT",
@@ -35,7 +35,7 @@ class QuestService {
     }
 
     // Get quests by folder
-    public async getByFolder(folderId: string): Promise<Quest[]> {
+    public async getByFolder(folderId: string) {
         return await apiClient<Quest[]>({
             url: `/folders/${folderId}/quests`,
             method: "GET",
@@ -44,7 +44,7 @@ class QuestService {
 
 
     // Get quest by ID
-    public async getById(questId: string): Promise<Quest> {
+    public async getById(questId: string) {
         return await apiClient<Quest>({
             url: `/quests/${questId}`,
             method: "GET",
@@ -52,7 +52,7 @@ class QuestService {
     }
 
     // Create new quest
-    public async create(data: CreateQuestRequest): Promise<Quest> {
+    public async create(data: CreateQuestRequest) {
         return await apiClient<Quest>({
             url: "/quests",
             method: "POST",
@@ -61,7 +61,7 @@ class QuestService {
     }
 
     // Update quest
-    public async update(questId: string, data: UpdateQuestRequest): Promise<Quest> {
+    public async update(questId: string, data: UpdateQuestRequest) {
         return await apiClient<Quest>({
             url: `/quests/${questId}`,
             method: "PUT",
@@ -70,7 +70,7 @@ class QuestService {
     }
 
     // Complete quest
-    public async complete(questId: string): Promise<Quest> {
+    public async complete(questId: string) {
         return await apiClient<Quest>({
             url: `/quests/${questId}/complete`,
             method: "POST",
@@ -78,8 +78,8 @@ class QuestService {
     }
 
     // Delete quest
-    public async delete(questId: string): Promise<void> {
-        return await apiClient<void>({
+    public async delete(questId: string) {
+        return await apiClient({
             url: `/quests/${questId}`,
             method: "DELETE",
         });
