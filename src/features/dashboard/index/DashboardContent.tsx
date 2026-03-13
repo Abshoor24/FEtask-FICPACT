@@ -13,10 +13,12 @@ import {
   useUpdateCompletedQuest,
 } from "@/data/hooks/useQuest";
 import EmptyTask from "./EmptyTask";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const queryInvalidate = useQueryClient();
 
   const { data } = useGetUserQuests();
   const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
@@ -32,7 +34,11 @@ export default function DashboardContent() {
     : 0;
 
   const handleClick = (questId: string) => {
-    updateCompletedQuest(questId);
+    updateCompletedQuest(questId, {
+      onSuccess: () => {
+        queryInvalidate.invalidateQueries({ queryKey: ["get_user_quests"] });
+      },
+    });
   };
 
   return (
