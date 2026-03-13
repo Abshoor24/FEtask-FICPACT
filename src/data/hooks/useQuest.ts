@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { questService } from "@/services/questService";
+import { questService } from "@/data/services/questService";
 import { CreateQuestSchema } from "@/common/validations/questValidation";
 import { AIMode } from "@/components/VoiceCommand/types";
 

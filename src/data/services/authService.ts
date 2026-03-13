@@ -27,6 +27,13 @@ class AuthService {
         }
     }
 
+    public async logout() {
+        return await apiClient({
+            url: "/auth/logout",
+            method: "POST",
+        });
+    }
+
     public async login(email: string, password: string) {
             return await apiClient({
                 url: "/auth/login",
@@ -68,6 +75,18 @@ class AuthService {
         return await apiClient({
             url: "/auth/resend-verification-code",
             method: "POST",
+        });
+    }
+
+    public async resetPassword(token: string, email: string, newPassword: string) {
+        return await apiClient({
+            url: "/auth/reset-password",
+            method: "POST",
+            data: {
+                token,
+                email,
+                newPassword
+            } ,
         });
     }
 }

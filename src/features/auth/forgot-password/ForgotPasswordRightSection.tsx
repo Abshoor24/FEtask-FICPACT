@@ -6,8 +6,56 @@ import { useForgotPassword } from "@/data/hooks/useAuth";
 import { useForm } from "@tanstack/react-form";
 import { forgotPasswordSchema } from "@/common/validations/authValidation";
 
+const COOLDOWN_MINUTES = 3;
+const COOLDOWN_SECONDS = COOLDOWN_MINUTES * 60;
+const COOLDOWN_STORAGE_KEY = "forgot-password-cooldown-until";
+
+function formatCountdown(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
 export default function ForgotPasswordRightSection() {
-  const { mutate: forgotPasswordMutate } = useForgotPassword();
+  const { mutate: forgotPasswordMutate, isPending } = useForgotPassword();
+  const [cooldownSeconds, setCooldownSeconds] = React.useState(0);
+
+  React.useEffect(() => {
+    const cooldownUntil = Number(localStorage.getItem(COOLDOWN_STORAGE_KEY) || 0);
+    if (!cooldownUntil) return;
+
+    const remaining = Math.max(0, Math.ceil((cooldownUntil - Date.now()) / 1000));
+    setCooldownSeconds(remaining);
+
+    if (remaining === 0) {
+      localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+
+    const interval = window.setInterval(() => {
+      setCooldownSeconds((prev) => {
+        if (prev <= 1) {
+          localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [cooldownSeconds]);
+
+  const startCooldown = React.useCallback((seconds: number) => {
+    const cooldownUntil = Date.now() + seconds * 1000;
+    localStorage.setItem(COOLDOWN_STORAGE_KEY, String(cooldownUntil));
+    setCooldownSeconds(seconds);
+  }, []);
+
+  const isCooldownActive = cooldownSeconds > 0;
+
   const form = useForm({
     defaultValues: {
       email: '',
@@ -16,7 +64,12 @@ export default function ForgotPasswordRightSection() {
       onSubmit: forgotPasswordSchema
     },
     onSubmit: ({ value }) => {
-      forgotPasswordMutate(value.email)
+      if (isCooldownActive) return;
+      forgotPasswordMutate(value.email, {
+        onSuccess: () => {
+          startCooldown(COOLDOWN_SECONDS);
+        }
+      })
     }
   })
   return (
@@ -65,6 +118,7 @@ export default function ForgotPasswordRightSection() {
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
+                      disabled={isPending}
                       type="email"
                       placeholder="nama@mahasiswa.univ.ac.id"
                       className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-3.5 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
@@ -83,11 +137,22 @@ export default function ForgotPasswordRightSection() {
             {/* Button */}
             <button
               type="submit"
-              className="relative w-full py-3 sm:py-3.5 lg:py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
+              disabled={isPending || isCooldownActive}
+              className="relative w-full py-3 sm:py-3.5 lg:py-4 bg-violet-600 hover:bg-violet-700 disabled:bg-violet-300 disabled:cursor-not-allowed text-white rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
             >
-              Kirim Link Pemulihan
+              {isPending
+                ? "Mengirim..."
+                : isCooldownActive
+                  ? `Coba lagi dalam ${formatCountdown(cooldownSeconds)}`
+                  : "Kirim Link Pemulihan"}
               <Zap className="w-4 h-4 fill-current" />
             </button>
+
+            {isCooldownActive ? (
+              <p className="mt-2 text-center text-xs sm:text-sm text-slate-500">
+                Cooldown aktif {COOLDOWN_MINUTES} menit setelah pengiriman berhasil.
+              </p>
+            ) : null}
           </div>
         </motion.form>
 

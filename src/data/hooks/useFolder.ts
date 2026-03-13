@@ -1,4 +1,4 @@
-import { folderService } from "@/services/folderService";
+import { folderService } from "@/data/services/folderService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateQuestFolderRequest } from "../models/folderModel";
 

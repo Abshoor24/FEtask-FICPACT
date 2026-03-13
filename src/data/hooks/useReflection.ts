@@ -1,5 +1,5 @@
 import { CreateUserReflectionSchema, UserFailedReflectionSchema } from "@/common/validations/reflectionValidation";
-import { reflectionService } from "@/services/reflectionService";
+import { reflectionService } from "@/data/services/reflectionService";
 import { useMutation } from "@tanstack/react-query";
 
 export function useCreateUserReflection() {
