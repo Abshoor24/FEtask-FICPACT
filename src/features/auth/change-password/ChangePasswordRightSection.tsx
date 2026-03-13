@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 import SuccessModal from "@/components/SuccessModal";
+import { useResetPassword } from "@/data/hooks/useAuth";
 
 export default function ChangePasswordRightSection({ token, email }: { token: string | null; email: string | null }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,7 @@ export default function ChangePasswordRightSection({ token, email }: { token: st
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { mutate: resetPassword } = useResetPassword()
 
   // Password validation rules
   const hasMinLength = password.length >= 8;
@@ -20,10 +22,8 @@ export default function ChangePasswordRightSection({ token, email }: { token: st
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your password change logic here
-    console.log("Password change submitted", { token, email } );
-    
-    // Show success modal
+    if (!hasMinLength || !hasUpperLowerNumber) return;
+    resetPassword({ token: token!, email: email!, newPassword: password })
     setIsModalOpen(true);
   };
 
