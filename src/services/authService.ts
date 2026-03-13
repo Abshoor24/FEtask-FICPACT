@@ -12,23 +12,28 @@ class AuthService {
     //         console.error(error);
     //     }
     // }
-    // 
+    //
     public async logout() {
         return await apiClient({
             url: "/auth/logout",
             method: "POST",
         });
     }
-    
+
 
     public async checkSession(token: string | undefined) {
-        return await apiClient<{ data: SessionModel }>({
-            url: "/user/session",
-            method: "GET",
-            headers: {
-                Cookie: `token=${token}`,
-            },
-        });
+        try {
+
+            return await apiClient<{ data: SessionModel }>({
+                url: "/user/session",
+                method: "GET",
+                headers: {
+                    Cookie: `token=${token}`,
+                },
+            });
+        } catch (error: unknown) {
+            return null
+        }
 
     }
 
