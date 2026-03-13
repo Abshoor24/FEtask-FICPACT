@@ -102,12 +102,12 @@ export default function LoginRightSection() {
                     <label className="text-sm font-semibold text-slate-700">
                       Kata Sandi
                     </label>
-                    <a
-                      href="#"
+                    <Link
+                      href="/auth/forgot-password"
                       className="text-sm font-semibold text-violet-600 hover:text-violet-700 transition"
                     >
                       Lupa Sandi?
-                    </a>
+                    </Link>
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />

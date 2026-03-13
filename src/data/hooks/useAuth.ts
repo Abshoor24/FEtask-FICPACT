@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { LoginSchema, RegisterSchema } from "@/common/validations/authValidation";
-import { authService } from "@/services/authService";
+import { authService } from "../services/authService";
 
 // export function useLoginGoole() {
 //     return useMutation({
@@ -55,10 +55,17 @@ export function useLogout() {
     return useMutation({
         mutationKey: ["auth_logout"],
         mutationFn: () => authService.logout(),
-        onSuccess: () => {
-            localStorage.removeItem("token");
-            window.location.href = "/";
-            alert("Logout successful");
-        }
+        // onSuccess: () => {
+        //     localStorage.removeItem("token");
+        //     window.location.href = "/";
+        //     alert("Logout successful");
+        // }
+    })
+}
+
+export function useResetPassword() {
+    return useMutation({
+        mutationKey: ["reset_password"],
+        mutationFn: ({ token, email, newPassword }: { token: string; email: string; newPassword: string }) => authService.resetPassword(token, email, newPassword),
     })
 }

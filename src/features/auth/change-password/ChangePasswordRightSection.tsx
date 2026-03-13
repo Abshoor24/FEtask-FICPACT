@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 import SuccessModal from "@/components/SuccessModal";
 
-export default function ChangePasswordRightSection() {
+export default function ChangePasswordRightSection({ token, email }: { token: string | null; email: string | null }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -21,7 +21,7 @@ export default function ChangePasswordRightSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Add your password change logic here
-    console.log("Password change submitted");
+    console.log("Password change submitted", { token, email } );
     
     // Show success modal
     setIsModalOpen(true);
