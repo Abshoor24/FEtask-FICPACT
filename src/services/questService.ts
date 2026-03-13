@@ -1,6 +1,7 @@
 // Quest Service - Quest operations using class pattern
 
 import { apiClient } from "@/common/libs/api-client";
+import { AIMode } from "@/components/VoiceCommand/types";
 import {
     Quest,
     CreateQuestRequest,
@@ -16,7 +17,16 @@ class QuestService {
             method: "GET",
         });
     }
-    
+
+    // Create Quest/Folder with AI
+    public async createWithVoiceCommand(text: string, mode: AIMode) {
+        return await apiClient<Quest>({
+            url: "/quests/create-with-voice",
+            method: "POST",
+            data: { text, mode },
+        });
+    }
+
     public async updateCompletedQuest(questId: string): Promise<Quest> {
         return await apiClient<Quest>({
             url: `/quests/${questId}/complete`,
@@ -31,6 +41,7 @@ class QuestService {
             method: "GET",
         });
     }
+
 
     // Get quest by ID
     public async getById(questId: string): Promise<Quest> {

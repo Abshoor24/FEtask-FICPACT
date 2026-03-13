@@ -13,10 +13,12 @@ import VoiceTranscript from "./VoiceTranscript";
 import { EXAMPLE_PROMPTS, MAX_CHARS, MODE_CONFIG } from "./constants";
 import { AIMode, VoiceCommandProps } from "./types";
 import { useVoiceRecognition } from "./useVoiceRecognition";
+import { useCreateQuestWithVoice } from "@/data/hooks/useQuest";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
   const [aiMode, setAIMode] = useState<AIMode>("with-folder");
-
+  const queryInvalidate = useQueryClient();
   const {
     voiceState,
     transcript,
@@ -36,6 +38,8 @@ export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
     handleExampleClick,
     startProcessing,
   } = useVoiceRecognition(open);
+
+  const { mutate: createQuestWithVoice } = useCreateQuestWithVoice();
 
   // ── Status labels ───────────────────────────────────────────────────────────
 
@@ -63,19 +67,34 @@ export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
 
     // TODO: kirim transcript + aiMode ke backend untuk AI processing
     // await aiService.processVoiceCommand({ transcript, mode: aiMode })
-    alert(
-      JSON.stringify({
-        transcript,
-        mode: aiMode,
-      }),
+    // alert(
+    //   JSON.stringify({
+    //     transcript,
+    //     mode: aiMode,
+    //   }),
+    // );
+    createQuestWithVoice(
+      { text: transcript, mode: aiMode },
+      {
+        onSuccess: () => {
+          queryInvalidate.invalidateQueries({ queryKey: ["get_user_quests"] });
+          setVoiceState("idle");
+          setTranscript("");
+          onClose();
+        },
+        onError: () => {
+          setVoiceState("idle");
+          setTranscript("");
+        },
+      },
     );
 
-    setTimeout(() => {
-      // Simulasi response – hapus setelah backend ready
-      setVoiceState("idle");
-      setTranscript("");
-      onClose();
-    }, 1500);
+    // setTimeout(() => {
+    //   // Simulasi response – hapus setelah backend ready
+    //   setVoiceState("idle");
+    //   setTranscript("");
+    //   onClose();
+    // }, 1500);
   };
 
   const currentPrompts = EXAMPLE_PROMPTS[aiMode];
