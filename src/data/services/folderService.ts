@@ -9,6 +9,11 @@ import {
 } from "@/data/models/folderModel";
 import { Quest } from "@/data/models/questModel";
 
+export type FolderDetailResponse = QuestFolder & {
+    description: string | null;
+    quests: Quest[];
+};
+
 class FolderService {
     // Get all folders for current user
     public async getAll(): Promise<{ data: FolderWithStats[] } | null> {
@@ -22,12 +27,12 @@ class FolderService {
         return await apiClient<{ data: QuestFolder[] }>({
             url: `/folders/user/available`,
             method: "GET",
-        })
+        });
     }
 
     // Get folder by ID with quests
-    public async getById(folderId: string): Promise<QuestFolder | null> {
-        return await apiClient<QuestFolder>({
+    public async getById(folderId: string): Promise<{ data: FolderDetailResponse } | null> {
+        return await apiClient<{ data: FolderDetailResponse }>({
             url: `/folders/${folderId}`,
             method: "GET",
         });
@@ -62,7 +67,6 @@ class FolderService {
         });
     }
 
-
     // Check if folder can add more quests (max 3)
     public canAddQuest(folder: QuestFolder & { quests?: Quest[] }): boolean {
         return (folder.quests?.length || 0) < 3;
@@ -74,8 +78,6 @@ class FolderService {
         const completed = folder.quests.filter((q) => q.isSuccess).length;
         return Math.round((completed / folder.quests.length) * 100);
     }
-
-
 
     // Check if folder is completed (all quests done)
     public isCompleted(folder: QuestFolder & { quests?: Quest[] }): boolean {
