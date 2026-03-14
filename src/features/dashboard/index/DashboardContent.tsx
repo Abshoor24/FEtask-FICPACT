@@ -115,7 +115,10 @@ export default function DashboardContent() {
 
         {/* ================= TASK LIST ================= */}
         {hasNoQuests ? (
-          <EmptyTask onAdd={() => setOpen(true)} />
+          <EmptyTask
+  onAdd={() => setOpen(true)}
+  onVoiceClick={() => setVoiceOpen(true)}
+/>
         ) : (
           data?.data?.map((data) => (
             <TaskSection key={data.key} title={data.key}>
