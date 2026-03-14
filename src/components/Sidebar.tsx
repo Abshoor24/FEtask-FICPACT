@@ -63,7 +63,7 @@ export default function Sidebar() {
             const active = pathname === item.path;
 
             return (
-              <a
+              <Link
                 key={item.name}
                 href={item.path}
                 className={clsx(
@@ -75,7 +75,7 @@ export default function Sidebar() {
               >
                 <Icon size={18} />
                 {item.name}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -90,14 +90,14 @@ export default function Sidebar() {
             {categories.map((item) => {
               const Icon = item.icon;
               return (
-                <a
+                <Link
                   key={item.name}
                   href={item.path}
                   className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 transition"
                 >
                   <Icon size={18} />
                   {item.name}
-                </a>
+                </Link>
               );
             })}
           </div>
