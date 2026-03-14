@@ -11,32 +11,37 @@ export enum FolderStatus {
 export interface QuestFolder {
     id: string;
     name: string;
-    icon?: string;
-    color?: string;
-    description?: string;
+    icon?: string | null;
+    color?: string | null;
+    description?: string | null;
     status: FolderStatus;
     userId: string;
     createdAt: string;
-    endedAt?: string;
+    endedAt?: string | null;
     updatedAt: string;
+}
+
+// Detail response for GET /folders/:id
+export interface FolderDetailResponse extends QuestFolder {
+    quests: Quest[];
 }
 
 // API Request/Response types
 export interface CreateQuestFolderRequest {
     name: string;
     description?: string | null;
-    icon?: string;
-    color?: string;
+    icon?: string | null;
+    color?: string | null;
     endedAt: string;
 }
 
 export interface UpdateQuestFolderRequest {
     name?: string;
-    description?: string;
-    icon?: string;
-    color?: string;
+    description?: string | null;
+    icon?: string | null;
+    color?: string | null;
     status?: FolderStatus;
-    endedAt?: string;
+    endedAt?: string | null;
 }
 
 // Extended types for UI
