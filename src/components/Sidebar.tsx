@@ -29,7 +29,7 @@ export default function Sidebar() {
   const menuItems: MenuItem[] = [
     { name: "All Tasks", icon: LayoutGrid, path: "/dashboard" },
     { name: "Folders", icon: Folder, path: "/dashboard/folder" },
-    { name: "Today", icon: Calendar, path: "/today" },
+    { name: "Today", icon: Calendar, path: "/dashboard/today" },
     { name: "Upcoming", icon: Clock, path: "/upcoming" },
     { name: "Achievements", icon: User, path: "/dashboard/achievement" },
   ];
