@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -17,6 +17,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useGetFolderById } from "@/data/hooks/useFolder";
+import { useUpdateCompletedQuest } from "@/data/hooks/useQuest";
 
 type Quest = {
   id: string;
@@ -82,6 +83,18 @@ export default function FolderDetail() {
   const folderId = params.id as string;
 
   const { data, isLoading, isError, refetch } = useGetFolderById(folderId);
+  const { mutate: updateCompleteQuestMutate, isPending, isSuccess } = useUpdateCompletedQuest();
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
+
+  const handleCompleteQuest = (questId: string) => {
+    if (isPending) return;
+    updateCompleteQuestMutate(questId);
+  }
 
   const folder: FolderDetailResponse | null = useMemo(() => {
     if (!data) return null;
@@ -262,13 +275,12 @@ export default function FolderDetail() {
               return (
                 <div
                   key={quest.id}
-                  className={`group relative flex flex-col gap-4 overflow-hidden rounded-xl border bg-white p-5 shadow-sm transition-all hover:shadow-md sm:flex-row sm:items-center sm:justify-between ${
-                    isCompleted
-                      ? "border-emerald-200 bg-emerald-50/30"
-                      : isInProgress
-                        ? "border-gray-300"
-                        : "border-gray-200 opacity-75"
-                  }`}
+                  className={`group relative flex flex-col gap-4 overflow-hidden rounded-xl border bg-white p-5 shadow-sm transition-all hover:shadow-md sm:flex-row sm:items-center sm:justify-between ${isCompleted
+                    ? "border-emerald-200 bg-emerald-50/30"
+                    : isInProgress
+                      ? "border-gray-300"
+                      : "border-gray-200 opacity-75"
+                    }`}
                   style={{
                     borderColor: isInProgress ? `${folderColor}60` : undefined,
                   }}
@@ -323,13 +335,12 @@ export default function FolderDetail() {
                       <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs font-medium">
                         {/* Status Badge */}
                         <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 uppercase tracking-wide ${
-                            isCompleted
-                              ? "bg-emerald-100 text-emerald-700"
-                              : isInProgress
-                                ? "text-white shadow-sm"
-                                : "bg-gray-100 text-gray-500"
-                          }`}
+                          className={`inline-flex items-center rounded-md px-2 py-1 uppercase tracking-wide ${isCompleted
+                            ? "bg-emerald-100 text-emerald-700"
+                            : isInProgress
+                              ? "text-white shadow-sm"
+                              : "bg-gray-100 text-gray-500"
+                            }`}
                           style={{
                             backgroundColor: isInProgress
                               ? folderColor
@@ -370,10 +381,12 @@ export default function FolderDetail() {
                   <div className="flex shrink-0 items-center justify-end gap-2 sm:pl-4">
                     {isInProgress && (
                       <button
+                        onClick={() => handleCompleteQuest(quest.id)}
+                        disabled={isPending}
                         className="rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
                         style={{ backgroundColor: folderColor }}
                       >
-                        Selesaikan
+                        {isPending ? <Loader2 size={16} className="ml-2 animate-spin text-white" /> : "Selesaikan"}
                       </button>
                     )}
                     <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700">
