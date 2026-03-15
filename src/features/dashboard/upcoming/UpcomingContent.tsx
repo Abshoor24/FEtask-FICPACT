@@ -23,6 +23,7 @@ import {
   useUpdateCompletedQuest,
 } from "@/data/hooks/useQuest";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetProfile } from "@/data/hooks/useAuth";
 
 type FilterType = "ALL" | "ONGOING" | "COMPLETED" | "FAILED";
 
@@ -33,6 +34,7 @@ export default function UpcomingContent() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("ALL");
   const queryInvalidate = useQueryClient();
 
+  const { data: session } = useGetProfile();
   const { data } = useGetUserQuests();
   const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
 
@@ -213,17 +215,15 @@ export default function UpcomingContent() {
             <button
               key={f.key}
               onClick={() => setActiveFilter(f.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeFilter === f.key
-                  ? "bg-[#7C3BED] text-white shadow-sm shadow-purple-200"
-                  : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeFilter === f.key
+                ? "bg-[#7C3BED] text-white shadow-sm shadow-purple-200"
+                : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                }`}
             >
               {f.label}
               <span
-                className={`ml-1.5 ${
-                  activeFilter === f.key ? "text-purple-200" : "text-gray-300"
-                }`}
+                className={`ml-1.5 ${activeFilter === f.key ? "text-purple-200" : "text-gray-300"
+                  }`}
               >
                 {f.count}
               </span>
@@ -299,7 +299,7 @@ export default function UpcomingContent() {
 
       {/* ================= DRAWERS & MODALS ================= */}
       <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
-      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} />
+      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} locked={session?.data.level! < 2} />
     </>
   );
 }
