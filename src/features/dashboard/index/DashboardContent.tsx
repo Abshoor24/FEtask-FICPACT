@@ -70,7 +70,6 @@ export default function DashboardContent() {
 
             {/* ADD TASK BUTTON + VOICE BUTTON */}
             <AddTaskButton
-              voiceLocked={session?.data?.level! < 2}
               onClick={() => setOpen(true)}
               onVoiceClick={() => setVoiceOpen(true)}
             />
@@ -151,7 +150,7 @@ export default function DashboardContent() {
 
       {/* ================= DRAWERS & MODALS ================= */}
       <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
-      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} />
+      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} locked={session?.data.level! < 2} />
     </>
   );
 }
