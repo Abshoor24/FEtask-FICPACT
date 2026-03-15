@@ -15,6 +15,7 @@ import {
   useUpdateCompletedQuest,
 } from "@/data/hooks/useQuest";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetProfile } from "@/data/hooks/useAuth";
 
 export default function TodayContent() {
   const [open, setOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function TodayContent() {
   const queryInvalidate = useQueryClient();
 
   const { data } = useGetUserQuests();
+  const { data: session } = useGetProfile();
   const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
 
   // Filter only TODAY quests
@@ -305,7 +307,7 @@ export default function TodayContent() {
 
       {/* ================= DRAWERS & MODALS ================= */}
       <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
-      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} />
+      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} locked={session?.data.level! < 2} />
     </>
   );
 }
