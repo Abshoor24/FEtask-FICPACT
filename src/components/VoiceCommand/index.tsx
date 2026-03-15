@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Sparkles, X } from "lucide-react";
+import { LockKeyhole, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 
 import ModeInfoCard from "./ModeInfoCard";
@@ -16,7 +16,7 @@ import { useVoiceRecognition } from "./useVoiceRecognition";
 import { useCreateQuestWithVoice } from "@/data/hooks/useQuest";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
+export default function VoiceCommand({ open, onClose, locked }: VoiceCommandProps) {
   const [aiMode, setAIMode] = useState<AIMode>("with-folder");
   const queryInvalidate = useQueryClient();
   const {
@@ -109,15 +109,14 @@ export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
           />
-
           {/* ── Modal wrapper ── */}
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center px-4"
+            className="fixed inset-0 z-40 flex items-center justify-center px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={onClose}
           >
             <motion.div
               className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
@@ -127,6 +126,63 @@ export default function VoiceCommand({ open, onClose }: VoiceCommandProps) {
               transition={{ type: "spring", stiffness: 300, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
             >
+              {locked && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm px-6 text-center"
+                >
+                  <div className="max-w-sm space-y-4">
+
+                    {/* Icon */}
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3BED]/10">
+                      <LockKeyhole className="text-[#7C3BED]" size={22} />
+                    </div>
+
+                    {/* Title */}
+                    <p className="text-lg font-semibold text-gray-900">
+                      Fitur Voice Quest Terkunci
+                    </p>
+
+                    {/* Description */}
+                    <p className="text-[14px] text-gray-500">
+                      Naikkan level kamu ke <span className="font-semibold text-[#7C3BED]">Level 2 </span>
+                      untuk membuka fitur pembuatan quest menggunakan suara.
+                    </p>
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-400/40 pt-3" />
+
+                    {/* Tips */}
+                    <div className="space-y-2 text-left">
+                      <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
+                        Cara menaikkan level
+                      </p>
+
+                      <ul className="text-[15px] space-y-2 text-sm text-gray-500">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#7C3BED]">✔</span>
+                          Selesaikan quest untuk mendapatkan EXP
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#7C3BED]">✔</span>
+                          Lakukan refleksi setelah menyelesaikan quest
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#7C3BED]">✔</span>
+                          Pertahankan streak menyelesaikan quest
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Progress hint */}
+                    <p className="text-sm text-gray-400">
+                      Semakin banyak quest yang kamu selesaikan, semakin cepat level kamu naik.
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
               {/* ── Top gradient bar ── */}
               <div className="h-1.5 w-full shrink-0 bg-gradient-to-r from-[#7C3BED] via-purple-400 to-indigo-400" />
 

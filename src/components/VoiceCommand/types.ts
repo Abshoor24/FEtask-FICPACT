@@ -8,6 +8,7 @@ export type AIMode = "with-folder" | "task-only";
 export interface VoiceCommandProps {
     open: boolean;
     onClose: () => void;
+    locked: boolean;
 }
 
 export interface ModeSelectorProps {
