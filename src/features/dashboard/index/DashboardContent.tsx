@@ -14,12 +14,14 @@ import {
 } from "@/data/hooks/useQuest";
 import EmptyTask from "./EmptyTask";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetProfile } from "@/data/hooks/useAuth";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const queryInvalidate = useQueryClient();
 
+  const { data: session } = useGetProfile();
   const { data } = useGetUserQuests();
   const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
 
@@ -41,6 +43,7 @@ export default function DashboardContent() {
     });
   };
 
+  console.log("Session data:", session);
   return (
     <>
       <div className="h-full overflow-y-auto px-10 py-8">
@@ -67,6 +70,7 @@ export default function DashboardContent() {
 
             {/* ADD TASK BUTTON + VOICE BUTTON */}
             <AddTaskButton
+              voiceLocked={session?.data?.level! < 2}
               onClick={() => setOpen(true)}
               onVoiceClick={() => setVoiceOpen(true)}
             />
@@ -116,9 +120,9 @@ export default function DashboardContent() {
         {/* ================= TASK LIST ================= */}
         {hasNoQuests ? (
           <EmptyTask
-  onAdd={() => setOpen(true)}
-  onVoiceClick={() => setVoiceOpen(true)}
-/>
+            onAdd={() => setOpen(true)}
+            onVoiceClick={() => setVoiceOpen(true)}
+          />
         ) : (
           data?.data?.map((data) => (
             <TaskSection key={data.key} title={data.key}>

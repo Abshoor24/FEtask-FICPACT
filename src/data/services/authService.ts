@@ -1,5 +1,6 @@
 import { apiClient } from "@/common/libs/api-client";
 import { SessionModel } from "../models/sessionModel";
+import { UserModel } from "../models/userModel";
 
 class AuthService {
     // public async loginWithGoogle() {
@@ -13,18 +14,21 @@ class AuthService {
     //     }
     // }
 
-    public async checkSession(token: string | undefined)  {
-        try {
-            return await apiClient<{data: SessionModel}>({
-                url: "/user/session",
-                method: "GET",
-                headers: {
-                    Cookie: `token=${token}`,
-                },
-            });
-        } catch (error) {
-            console.error(error);
-        }
+    public async getProfile() {
+        return await apiClient<{ data: UserModel }>({
+            url: "/user/profile",
+            method: "GET",
+        });
+    }
+
+    public async checkSession(token: string | undefined) {
+        return await apiClient<{ data: SessionModel }>({
+            url: "/user/session",
+            method: "GET",
+            headers: {
+                Cookie: `token=${token}`,
+            },
+        });
     }
 
     public async logout() {
@@ -35,20 +39,20 @@ class AuthService {
     }
 
     public async login(email: string, password: string) {
-            return await apiClient({
-                url: "/auth/login",
-                method: "POST",
-                data: { email, password },
-            });
-  
+        return await apiClient({
+            url: "/auth/login",
+            method: "POST",
+            data: { email, password },
+        });
+
     }
 
     public async register(name: string, email: string, password: string) {
-            return await apiClient({
-                url: "/auth/register",
-                method: "POST",
-                data: { name, email, password },
-            });
+        return await apiClient({
+            url: "/auth/register",
+            method: "POST",
+            data: { name, email, password },
+        });
     }
 
     public async verifyAccount(token: string) {
@@ -57,7 +61,7 @@ class AuthService {
             method: "POST",
             data: {
                 token
-            } ,
+            },
         });
     }
 
@@ -67,7 +71,7 @@ class AuthService {
             method: "POST",
             data: {
                 email
-            } ,
+            },
         });
     }
 
@@ -86,7 +90,7 @@ class AuthService {
                 token,
                 email,
                 newPassword
-            } ,
+            },
         });
     }
 }

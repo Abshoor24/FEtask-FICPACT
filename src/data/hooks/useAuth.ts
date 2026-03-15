@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoginSchema, RegisterSchema } from "@/common/validations/authValidation";
 import { authService } from "../services/authService";
 
@@ -8,6 +8,14 @@ import { authService } from "../services/authService";
 //         mutationFn: authService.loginWithGoogle,
 //     })
 // }
+
+export const useGetProfile = () => {
+    return useQuery({
+        queryKey: ["get_profile"],
+        queryFn: authService.getProfile,
+    })
+}
+
 export function useCheckSession() {
     return useMutation({
         mutationKey: ["check_session"],
