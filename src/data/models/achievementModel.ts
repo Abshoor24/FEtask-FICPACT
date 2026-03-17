@@ -30,6 +30,7 @@ export interface UserAchievementModel {
 
 export interface AchievementProgressModel extends AchievementModel {
     progress: number
+    current: number
     isUnlocked: boolean
     isClaimed: boolean
     type: "folder" | "level" | "quest" | "reflection"
