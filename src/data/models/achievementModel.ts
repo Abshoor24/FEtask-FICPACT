@@ -1,29 +1,23 @@
-// model Achievement {
-//   id          String @id @default (uuid())
-//   name        String @unique
-//   description String ?
-// expReward   Int @default (0)
-//   criteria    Json
-//   createdAt   DateTime @default (now())
-//   updatedAt   DateTime @updatedAt
-//   users       UserAchievement[]
-// }
 
-import { UserModel } from "./userModel"
+
+export type AchievementTypeModel = "folder" | "level" | "quest" | "reflection"
+
+export interface AchievementCriteriaModel {
+    type: AchievementTypeModel
+    target: number
+}
 
 export interface AchievementModel {
     id: string
     name: string
     description?: string
     expReward: number
-    criteria: {
-        type: "folder" | "level" | "quest" | "reflection"
-        target: number
-    }
+    criteria: AchievementCriteriaModel
     createdAt: string
     updatedAt: string
     users: UserAchievementModel[]
 }
+
 
 export interface UserAchievementModel {
     id: string
