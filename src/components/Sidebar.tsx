@@ -20,6 +20,7 @@ import { useLogout } from "@/data/hooks/useAuth";
 
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -192,12 +193,27 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
           <p className="text-sm font-semibold text-gray-900">MASAmbaaaa</p>
         </Link>
 
-        <div
-          onClick={() => logout()}
-          className="cursor-pointer flex items-center gap-2"
-        >
-          <LogOut size={16} className="text-gray-400" />
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <div className="cursor-pointer flex items-center gap-2 p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors group">
+              <LogOut size={16} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+            </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Konfirmasi Logout</AlertDialogTitle>
+              <AlertDialogDescription>
+                Apakah kamu yakin ingin keluar dari akun ini? Kamu harus login kembali untuk mengakses tugas-tugasmu.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Batal</AlertDialogCancel>
+              <AlertDialogAction onClick={() => logout()} className="bg-red-500 hover:bg-red-600 text-white">
+                Keluar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </aside>
   );
