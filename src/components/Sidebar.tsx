@@ -12,6 +12,7 @@ import {
   Plus,
   LogOut,
   Mic,
+  Trophy,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -53,9 +54,9 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
     { name: "Achievements", icon: User, path: "/dashboard/achievement" },
   ];
 
-  const categories: MenuItem[] = [
-    { name: "Personal", icon: User, path: "/personal" },
-    { name: "Work", icon: Briefcase, path: "/work" },
+  const extraItems: MenuItem[] = [
+    { name: "Leaderboard", icon: Trophy, path: "/dashboard/leaderboard" },
+    { name: "Profile", icon: User, path: "/dashboard/profile" },
   ];
 
   return (
@@ -96,21 +97,26 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
           })}
         </nav>
 
-        {/* CATEGORIES */}
+        {/* EXTRA ITEMS */}
         <div className="mt-8">
           <p className="text-xs font-semibold text-gray-400 mb-3 uppercase">
-            Categories
+            Others
           </p>
-
           <div className="space-y-2">
-            {categories.map((item) => {
+            {extraItems.map((item) => {
               const Icon = item.icon;
+              const active = pathname === item.path;
 
               return (
                 <Link
                   key={item.name}
                   href={item.path}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 transition"
+                  className={clsx(
+                    "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition",
+                    active
+                      ? "bg-[#7C3BED]/10 text-[#7C3BED]"
+                      : "text-gray-600 hover:bg-gray-100",
+                  )}
                 >
                   <Icon size={18} />
                   {item.name}
