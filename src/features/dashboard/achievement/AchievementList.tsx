@@ -3,7 +3,7 @@
 import { useClaimAchievement } from '@/data/hooks/useAchievements'
 import { AchievementProgressModel } from '@/data/models/achievementModel'
 import { useQueryClient } from '@tanstack/react-query'
-import { Loader2, Trophy } from 'lucide-react'
+import { Loader2, Trophy, Folder, Star, Target, BookOpen } from 'lucide-react'
 import { useEffect } from 'react'
 
 interface Props {
@@ -30,7 +30,11 @@ export default function AchievementList({ data, index }: Props) {
         >
             {/* ICON */}
             <div className="w-12 h-12 rounded-full bg-[#7C3BED]/10 flex items-center justify-center mb-4">
-                <Trophy size={20} className="text-[#7C3BED]" />
+                {achievementType === "folder" && <Folder size={20} className="text-[#7C3BED]" />}
+                {achievementType === "level" && <Star size={20} className="text-[#7C3BED]" />}
+                {achievementType === "quest" && <Target size={20} className="text-[#7C3BED]" />}
+                {achievementType === "reflection" && <BookOpen size={20} className="text-[#7C3BED]" />}
+                {!["folder", "level", "quest", "reflection"].includes(achievementType) && <Trophy size={20} className="text-[#7C3BED]" />}
             </div>
 
             {/* TITLE */}
