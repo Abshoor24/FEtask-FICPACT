@@ -93,6 +93,22 @@ class AuthService {
             },
         });
     }
+
+    public async resendPhoneVerificationToken(phone: string) {
+        return await apiClient({
+            url: "/auth/resend-phone-verification",
+            method: "POST",
+            data: { phone },
+        });
+    }
+
+    public async updatePhone(phone: string, token: string) {
+        return await apiClient({
+            url: "/auth/update-phone",
+            method: "POST",
+            data: { phone, token },
+        });
+    }
 }
 
 export const authService = new AuthService();

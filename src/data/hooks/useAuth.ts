@@ -77,3 +77,17 @@ export function useResetPassword() {
         mutationFn: ({ token, email, newPassword }: { token: string; email: string; newPassword: string }) => authService.resetPassword(token, email, newPassword),
     })
 }
+
+export function useResendPhoneVerification() {
+    return useMutation({
+        mutationKey: ["resend_phone_verification"],
+        mutationFn: (phone: string) => authService.resendPhoneVerificationToken(phone),
+    })
+}
+
+export function useUpdatePhone() {
+    return useMutation({
+        mutationKey: ["update_phone"],
+        mutationFn: ({ phone, token }: { phone: string; token: string }) => authService.updatePhone(phone, token),
+    })
+}

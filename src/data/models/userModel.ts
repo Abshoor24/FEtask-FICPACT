@@ -11,4 +11,5 @@ export interface UserModel {
     lastReflection: string;
     createdAt: string;
     updatedAt: string;
+    phone: string | null;
 }
