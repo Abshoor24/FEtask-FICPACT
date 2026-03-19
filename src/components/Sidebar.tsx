@@ -45,6 +45,11 @@ interface VoiceProps {
 export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems: MenuItem[] = [
     { name: "All Tasks", icon: LayoutGrid, path: "/dashboard" },
@@ -58,6 +63,22 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
     { name: "Leaderboard", icon: Trophy, path: "/dashboard/leaderboard" },
     { name: "Profile", icon: User, path: "/dashboard/profile" },
   ];
+
+  if (!mounted) {
+    return (
+      <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
+        <div>
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-10 h-10 bg-gray-100 animate-pulse rounded-lg" />
+            <div>
+              <div className="h-4 w-24 bg-gray-100 animate-pulse rounded mb-1" />
+              <div className="h-3 w-16 bg-gray-100 animate-pulse rounded" />
+            </div>
+          </div>
+        </div>
+      </aside>
+    );
+  }
 
   return (
     <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
