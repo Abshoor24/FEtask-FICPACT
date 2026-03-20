@@ -18,6 +18,9 @@ export async function proxy(request: NextRequest) {
         if (!session.data.isVerified) {
             return NextResponse.redirect(new URL("/auth/verify", request.url));
         }
+        if (!session.data.isOnboarded) {
+            return NextResponse.redirect(new URL("/onboarding", request.url));
+        }
     }
 
     if (pathName.startsWith("/auth/verify")) {
