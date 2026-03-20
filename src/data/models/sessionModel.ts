@@ -1,5 +1,6 @@
 export interface SessionModel {
     id: string;
     isVerified: boolean;
-    level: number
+    level: number,
+    isOnboarded: boolean,
 }
