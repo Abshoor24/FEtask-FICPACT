@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
+import { UserModel } from "@/data/models/userModel";
 
-export default function InsightCard() {
+interface InsightCardProps {
+  user: UserModel;
+}
+
+export default function InsightCard({ user }: InsightCardProps) {
+  const completedFolders = user.questFolders?.filter((folder) => folder.progress === 100).length || 0;
+
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -9,12 +16,12 @@ export default function InsightCard() {
     >
       <h3 className="font-semibold mb-2">Insight AI</h3>
       <p className="text-sm opacity-90">
-        Kamu paling fokus di pagi hari (08.00 – 10.00).
+        Kamu sudah menuntaskan {user.totalQuestCompleted || 0} quest dengan {completedFolders} folder selesai total.
       </p>
 
-      <button className="mt-4 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm">
-        Lihat Detail Fokus
-      </button>
+      <div className="mt-4 bg-white/20 px-4 py-2 rounded-lg text-sm inline-block">
+        Status akun: {user.isOnboarded ? "Onboarded" : "Belum Onboarded"}
+      </div>
     </motion.div>
   );
 }
