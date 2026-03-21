@@ -141,6 +141,15 @@ const LeaderboardContent = () => {
                             </h4>
                             <p className={`text-sm ${isFirst ? 'text-violet-600' : 'text-slate-500'}`}>Lvl {user.level} Guardian</p>
 
+                            <div className={`
+                                mt-4 px-4 py-1.5 rounded-full text-sm font-bold
+                                ${isFirst ? 'bg-violet-600 text-white shadow-md' :
+                                    isSecond ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300' :
+                                        'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'}
+                            `}>
+                                {user.exp.toLocaleString()} EXP
+                            </div>
+
                         </div>
                     );
                 })}
@@ -214,20 +223,21 @@ const LeaderboardContent = () => {
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Peringkat</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Level</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">EXP</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {isLoading ? (
                                 [1, 2, 3, 4, 5].map((i) => (
                                     <tr key={i}>
-                                        <td colSpan={3} className="px-6 py-4">
+                                        <td colSpan={4} className="px-6 py-4">
                                             <div className="h-8 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg" />
                                         </td>
                                     </tr>
                                 ))
                             ) : leaderboardData.length === 0 ? (
                                 <tr>
-                                    <td colSpan={3} className="px-6 py-12 text-center text-slate-400 italic">
+                                    <td colSpan={4} className="px-6 py-12 text-center text-slate-400 italic">
                                         Belum ada data peringkat untuk periode ini
                                     </td>
                                 </tr>
@@ -274,6 +284,11 @@ const LeaderboardContent = () => {
                                                 Lvl {user.level}
                                             </span>
                                         </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <span className={`font-bold ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 font-black' : 'text-slate-900 dark:text-white'}`}>
+                                                {user.exp.toLocaleString()} EXP
+                                            </span>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -293,7 +308,7 @@ const LeaderboardContent = () => {
                             <p className="font-bold text-slate-900 dark:text-white">Peringkat Kamu: #{myRankData.rank}</p>
                             <p className="text-sm text-slate-500">
                                 {myRankData.rank > 1
-                                    ? `Butuh ${((leaderboardData[leaderboardData.indexOf(myRankData) - 1]?.exp || 0) - myRankData.exp + 1).toLocaleString()} EXP lagi untuk naik peringkat!`
+                                    ? `Butuh ${((fullLeaderboardData[fullLeaderboardData.indexOf(myRankData) - 1]?.exp || 0) - myRankData.exp + 1).toLocaleString()} EXP lagi untuk naik peringkat!`
                                     : "Selamat! Kamu berada di posisi puncak!"}
                             </p>
                         </div>

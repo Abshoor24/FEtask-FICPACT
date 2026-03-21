@@ -31,6 +31,20 @@ export interface UserAchievementSummary {
     achievementId: string;
     achievedAt: string;
     isClaimed: boolean;
+    achievement: AchievementDetail;
+}
+
+export interface AchievementDetail {
+    id: string;
+    name: string;
+    description: string;
+    expReward: number;
+    criteria: {
+        type: "folder" | "level" | "quest" | "reflection";
+        target: number;
+    };
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface UserQuest {
@@ -59,5 +73,7 @@ export interface UserQuestFolder {
     quests: UserQuest[];
     progress: number;
 }
+
+export type UserProfileApiResponse = UserModel | { data: UserModel };
 
 

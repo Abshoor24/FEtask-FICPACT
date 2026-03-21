@@ -4,9 +4,11 @@ import { CreateQuestSchema, createQuestSchema } from "@/common/validations/quest
 import { useGetUserAvailableFolders } from "@/data/hooks/useFolder";
 import { useCreateQuest } from "@/data/hooks/useQuest";
 import { useForm } from "@tanstack/react-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface AddTaskDrawerProps {
   open: boolean;
@@ -16,6 +18,7 @@ interface AddTaskDrawerProps {
 export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
   const { data: foldersData } = useGetUserAvailableFolders()
   const { mutate: createQuestMutate, isSuccess, isPending } = useCreateQuest();
+  const invalidateQuery = useQueryClient();
   // Mock folders - nanti diganti dengan data dari API
 
   const form = useForm({
@@ -29,15 +32,16 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
       onSubmit: createQuestSchema
     },
     onSubmit: ({ value }) => {
-      createQuestMutate({ ...value, deadLineAt: new Date(value.deadLineAt).toISOString() })
+      createQuestMutate({ ...value, deadLineAt: new Date(value.deadLineAt).toISOString() },{
+        onSuccess: () => {          form.reset()
+          toast.success("Quest created successfully!")
+          invalidateQuery.invalidateQueries({ queryKey: ["get_user_quests"] });
+          onClose()
+        }
+      })
     }
   })
 
-  useEffect(() => {
-    if (isSuccess) {
-      onClose()
-    }
-  }, [isSuccess, onClose])
   return (
     <AnimatePresence>
       {open && (
