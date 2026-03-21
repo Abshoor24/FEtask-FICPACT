@@ -89,7 +89,7 @@ class AuthService {
             data: {
                 token,
                 email,
-                newPassword
+                password: newPassword
             },
         });
     }

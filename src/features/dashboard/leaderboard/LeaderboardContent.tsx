@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Award, Info, TrendingUp, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Award, Info, TrendingUp, Loader2, Search } from 'lucide-react';
 import { useWeeklyLeaderboard, useMonthlyLeaderboard, useLeaderboardAllTime } from '@/data/hooks/useLeaderboard';
 import { useGetProfile } from '@/data/hooks/useAuth';
-import { LeaderboardModel } from '@/data/models/leaderboardModel';
 import { useRouter } from 'next/navigation';
 
 const LeaderboardContent = () => {
     const [filter, setFilter] = useState<'weekly' | 'monthly' | 'all-time'>('weekly');
+    const [searchQuery, setSearchQuery] = useState('');
     const [mounted, setMounted] = useState(false);
     const router = useRouter();
     useEffect(() => {
@@ -30,7 +30,17 @@ const LeaderboardContent = () => {
     };
 
     const activeQuery = getActiveQuery();
-    const leaderboardData = activeQuery.data?.data || [];
+    const fullLeaderboardData = activeQuery.data?.data || [];
+    const leaderboardData = useMemo(() => {
+        const keyword = searchQuery.trim().toLowerCase();
+
+        if (!keyword) return fullLeaderboardData;
+
+        return fullLeaderboardData.filter((item) =>
+            item.profile.name?.toLowerCase().includes(keyword) ||
+            item.profile.email?.toLowerCase().includes(keyword)
+        );
+    }, [fullLeaderboardData, searchQuery]);
     const isLoading = activeQuery.isLoading;
     const currentUser = profileQuery.data?.data;
 
@@ -39,7 +49,7 @@ const LeaderboardContent = () => {
     const tableData = leaderboardData.slice(3);
 
     // Get current user's rank from the full list if available
-    const myRankData = leaderboardData.find(item => item.profile.email === currentUser?.email);
+    const myRankData = fullLeaderboardData.find(item => item.profile.email === currentUser?.email);
 
     if (!mounted) {
         return (
@@ -131,14 +141,6 @@ const LeaderboardContent = () => {
                             </h4>
                             <p className={`text-sm ${isFirst ? 'text-violet-600' : 'text-slate-500'}`}>Lvl {user.level} Guardian</p>
 
-                            <div className={`
-                                mt-4 px-4 py-1.5 rounded-full text-sm font-bold
-                                ${isFirst ? 'bg-violet-600 text-white shadow-md' :
-                                    isSecond ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300' :
-                                        'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'}
-                            `}>
-                                {user.exp.toLocaleString()} EXP
-                            </div>
                         </div>
                     );
                 })}
@@ -167,21 +169,33 @@ const LeaderboardContent = () => {
 
             {/* Filters */}
             <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-full md:w-auto overflow-x-auto no-scrollbar">
-                    {(['weekly', 'monthly', 'all-time'] as const).map((t) => (
-                        <button
-                            key={t}
-                            onClick={() => setFilter(t)}
-                            className={`
-                                px-6 py-2 text-sm font-bold flex-1 md:flex-none transition-all duration-200
-                                ${filter === t
-                                    ? 'bg-white dark:bg-slate-700 shadow-sm rounded-lg text-violet-600'
-                                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}
-                            `}
-                        >
-                            {t === 'weekly' ? 'Mingguan' : t === 'monthly' ? 'Bulanan' : 'Sepanjang Waktu'}
-                        </button>
-                    ))}
+                <div className="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-full md:w-auto overflow-x-auto no-scrollbar">
+                        {(['weekly', 'monthly', 'all-time'] as const).map((t) => (
+                            <button
+                                key={t}
+                                onClick={() => setFilter(t)}
+                                className={`
+                                    px-6 py-2 text-sm font-bold flex-1 md:flex-none transition-all duration-200
+                                    ${filter === t
+                                        ? 'bg-white dark:bg-slate-700 shadow-sm rounded-lg text-violet-600'
+                                        : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}
+                                `}
+                            >
+                                {t === 'weekly' ? 'Mingguan' : t === 'monthly' ? 'Bulanan' : 'Sepanjang Waktu'}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 w-full sm:w-72">
+                        <Search className="w-4 h-4 text-slate-400" />
+                        <input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Cari Guardian..."
+                            className="w-full bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 outline-none"
+                        />
+                    </div>
                 </div>
                 {!isLoading && (
                     <div className="flex items-center gap-2 text-slate-500 text-sm">
@@ -200,21 +214,20 @@ const LeaderboardContent = () => {
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Peringkat</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Level</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Total EXP</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {isLoading ? (
                                 [1, 2, 3, 4, 5].map((i) => (
                                     <tr key={i}>
-                                        <td colSpan={4} className="px-6 py-4">
+                                        <td colSpan={3} className="px-6 py-4">
                                             <div className="h-8 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg" />
                                         </td>
                                     </tr>
                                 ))
                             ) : leaderboardData.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="px-6 py-12 text-center text-slate-400 italic">
+                                    <td colSpan={3} className="px-6 py-12 text-center text-slate-400 italic">
                                         Belum ada data peringkat untuk periode ini
                                     </td>
                                 </tr>
@@ -259,11 +272,6 @@ const LeaderboardContent = () => {
                                         <td className="px-6 py-4 text-center">
                                             <span className={`px-3 py-1 rounded-lg text-sm font-medium ${user.profile.email === currentUser?.email ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                                                 Lvl {user.level}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <span className={`font-bold ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 font-black' : 'text-slate-900 dark:text-white'}`}>
-                                                {user.exp.toLocaleString()} EXP
                                             </span>
                                         </td>
                                     </tr>

@@ -7,8 +7,32 @@ import AchievementCard from "@/features/dashboard/profile/AchievementCard";
 import FolderProgress from "@/features/dashboard/profile/FolderProgress";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
+import { useUserProfile } from "@/data/hooks/useUser";
 
 export default function ProfilePage() {
+  const { data, isLoading } = useUserProfile();
+  const user = data?.data;
+
+  if (isLoading) {
+    return (
+      <main className="flex-1 px-10 py-8 space-y-6">
+        <div className="h-28 rounded-2xl bg-gray-200 animate-pulse" />
+        <div className="h-32 rounded-2xl bg-gray-200 animate-pulse" />
+        <div className="h-40 rounded-2xl bg-gray-200 animate-pulse" />
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="flex-1 px-10 py-8">
+        <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
+          Data profile tidak ditemukan.
+        </div>
+      </main>
+    );
+  }
+
   return (
     <motion.main
       className="flex-1 px-10 py-8 space-y-10"
@@ -17,24 +41,30 @@ export default function ProfilePage() {
       animate="show"
     >
       <motion.div variants={fadeUp}>
-        <ProfileHeader />
+        <ProfileHeader user={user} />
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <ProfileStats />
+        <ProfileStats user={user} />
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <InsightCard />
+        <InsightCard user={user} />
       </motion.div>
 
       {/* ACHIEVEMENTS */}
       <motion.section variants={fadeUp}>
         <h2 className="text-lg font-semibold mb-4">🏆 Pencapaian Langka</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <AchievementCard title="Early Bird" desc="Selesai sebelum jam 7" />
-          <AchievementCard title="Consistency King" desc="Streak 7 hari" />
-          <AchievementCard title="Slayer of Exams" desc="Semua ujian kelar" />
+          {user.userAchievements.length === 0 ? (
+            <div className="col-span-full rounded-2xl border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-gray-500">
+              Belum ada achievement yang tercatat.
+            </div>
+          ) : (
+            user.userAchievements.slice(0, 6).map((achievement) => (
+              <AchievementCard key={achievement.id} achievement={achievement} />
+            ))
+          )}
         </div>
       </motion.section>
 
@@ -42,9 +72,15 @@ export default function ProfilePage() {
       <motion.section variants={fadeUp}>
         <h2 className="text-lg font-semibold mb-4">📂 Overview Folder Quest</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FolderProgress title="Ngoding" progress={40} />
-          <FolderProgress title="Ngocok" progress={40} />
-          <FolderProgress title="Ulangan MK2 Cik" progress={40} />
+          {user.questFolders.length === 0 ? (
+            <div className="col-span-full rounded-2xl border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-gray-500">
+              Belum ada folder quest.
+            </div>
+          ) : (
+            user.questFolders.slice(0, 6).map((folder) => (
+              <FolderProgress key={folder.id} folder={folder} />
+            ))
+          )}
         </div>
       </motion.section>
     </motion.main>
