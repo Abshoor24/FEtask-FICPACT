@@ -13,3 +13,5 @@ export interface UserModel {
     updatedAt: string;
     phone: string | null;
 }
+
+
