@@ -2,9 +2,11 @@
 
 import { useCreateFolder } from "@/data/hooks/useFolder";
 import { CreateQuestFolderRequest } from "@/data/models/folderModel";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Folder, CalendarClock } from "lucide-react";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 interface AddFolderModalProps {
   open: boolean;
@@ -46,7 +48,7 @@ export default function AddFolderModal({ open, onClose }: AddFolderModalProps) {
   const [endedTime, setEndedTime] = useState("23:59");
   const [selectedIcon, setSelectedIcon] = useState("📚");
   const [selectedColor, setSelectedColor] = useState("#7C3BED");
-
+const invalidateQuery = useQueryClient();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!folderName.trim() || !endedDate) return;
@@ -63,21 +65,22 @@ export default function AddFolderModal({ open, onClose }: AddFolderModalProps) {
       endedAt: combinedDateTime.toISOString(),
     };
 
-    createFolder(folderData);
+    createFolder(folderData,{
+      onSuccess: () => {
+        setFolderName("");
+        setDescription("");
+        setEndedDate("");
+        setEndedTime("23:59");
+        setSelectedIcon("📚");
+        setSelectedColor("#7C3BED");
+        toast.success("Folder created successfully!");
+        invalidateQuery.invalidateQueries({queryKey: ["get_all_folders"]});
+        onClose();
+      }
+    });
     console.log(folderData);
   };
 
-  React.useEffect(() => {
-    if (isSuccess) {
-      setFolderName("");
-      setDescription("");
-      setEndedDate("");
-      setEndedTime("23:59");
-      setSelectedIcon("📚");
-      setSelectedColor("#7C3BED");
-      onClose();
-    }
-  }, [isSuccess, onClose]);
 
   return (
     <AnimatePresence>

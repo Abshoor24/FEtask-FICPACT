@@ -1,9 +1,9 @@
 import { apiClient } from "@/common/libs/api-client";
-import { UserModel } from "../models/userModel";
+import { UserProfileApiResponse } from "../models/userModel";
 
 class UserService {
 	public async getProfile() {
-		return await apiClient<{ data: UserModel }>({
+		return await apiClient<UserProfileApiResponse>({
 			url: "/user/profile",
 			method: "GET",
 		});

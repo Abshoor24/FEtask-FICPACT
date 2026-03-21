@@ -8,10 +8,11 @@ import FolderProgress from "@/features/dashboard/profile/FolderProgress";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 import { useUserProfile } from "@/data/hooks/useUser";
+import { UserModel } from "@/data/models/userModel";
 
 export default function ProfilePage() {
   const { data, isLoading } = useUserProfile();
-  const user = data?.data;
+  const user = (data && "data" in data ? data.data : data) as UserModel | undefined;
 
   if (isLoading) {
     return (
