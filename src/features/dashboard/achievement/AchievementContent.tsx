@@ -31,13 +31,28 @@ const tabButtonItems = [
 
 export default function AchievementContent() {
     const [openedTab, setOpenedTab] = React.useState<TabType>("all");
+    const [searchQuery, setSearchQuery] = React.useState("");
     const { data: achievements } = useGetUserAchievements();
+
+    const filterAchievements = (items: typeof achievements.data.achievements = []) => {
+        const keyword = searchQuery.trim().toLowerCase();
+        if (!keyword) return items;
+
+        return items.filter((item) =>
+            item.name.toLowerCase().includes(keyword) ||
+            item.description?.toLowerCase().includes(keyword)
+        );
+    };
 
     return (
         <div className="flex flex-col h-screen w-full">
 
             {/* HEADER */}
-            <Header />
+            <Header
+                searchValue={searchQuery}
+                onSearchChange={setSearchQuery}
+                searchPlaceholder="Cari medali legendaris..."
+            />
 
             {/* CONTENT */}
             <main className="flex-1 bg-[#F6F7FB] overflow-y-auto px-6 md:px-10 py-8">
@@ -65,23 +80,23 @@ export default function AchievementContent() {
 
                 {/* All */}
                 <Activity mode={openedTab === "all" ? "visible" : "hidden"} >
-                    <AllAchievementSection achievements={achievements?.data?.achievements || []} />
+                    <AllAchievementSection achievements={filterAchievements(achievements?.data?.achievements || [])} />
                 </Activity>
                 {/* Claimed */}
 
                 <Activity mode={openedTab === "claimed" ? "visible" : "hidden"} >
-                    <AllAchievementSection achievements={achievements?.data?.claimed || []} />
+                    <AllAchievementSection achievements={filterAchievements(achievements?.data?.claimed || [])} />
                 </Activity>
 
                 {/* Unclaimed */}
                 <Activity mode={openedTab === "unclaimed" ? "visible" : "hidden"} >
-                    <AllAchievementSection achievements={achievements?.data?.unclaimed || []} />
+                    <AllAchievementSection achievements={filterAchievements(achievements?.data?.unclaimed || [])} />
                 </Activity>
 
 
                 {/* Unlocked */}
                 <Activity mode={openedTab === "unlocked" ? "visible" : "hidden"} >
-                    <AllAchievementSection achievements={achievements?.data?.unlocked || []} />
+                    <AllAchievementSection achievements={filterAchievements(achievements?.data?.unlocked || [])} />
                 </Activity>
             </main>
         </div>
