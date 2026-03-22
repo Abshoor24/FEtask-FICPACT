@@ -16,10 +16,11 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     <div className="flex items-center gap-6">
 <div className="relative w-24 h-24 rounded-full border-2 border-[#7C3BED] flex items-center justify-center">
   {user.profile?.avatar ? (
-    <Image
-      src={user.profile.avatar}
+    <Image  
+      src={user.profile?.avatar}
       alt={displayName}
       fill
+      unoptimized
       className="rounded-full object-cover"
     />
   ) : (
