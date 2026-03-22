@@ -4,6 +4,7 @@ import { Trophy } from 'lucide-react';
 import React, { Activity } from 'react'
 import AchievementList from './AchievementList';
 import AllAchievementSection from './AchievementListSection';
+import { AchievementProgressModel } from '@/data/models/achievementModel';
 
 type TabType = "all" | "unlocked" | "claimed" | "unclaimed";
 const tabButtonItems = [
@@ -34,7 +35,7 @@ export default function AchievementContent() {
     const [searchQuery, setSearchQuery] = React.useState("");
     const { data: achievements } = useGetUserAchievements();
 
-    const filterAchievements = (items: typeof achievements.data.achievements = []) => {
+    const filterAchievements = (items: AchievementProgressModel[] = []) => {
         const keyword = searchQuery.trim().toLowerCase();
         if (!keyword) return items;
 
