@@ -17,7 +17,7 @@ import {
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Image from "next/image";
-import { useLogout } from "@/data/hooks/useAuth";
+import { useGetProfile, useLogout } from "@/data/hooks/useAuth";
 
 import {
   AlertDialog,
@@ -43,6 +43,7 @@ interface VoiceProps {
 }
 
 export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
+  const { data: user } = useGetProfile()
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
   const [mounted, setMounted] = React.useState(false);
@@ -210,14 +211,14 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
       <div className="flex items-center justify-between px-5 py-3 rounded-xl bg-[#7C3BED]/5">
         <Link href="/dashboard/profile" className="flex items-center gap-3">
           <Image
-            src="/amba1.jpg"
+            src={user?.data.profile?.avatar || "/amba1.jpg"}
             width={40}
             height={40}
-            alt="User"
+            alt={"User Avatar"}
+            unoptimized
             className="w-9 h-9 rounded-full"
           />
-
-          <p className="text-sm font-semibold text-gray-900">MASAmbaaaa</p>
+          <p className="text-sm font-semibold text-gray-900">{user?.data.profile?.name || "Guardian"}</p>
         </Link>
 
         <AlertDialog>
