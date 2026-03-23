@@ -1,6 +1,9 @@
 "use client";
 
-import { CreateQuestSchema, createQuestSchema } from "@/common/validations/questValidation";
+import {
+  CreateQuestSchema,
+  createQuestSchema,
+} from "@/common/validations/questValidation";
 import { useGetUserAvailableFolders } from "@/data/hooks/useFolder";
 import { useCreateQuest } from "@/data/hooks/useQuest";
 import { useForm } from "@tanstack/react-form";
@@ -17,7 +20,7 @@ interface AddTaskDrawerProps {
 }
 
 export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
-  const { data: foldersData } = useGetUserAvailableFolders()
+  const { data: foldersData } = useGetUserAvailableFolders();
   const { mutate: createQuestMutate, isSuccess, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
   const [isPunishmentOpen, setIsPunishmentOpen] = useState(false);
@@ -25,41 +28,41 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
 
   // Mock folders - nanti diganti dengan data dari API
 
-const form = useForm({
-  defaultValues: {
-    name: "",
-    description: "",
-    folderId: "",
-    deadLineAt: "",
-  },
-  validators: {
-    onSubmit: createQuestSchema,
-  },
-  onSubmit: ({ value }) => {
-    createQuestMutate(
-      {
-        ...value,
-        deadLineAt: new Date(value.deadLineAt).toISOString(),
-      },
-      {
-        onSuccess: (res) => {
-          form.reset();
-          toast.success("Quest created successfully!");
-
-          invalidateQuery.invalidateQueries({
-            queryKey: ["get_user_quests"],
-          });
-
-          if (!res) return;
-          setSelectedQuestId(res.id);
-          setIsPunishmentOpen(true);
-
-          onClose();
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      folderId: "",
+      deadLineAt: "",
+    },
+    validators: {
+      onSubmit: createQuestSchema,
+    },
+    onSubmit: ({ value }) => {
+      createQuestMutate(
+        {
+          ...value,
+          deadLineAt: new Date(value.deadLineAt).toISOString(),
         },
-      }
-    );
-  },
-});
+        {
+          onSuccess: (res) => {
+            form.reset();
+            toast.success("Quest created successfully!");
+
+            invalidateQuery.invalidateQueries({
+              queryKey: ["get_user_quests"],
+            });
+
+            if (!res) return;
+            setSelectedQuestId(res.id);
+            setIsPunishmentOpen(true);
+
+            onClose();
+          },
+        },
+      );
+    },
+  });
 
   return (
     <AnimatePresence>
@@ -82,13 +85,14 @@ const form = useForm({
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 30 }}
           >
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation()
-              form.handleSubmit();
-            }}
-              className="flex flex-col h-full">
-
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+              }}
+              className="flex flex-col h-full"
+            >
               {/* HEADER */}
               <div className="flex items-center justify-between px-6 py-4 border-b">
                 <h2 className="text-lg font-semibold text-gray-900">
@@ -124,7 +128,9 @@ const form = useForm({
                         required
                       />
                       {field.state.meta.errors?.map((err) => (
-                        <p key={err?.message} className="text-red-500 text-xs">{err?.message}</p>
+                        <p key={err?.message} className="text-red-500 text-xs">
+                          {err?.message}
+                        </p>
                       ))}
                     </div>
                   )}
@@ -246,13 +252,11 @@ const form = useForm({
           </motion.aside>
         </>
       )}
-        <PunishmentModal
-  open={isPunishmentOpen}
-  questId={selectedQuestId}
-  onClose={() => setIsPunishmentOpen(false)}
-/>
-    </AnimatePresence >
+      <PunishmentModal
+        open={isPunishmentOpen}
+        questId={selectedQuestId}
+        onClose={() => setIsPunishmentOpen(false)}
+      />
+    </AnimatePresence>
   );
-
-
 }
