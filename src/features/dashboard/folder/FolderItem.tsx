@@ -91,8 +91,8 @@ export default function FolderItem({ folder }: FolderItemProps) {
 
   return (
     <Link href={`/dashboard/folder/${folder.id}`}>
-      <div
-        className={`group cursor-pointer rounded-xl bg-white p-5 shadow-sm transition hover:shadow-md border ${
+        <div
+  className={`group cursor-pointer rounded-xl bg-white p-5 shadow-sm transition hover:shadow-md border h-[220px] flex flex-col ${
           isCompleted
             ? "border-green-200"
             : isOverdue
