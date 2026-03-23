@@ -56,8 +56,6 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             if (!res) return;
             setSelectedQuestId(res.id);
             setIsPunishmentOpen(true);
-
-            onClose();
           },
         },
       );
