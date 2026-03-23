@@ -21,7 +21,7 @@ export default function PunishmentModal({
 }: PunishmentModalProps) {
   const [step, setStep] = useState<"confirm" | "form">("confirm");
   const { mutate: createPunishment, isPending } = useCreatePunishment();
-
+  
   const form = useForm({
     defaultValues: {
       name: "",
@@ -44,9 +44,8 @@ export default function PunishmentModal({
           onSuccess: () => {
             toast.success("Punishment berhasil ditambahkan!");
             handleClose();
-            onClose();
           },
-        }
+        },
       );
     },
   });
@@ -83,9 +82,7 @@ export default function PunishmentModal({
               {/* HEADER */}
               <div className="flex justify-between items-center px-5 py-4 border-b">
                 <h2 className="font-semibold text-gray-800">
-                  {step === "confirm"
-                    ? "Tambah Hukuman?"
-                    : "Tambah Hukuman"}
+                  {step === "confirm" ? "Tambah Hukuman?" : "Tambah Hukuman"}
                 </h2>
               </div>
 
@@ -118,10 +115,10 @@ export default function PunishmentModal({
                 {/* STEP 2 (FORM) */}
                 {step === "form" && (
                   <form
-                       onSubmit={(e) => {
-    console.log("FORM KE SUBMIT");
-    form.handleSubmit(e);
-  }}
+                    onSubmit={(e) => {
+                      console.log("FORM KE SUBMIT");
+                      form.handleSubmit(e);
+                    }}
                     className="space-y-4"
                   >
                     {/* NAME */}
@@ -135,9 +132,7 @@ export default function PunishmentModal({
                             id={field.name}
                             name={field.name}
                             value={field.state.value}
-                            onChange={(e) =>
-                              field.handleChange(e.target.value)
-                            }
+                            onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                             className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
                           />
@@ -165,9 +160,7 @@ export default function PunishmentModal({
                             name={field.name}
                             type="datetime-local"
                             value={field.state.value}
-                            onChange={(e) =>
-                              field.handleChange(e.target.value)
-                            }
+                            onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                             className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
                           />
