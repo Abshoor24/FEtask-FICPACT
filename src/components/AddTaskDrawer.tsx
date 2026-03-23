@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import PunishmentModal from "./modals/PunishmentModal";
 
 interface AddTaskDrawerProps {
   open: boolean;
@@ -19,28 +20,46 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
   const { data: foldersData } = useGetUserAvailableFolders()
   const { mutate: createQuestMutate, isSuccess, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
+  const [isPunishmentOpen, setIsPunishmentOpen] = useState(false);
+  const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
+
   // Mock folders - nanti diganti dengan data dari API
 
-  const form = useForm({
-    defaultValues: {
-      name: "",
-      description: "",
-      folderId: "",
-      deadLineAt: "",
-    },
-    validators: {
-      onSubmit: createQuestSchema
-    },
-    onSubmit: ({ value }) => {
-      createQuestMutate({ ...value, deadLineAt: new Date(value.deadLineAt).toISOString() },{
-        onSuccess: () => {          form.reset()
-          toast.success("Quest created successfully!")
-          invalidateQuery.invalidateQueries({ queryKey: ["get_user_quests"] });
-          onClose()
-        }
-      })
-    }
-  })
+const form = useForm({
+  defaultValues: {
+    name: "",
+    description: "",
+    folderId: "",
+    deadLineAt: "",
+  },
+  validators: {
+    onSubmit: createQuestSchema,
+  },
+  onSubmit: ({ value }) => {
+    createQuestMutate(
+      {
+        ...value,
+        deadLineAt: new Date(value.deadLineAt).toISOString(),
+      },
+      {
+        onSuccess: (res) => {
+          form.reset();
+          toast.success("Quest created successfully!");
+
+          invalidateQuery.invalidateQueries({
+            queryKey: ["get_user_quests"],
+          });
+
+          if (!res) return;
+          setSelectedQuestId(res.id);
+          setIsPunishmentOpen(true);
+
+          onClose();
+        },
+      }
+    );
+  },
+});
 
   return (
     <AnimatePresence>
@@ -226,8 +245,14 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             </form>
           </motion.aside>
         </>
-      )
-      }
+      )}
+        <PunishmentModal
+  open={isPunishmentOpen}
+  questId={selectedQuestId}
+  onClose={() => setIsPunishmentOpen(false)}
+/>
     </AnimatePresence >
   );
+
+
 }
