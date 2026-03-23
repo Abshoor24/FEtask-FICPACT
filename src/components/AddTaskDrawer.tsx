@@ -1,6 +1,9 @@
 "use client";
 
-import { CreateQuestSchema, createQuestSchema } from "@/common/validations/questValidation";
+import {
+  CreateQuestSchema,
+  createQuestSchema,
+} from "@/common/validations/questValidation";
 import { useGetUserAvailableFolders } from "@/data/hooks/useFolder";
 import { useCreateQuest } from "@/data/hooks/useQuest";
 import { useForm } from "@tanstack/react-form";
@@ -9,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import PunishmentModal from "./modals/PunishmentModal";
 
 interface AddTaskDrawerProps {
   open: boolean;
@@ -16,9 +20,12 @@ interface AddTaskDrawerProps {
 }
 
 export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
-  const { data: foldersData } = useGetUserAvailableFolders()
+  const { data: foldersData } = useGetUserAvailableFolders();
   const { mutate: createQuestMutate, isSuccess, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
+  const [isPunishmentOpen, setIsPunishmentOpen] = useState(false);
+  const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
+
   // Mock folders - nanti diganti dengan data dari API
 
   const form = useForm({
@@ -29,18 +36,31 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
       deadLineAt: "",
     },
     validators: {
-      onSubmit: createQuestSchema
+      onSubmit: createQuestSchema,
     },
     onSubmit: ({ value }) => {
-      createQuestMutate({ ...value, deadLineAt: new Date(value.deadLineAt).toISOString() },{
-        onSuccess: () => {          form.reset()
-          toast.success("Quest created successfully!")
-          invalidateQuery.invalidateQueries({ queryKey: ["get_user_quests"] });
-          onClose()
-        }
-      })
-    }
-  })
+      createQuestMutate(
+        {
+          ...value,
+          deadLineAt: new Date(value.deadLineAt).toISOString(),
+        },
+        {
+          onSuccess: (res) => {
+            form.reset();
+            toast.success("Quest created successfully!");
+
+            invalidateQuery.invalidateQueries({
+              queryKey: ["get_user_quests"],
+            });
+
+            if (!res) return;
+            setSelectedQuestId(res.id);
+            setIsPunishmentOpen(true);
+          },
+        },
+      );
+    },
+  });
 
   return (
     <AnimatePresence>
@@ -63,13 +83,14 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 30 }}
           >
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation()
-              form.handleSubmit();
-            }}
-              className="flex flex-col h-full">
-
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+              }}
+              className="flex flex-col h-full"
+            >
               {/* HEADER */}
               <div className="flex items-center justify-between px-6 py-4 border-b">
                 <h2 className="text-lg font-semibold text-gray-900">
@@ -105,7 +126,9 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
                         required
                       />
                       {field.state.meta.errors?.map((err) => (
-                        <p key={err?.message} className="text-red-500 text-xs">{err?.message}</p>
+                        <p key={err?.message} className="text-red-500 text-xs">
+                          {err?.message}
+                        </p>
                       ))}
                     </div>
                   )}
@@ -226,8 +249,12 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             </form>
           </motion.aside>
         </>
-      )
-      }
-    </AnimatePresence >
+      )}
+      <PunishmentModal
+        open={isPunishmentOpen}
+        questId={selectedQuestId}
+        onClose={() => setIsPunishmentOpen(false)}
+      />
+    </AnimatePresence>
   );
 }

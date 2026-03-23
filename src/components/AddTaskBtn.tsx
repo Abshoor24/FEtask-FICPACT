@@ -1,6 +1,6 @@
 "use client";
 
-import { LockKeyhole, Mic, Plus } from "lucide-react";
+import { Mic, Plus } from "lucide-react";
 
 interface AddTaskButtonProps {
   onClick: () => void;
