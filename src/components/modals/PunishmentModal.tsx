@@ -25,7 +25,7 @@ export default function PunishmentModal({
   const form = useForm({
     defaultValues: {
       name: "",
-      deadline: "",
+      deadlineAt: "",
     },
     validators: {
       onSubmit: createPunishmentSchema,
@@ -38,12 +38,13 @@ export default function PunishmentModal({
         {
           name: value.name,
           questId,
-          deadlineAt: new Date(value.deadline).toISOString(),
+          deadlineAt: new Date(value.deadlineAt).toISOString(),
         },
         {
           onSuccess: () => {
             toast.success("Punishment berhasil ditambahkan!");
             handleClose();
+            onClose();
           },
         }
       );
@@ -117,10 +118,10 @@ export default function PunishmentModal({
                 {/* STEP 2 (FORM) */}
                 {step === "form" && (
                   <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      form.handleSubmit();
-                    }}
+                       onSubmit={(e) => {
+    console.log("FORM KE SUBMIT");
+    form.handleSubmit(e);
+  }}
                     className="space-y-4"
                   >
                     {/* NAME */}
@@ -131,6 +132,8 @@ export default function PunishmentModal({
                             Nama Hukuman
                           </label>
                           <input
+                            id={field.name}
+                            name={field.name}
                             value={field.state.value}
                             onChange={(e) =>
                               field.handleChange(e.target.value)
@@ -151,13 +154,15 @@ export default function PunishmentModal({
                     </form.Field>
 
                     {/* DEADLINE */}
-                    <form.Field name="deadline">
+                    <form.Field name="deadlineAt">
                       {(field) => (
                         <div>
                           <label className="text-sm font-medium">
                             Deadline Hukuman
                           </label>
                           <input
+                            id={field.name}
+                            name={field.name}
                             type="datetime-local"
                             value={field.state.value}
                             onChange={(e) =>
@@ -190,7 +195,7 @@ export default function PunishmentModal({
                       <button
                         type="submit"
                         disabled={isPending}
-                        className="flex-1 bg-[#7C3BED] text-white rounded-lg py-2 text-sm disabled:opacity-50"
+                        className="flex-1 bg-[#7C3BED] text-white rounded-lg py-2 text-sm disabled:opacity-50 hover:bg-amber-100 transition-transform active:scale-95"
                       >
                         Simpan
                       </button>

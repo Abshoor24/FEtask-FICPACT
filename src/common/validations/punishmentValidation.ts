@@ -16,7 +16,9 @@ import { z } from "zod";
 
 export const createPunishmentSchema = z.object({
   name: z.string().min(3, "Nama minimal 3 karakter"),
-  deadline: z.string().min(1, "Deadline wajib diisi"),
+  deadlineAt: z.string().refine((val) => val !== "", {
+  message: "Deadline wajib diisi",
+})
 });
 
 export type CreatePunishmentSchema = z.infer<typeof createPunishmentSchema>;
