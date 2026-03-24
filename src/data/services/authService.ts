@@ -34,7 +34,7 @@ class AuthService {
     public async logout() {
         return await apiClient({
             url: "/auth/logout",
-            method: "POST",
+            method: "DELETE",
         });
     }
 
