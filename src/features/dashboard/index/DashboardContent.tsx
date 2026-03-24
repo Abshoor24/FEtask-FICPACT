@@ -1,13 +1,14 @@
 "use client";
 
 import { Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import TaskSection from "./TaskSection";
 import TaskItem from "./TaskItem";
 import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
 import VoiceCommand from "@/components/VoiceCommand/index";
+import DashboardAlert from "@/components/DashboardAlert";
 import {
   useGetUserQuests,
   useUpdateCompletedQuest,
@@ -15,6 +16,7 @@ import {
 import EmptyTask from "./EmptyTask";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "@/data/hooks/useAuth";
+import { useIsFirstReflection } from "@/data/hooks/useUser";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
@@ -23,6 +25,7 @@ export default function DashboardContent() {
 
   const { data: session } = useGetProfile();
   const { data } = useGetUserQuests();
+  const { data: isFirstReflection } = useIsFirstReflection();
   const { mutate: updateCompletedQuest } = useUpdateCompletedQuest();
 
   const hasNoQuests = !data?.data || data.data.length === 0;
@@ -46,9 +49,9 @@ export default function DashboardContent() {
   console.log("Session data:", session);
   return (
     <>
-      <div className="h-full overflow-y-auto px-10 py-8">
+      <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-10 py-8 gap-5">
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-2">
           {/* LEFT */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">All Tasks</h1>
@@ -75,7 +78,8 @@ export default function DashboardContent() {
             />
           </div>
         </div>
-
+        {/* First-reflection alert (shows once after completing first quest) */}
+        <DashboardAlert isOpen={isFirstReflection?.data === true} />
         {/* ================= PROGRESS ================= */}
         <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-2">
@@ -150,7 +154,11 @@ export default function DashboardContent() {
 
       {/* ================= DRAWERS & MODALS ================= */}
       <AddTaskDrawer open={open} onClose={() => setOpen(false)} />
-      <VoiceCommand open={voiceOpen} onClose={() => setVoiceOpen(false)} locked={session?.data.level! < 2} />
+      <VoiceCommand
+        open={voiceOpen}
+        onClose={() => setVoiceOpen(false)}
+        locked={(session?.data.level || 0) < 2}
+      />
     </>
   );
 }
