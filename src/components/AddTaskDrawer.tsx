@@ -21,7 +21,7 @@ interface AddTaskDrawerProps {
 
 export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
   const { data: foldersData } = useGetUserAvailableFolders();
-  const { mutate: createQuestMutate, isSuccess, isPending } = useCreateQuest();
+  const { mutate: createQuestMutate, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
   const [isPunishmentOpen, setIsPunishmentOpen] = useState(false);
   const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
@@ -57,6 +57,9 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             setSelectedQuestId(res.id);
             setIsPunishmentOpen(true);
           },
+          onError: (err) => {
+            toast.error(err.message || "Gagal menambahkan quest baru")
+          }
         },
       );
     },

@@ -5,6 +5,7 @@ import { fadeUp, stagger } from "@/components/motion";
 import { useForgotPassword } from "@/data/hooks/useAuth";
 import { useForm } from "@tanstack/react-form";
 import { forgotPasswordSchema } from "@/common/validations/authValidation";
+import toast from "react-hot-toast";
 
 const COOLDOWN_MINUTES = 3;
 const COOLDOWN_SECONDS = COOLDOWN_MINUTES * 60;
@@ -68,6 +69,9 @@ export default function ForgotPasswordRightSection() {
       forgotPasswordMutate(value.email, {
         onSuccess: () => {
           startCooldown(COOLDOWN_SECONDS);
+        },
+        onError: (err) => {
+          toast.error(err.message)
         }
       })
     }

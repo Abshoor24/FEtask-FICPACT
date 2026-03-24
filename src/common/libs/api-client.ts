@@ -15,14 +15,14 @@ export const apiClient = async <T>(config: AxiosRequestConfig): Promise<T | null
             // kalau server ada tapi error
             if (error.response) {
                 console.error("API ERROR:", error.response.status, error.response.data);
+                throw new Error(error.response.data.message)
             }
-
             // kalau server mati
             if (error.request) {
                 console.error("SERVER OFFLINE:", error.message);
             }
         } else {
-            console.error("UNKNOWN ERROR:", error);
+            throw error
         }
 
         return null;

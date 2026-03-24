@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
 import SuccessModal from "@/components/SuccessModal";
 import { useResetPassword } from "@/data/hooks/useAuth";
+import toast from "react-hot-toast";
 
 export default function ChangePasswordRightSection({ token, email }: { token: string | null; email: string | null }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,8 +24,14 @@ export default function ChangePasswordRightSection({ token, email }: { token: st
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasMinLength || !hasUpperLowerNumber) return;
-    resetPassword({ token: token!, email: email!, newPassword: password })
-    setIsModalOpen(true);
+    resetPassword({ token: token!, email: email!, newPassword: password }, {
+      onSuccess: () => {
+        setIsModalOpen(true);
+      },
+      onError: (err) => {
+        toast.error(err.message)
+      }
+    })
   };
 
   return (
@@ -113,32 +120,28 @@ export default function ChangePasswordRightSection({ token, email }: { token: st
           <div className="p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100 space-y-2">
             <div className="flex items-center gap-2">
               <div
-                className={`w-3 h-3 rounded-full flex items-center justify-center transition-colors ${
-                  hasMinLength ? "bg-green-500" : "bg-slate-300"
-                }`}
+                className={`w-3 h-3 rounded-full flex items-center justify-center transition-colors ${hasMinLength ? "bg-green-500" : "bg-slate-300"
+                  }`}
               >
                 {hasMinLength && <Check className="w-2 h-2 text-white" strokeWidth={3} />}
               </div>
               <span
-                className={`text-xs sm:text-sm transition-colors ${
-                  hasMinLength ? "text-green-600 font-medium" : "text-slate-500"
-                }`}
+                className={`text-xs sm:text-sm transition-colors ${hasMinLength ? "text-green-600 font-medium" : "text-slate-500"
+                  }`}
               >
                 Minimal 8 karakter
               </span>
             </div>
             <div className="flex items-center gap-2">
               <div
-                className={`w-3 h-3 rounded-full flex items-center justify-center transition-colors ${
-                  hasUpperLowerNumber ? "bg-green-500" : "bg-slate-300"
-                }`}
+                className={`w-3 h-3 rounded-full flex items-center justify-center transition-colors ${hasUpperLowerNumber ? "bg-green-500" : "bg-slate-300"
+                  }`}
               >
                 {hasUpperLowerNumber && <Check className="w-2 h-2 text-white" strokeWidth={3} />}
               </div>
               <span
-                className={`text-xs sm:text-sm transition-colors ${
-                  hasUpperLowerNumber ? "text-green-600 font-medium" : "text-slate-500"
-                }`}
+                className={`text-xs sm:text-sm transition-colors ${hasUpperLowerNumber ? "text-green-600 font-medium" : "text-slate-500"
+                  }`}
               >
                 Kombinasi huruf besar, kecil, dan angka
               </span>
@@ -178,7 +181,7 @@ export default function ChangePasswordRightSection({ token, email }: { token: st
       </motion.div>
 
       {/* Success Modal */}
-      <SuccessModal 
+      <SuccessModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Berhasil Diperbarui!"

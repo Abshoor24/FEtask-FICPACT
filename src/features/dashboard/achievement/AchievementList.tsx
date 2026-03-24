@@ -5,6 +5,7 @@ import { AchievementProgressModel } from '@/data/models/achievementModel'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, Trophy, Folder, Star, Target, BookOpen } from 'lucide-react'
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
     data: AchievementProgressModel
@@ -17,15 +18,19 @@ export default function AchievementList({ data, index }: Props) {
 
     const { mutate, isPending, isSuccess } = useClaimAchievement()
     const handleClaim = () => {
-        mutate(id)
+        mutate(id, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["userAchievements"], refetchType: "all" });
+            },
+            onError: (err) => {
+                toast.error(err.message || "Gagal klaim achievement")
+            }
+        })
     }
-
-    useEffect(() => {
-        queryClient.invalidateQueries({ queryKey: ["userAchievements"], refetchType: "all" });
-    }, [isSuccess])
 
     return (
         <div
+            key={index}
             className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between hover:shadow-md transition"
         >
             {/* ICON */}

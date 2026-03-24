@@ -8,6 +8,7 @@ import FieldInfo from "@/components/FieldInfo";
 import { useRegister } from "@/data/hooks/useAuth";
 import React from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RegisterRightSection() {
   const { mutate: registerMutate, isPending, isSuccess } = useRegister();
@@ -28,15 +29,16 @@ export default function RegisterRightSection() {
       onChange: registerSchema,
     },
     onSubmit: ({ value }) => {
-      registerMutate(value);
+      registerMutate(value, {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+        onError: (error) => {
+          toast.error(error.message || "Terjadi kesalahan saat mendaftar.");
+        }
+      });
     },
   });
-
-  React.useEffect(() => {
-    if (isSuccess === true) {
-      router.push("/dashboard");
-    }
-  }, [isSuccess, router]);
 
   return (
     <div className="flex-1 bg-neutral-100 p-6 lg:p-12 flex items-center justify-center">

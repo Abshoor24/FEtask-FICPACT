@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useGetFolderById } from "@/data/hooks/useFolder";
 import { useUpdateCompletedQuest } from "@/data/hooks/useQuest";
+import toast from "react-hot-toast";
 
 type Quest = {
   id: string;
@@ -93,7 +94,14 @@ export default function FolderDetail() {
 
   const handleCompleteQuest = (questId: string) => {
     if (isPending) return;
-    updateCompleteQuestMutate(questId);
+    updateCompleteQuestMutate(questId, {
+      onSuccess: () => {
+        toast.success("Berhasil menambahkan quest baru")
+      },
+      onError: (err) => {
+        toast.error(err.message || "Gagal menyelesaikan quest")
+      }
+    });
   }
 
   const folder: FolderDetailResponse | null = useMemo(() => {

@@ -8,6 +8,7 @@ import { loginSchema } from "@/common/validations/authValidation";
 import { useLogin } from "@/data/hooks/useAuth";
 import FieldInfo from "@/components/FieldInfo";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginRightSection() {
   const router = useRouter();
@@ -28,15 +29,17 @@ export default function LoginRightSection() {
       loginMutate({
         email: value.email,
         password: value.password,
-      });
+      },
+        {
+          onSuccess: () => {
+            router.push("/dashboard");
+          },
+          onError: (err) => {
+            toast.error(err.message)
+          }
+        });
     },
   });
-
-  React.useEffect(() => {
-    if (isSuccess === true) {
-      router.push("/dashboard");
-    }
-  }, [isSuccess, router]);
 
   return (
     <div className="flex-1 bg-white p-6 lg:p-12 flex items-center justify-center">

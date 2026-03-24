@@ -48,7 +48,7 @@ export default function AddFolderModal({ open, onClose }: AddFolderModalProps) {
   const [endedTime, setEndedTime] = useState("23:59");
   const [selectedIcon, setSelectedIcon] = useState("📚");
   const [selectedColor, setSelectedColor] = useState("#7C3BED");
-const invalidateQuery = useQueryClient();
+  const invalidateQuery = useQueryClient();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!folderName.trim() || !endedDate) return;
@@ -65,7 +65,7 @@ const invalidateQuery = useQueryClient();
       endedAt: combinedDateTime.toISOString(),
     };
 
-    createFolder(folderData,{
+    createFolder(folderData, {
       onSuccess: () => {
         setFolderName("");
         setDescription("");
@@ -74,11 +74,13 @@ const invalidateQuery = useQueryClient();
         setSelectedIcon("📚");
         setSelectedColor("#7C3BED");
         toast.success("Folder created successfully!");
-        invalidateQuery.invalidateQueries({queryKey: ["get_all_folders"]});
+        invalidateQuery.invalidateQueries({ queryKey: ["get_all_folders"] });
         onClose();
+      },
+      onError: (err) => {
+        toast.error(err.message || "Gagal menambahkan folder baru")
       }
     });
-    console.log(folderData);
   };
 
 
@@ -220,11 +222,10 @@ const invalidateQuery = useQueryClient();
                           key={icon}
                           type="button"
                           onClick={() => setSelectedIcon(icon)}
-                          className={`flex aspect-square items-center justify-center rounded-lg border-2 text-lg transition ${
-                            selectedIcon === icon
+                          className={`flex aspect-square items-center justify-center rounded-lg border-2 text-lg transition ${selectedIcon === icon
                               ? "border-[#7C3BED] bg-purple-50"
                               : "border-gray-200 hover:border-gray-300"
-                          }`}
+                            }`}
                         >
                           {icon}
                         </button>
@@ -244,11 +245,10 @@ const invalidateQuery = useQueryClient();
                           type="button"
                           title={c.name}
                           onClick={() => setSelectedColor(c.value)}
-                          className={`flex h-8 w-full items-center justify-center rounded-lg border-2 transition ${
-                            selectedColor === c.value
+                          className={`flex h-8 w-full items-center justify-center rounded-lg border-2 transition ${selectedColor === c.value
                               ? "border-gray-900 scale-105"
                               : "border-transparent hover:border-gray-300"
-                          }`}
+                            }`}
                           style={{ backgroundColor: `${c.value}30` }}
                         >
                           <span

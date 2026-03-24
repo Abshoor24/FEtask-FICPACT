@@ -15,6 +15,7 @@ import { AIMode, VoiceCommandProps } from "./types";
 import { useVoiceRecognition } from "./useVoiceRecognition";
 import { useCreateQuestWithVoice } from "@/data/hooks/useQuest";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function VoiceCommand({ open, onClose, locked }: VoiceCommandProps) {
   const [aiMode, setAIMode] = useState<AIMode>("with-folder");
@@ -82,9 +83,10 @@ export default function VoiceCommand({ open, onClose, locked }: VoiceCommandProp
           setTranscript("");
           onClose();
         },
-        onError: () => {
+        onError: (err) => {
           setVoiceState("idle");
           setTranscript("");
+          toast.error(err.message)
         },
       },
     );
