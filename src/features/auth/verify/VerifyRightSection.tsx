@@ -8,7 +8,8 @@ import { useResendVerificationToken, useVerifyAccount } from '@/data/hooks/useAu
 import SuccessModal from '@/components/SuccessModal';
 
 export default function VerifyRightSection() {
-  const { mutate: verifyMutate, isPending: isLoading, isSuccess } = useVerifyAccount();
+  const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
+  const [isSuccess, setIsSuccess] = useState(false);
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -83,11 +84,15 @@ export default function VerifyRightSection() {
     if (!canResend || isResending) return;
 
     // Set cooldown 5 menit (300 detik)
-    setResendCooldown(300);
-    setCanResend(false);
     localStorage.setItem('lastResendTime', Date.now().toString());
 
-    resendMutate();
+    resendMutate(undefined, {
+      onSuccess: () => {
+        setCanResend(false);
+        setResendCooldown(300);
+        setIsSuccess(true);
+      },
+    });
   };
 
   // Format waktu mm:ss
