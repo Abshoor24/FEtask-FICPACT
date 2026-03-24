@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { fadeUp, stagger } from '@/components/motion'
 import { useResendVerificationToken, useVerifyAccount } from '@/data/hooks/useAuth';
 import SuccessModal from '@/components/SuccessModal';
+import toast from 'react-hot-toast';
 
 export default function VerifyRightSection() {
   const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
@@ -77,7 +78,14 @@ export default function VerifyRightSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join('');
-    verifyMutate(code);
+    verifyMutate(code, {
+      onSuccess: () => {
+        setIsSuccess(true);
+      },
+      onError: (error) => {
+        toast.error("Verifikasi gagal. Pastikan kode benar dan coba lagi.");
+      }
+    });
   };
 
   const handleResend = () => {
@@ -90,8 +98,10 @@ export default function VerifyRightSection() {
       onSuccess: () => {
         setCanResend(false);
         setResendCooldown(300);
-        setIsSuccess(true);
       },
+      onError: () => {
+        toast.error("Gagal mengirim ulang kode. Silakan coba lagi nanti.");
+      }
     });
   };
 
