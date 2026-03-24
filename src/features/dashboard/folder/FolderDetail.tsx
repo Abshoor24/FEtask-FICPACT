@@ -53,6 +53,7 @@ function formatTime(value?: string | null) {
   return date.toLocaleTimeString("id-ID", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Jakarta",
   });
 }
 
@@ -75,6 +76,7 @@ function formatDeadline(value?: string | null) {
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: "Asia/Jakarta",
   })} ${formatTime(value)}`;
 }
 

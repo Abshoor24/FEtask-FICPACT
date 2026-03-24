@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import FailedModal from '@/components/FailedModal';
 
 export default function VerifyRightSection() {
-  const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
+  const { mutate: verifyMutate, isPending: isLoading } = useVerifyAccount();
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -130,7 +130,7 @@ export default function VerifyRightSection() {
         description="Kode verifikasi yang kamu masukkan salah!"
         buttonText="Coba Lagi"
       />
-      <div className="flex-1 bg-white px-6 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-12 flex flex-col justify-center min-h-125 lg:min-h-screen">
+      <div className="flex-1 bg-white px-6 sm:px-8 lg:px-16 pyF-8 sm:py-10 lg:py-12 flex flex-col justify-center min-h-125 lg:min-h-screen">
         <motion.div
           className="w-full max-w-md mx-auto space-y-8"
           variants={stagger}
