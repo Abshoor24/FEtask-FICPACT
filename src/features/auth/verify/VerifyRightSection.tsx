@@ -6,9 +6,11 @@ import { motion } from 'framer-motion'
 import { fadeUp, stagger } from '@/components/motion'
 import { useResendVerificationToken, useVerifyAccount } from '@/data/hooks/useAuth';
 import SuccessModal from '@/components/SuccessModal';
+import toast from 'react-hot-toast';
 
 export default function VerifyRightSection() {
-  const { mutate: verifyMutate, isPending: isLoading, isSuccess } = useVerifyAccount();
+  const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
+  const [isSuccess, setIsSuccess] = useState(false);
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -76,18 +78,31 @@ export default function VerifyRightSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join('');
-    verifyMutate(code);
+    verifyMutate(code, {
+      onSuccess: () => {
+        setIsSuccess(true);
+      },
+      onError: (error) => {
+        toast.error("Verifikasi gagal. Pastikan kode benar dan coba lagi.");
+      }
+    });
   };
 
   const handleResend = () => {
     if (!canResend || isResending) return;
 
     // Set cooldown 5 menit (300 detik)
-    setResendCooldown(300);
-    setCanResend(false);
     localStorage.setItem('lastResendTime', Date.now().toString());
 
-    resendMutate();
+    resendMutate(undefined, {
+      onSuccess: () => {
+        setCanResend(false);
+        setResendCooldown(300);
+      },
+      onError: () => {
+        toast.error("Gagal mengirim ulang kode. Silakan coba lagi nanti.");
+      }
+    });
   };
 
   // Format waktu mm:ss
