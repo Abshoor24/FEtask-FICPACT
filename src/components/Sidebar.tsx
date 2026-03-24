@@ -87,7 +87,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
       <div>
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10">
-          <Image src="/favicon.ico" width={40} height={40} alt="Logo" />
+          <Image src="/icon.png" width={40} height={40} alt="Logo" />
 
           <div>
             <h1 className="text-lg font-semibold text-gray-900">TaskMaster</h1>
