@@ -14,7 +14,6 @@ export const apiClient = async <T>(config: AxiosRequestConfig): Promise<T | null
         if (axios.isAxiosError(error)) {
             // kalau server ada tapi error
             if (error.response) {
-                console.error("API ERROR:", error.response.status, error.response.data);
                 throw new Error(error.response.data.message)
             }
             // kalau server mati

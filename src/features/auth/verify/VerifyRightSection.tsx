@@ -7,14 +7,17 @@ import { fadeUp, stagger } from '@/components/motion'
 import { useResendVerificationToken, useVerifyAccount } from '@/data/hooks/useAuth';
 import SuccessModal from '@/components/SuccessModal';
 import toast from 'react-hot-toast';
+import FailedModal from '@/components/FailedModal';
 
 export default function VerifyRightSection() {
-  const { mutate: verifyMutate, isPending: isLoading, isSuccess } = useVerifyAccount();
+  const { mutate: verifyMutate, isPending: isLoading } = useVerifyAccount();
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [resendCooldown, setResendCooldown] = useState<number>(0);
   const [canResend, setCanResend] = useState<boolean>(true);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isFailedModalOpen, setIsFailedModalOpen] = useState(false);
 
   React.useEffect(() => {
     const lastResendTime = localStorage.getItem('lastResendTime');
@@ -80,9 +83,10 @@ export default function VerifyRightSection() {
     verifyMutate(code, {
       onSuccess: () => {
         setOtp(["", "", "", "", "", ""]);
+        setIsSuccessModalOpen(true);
       },
-      onError: () => {
-        toast.error("Kode verifikasi salah. Silakan coba lagi.");
+      onError: (err) => {
+        setIsFailedModalOpen(true);
       }
     });
   };
@@ -107,12 +111,19 @@ export default function VerifyRightSection() {
   return (
     <>
       <SuccessModal
-        isOpen={isSuccess}
-        onClose={() => { }}
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
         title="Akun Terverifikasi!"
         description="Akunmu telah berhasil diverifikasi. Klik tombol di bawah untuk mulai menjelajahi perjalananmu di TaskQuest!"
         buttonText="Lanjut ke Dashboard"
         redirectTo="/dashboard"
+      />
+      <FailedModal
+        isOpen={isFailedModalOpen}
+        onClose={() => setIsFailedModalOpen(false)}
+        title="Verifikasi Gagal"
+        description="Kode verifikasi yang kamu masukkan salah!"
+        buttonText="Coba Lagi"
       />
       <div className="flex-1 bg-white px-6 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-12 flex flex-col justify-center min-h-125 lg:min-h-screen">
         <motion.div

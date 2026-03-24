@@ -22,13 +22,17 @@ class AuthService {
     }
 
     public async checkSession(token: string | undefined) {
-        return await apiClient<{ data: SessionModel }>({
-            url: "/user/session",
-            method: "GET",
-            headers: {
-                Cookie: `token=${token}`,
-            },
-        });
+        try {
+            return await apiClient<{ data: SessionModel }>({
+                url: "/user/session",
+                method: "GET",
+                headers: {
+                    Cookie: `token=${token}`,
+                },
+            });
+        } catch (error) {
+            console.error("Session check failed:", error);
+        }
     }
 
     public async logout() {
