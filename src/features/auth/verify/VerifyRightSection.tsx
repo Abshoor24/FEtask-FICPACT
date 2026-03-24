@@ -11,7 +11,6 @@ import FailedModal from '@/components/FailedModal';
 
 export default function VerifyRightSection() {
   const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
-  const [isSuccess, setIsSuccess] = useState(false);
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -83,10 +82,10 @@ export default function VerifyRightSection() {
     const code = otp.join('');
     verifyMutate(code, {
       onSuccess: () => {
-        setIsSuccess(true);
+        setIsSuccessModalOpen(true);
       },
       onError: (error) => {
-        toast.error("Verifikasi gagal. Pastikan kode benar dan coba lagi.");
+        setIsFailedModalOpen(true);
       }
     });
   };
