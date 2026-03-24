@@ -10,7 +10,8 @@ import toast from 'react-hot-toast';
 import FailedModal from '@/components/FailedModal';
 
 export default function VerifyRightSection() {
-  const { mutate: verifyMutate, isPending: isLoading } = useVerifyAccount();
+  const { mutate: verifyMutate, isPending: isLoading, } = useVerifyAccount();
+  const [isSuccess, setIsSuccess] = useState(false);
   const { mutate: resendMutate, isPending: isResending } = useResendVerificationToken();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -82,11 +83,10 @@ export default function VerifyRightSection() {
     const code = otp.join('');
     verifyMutate(code, {
       onSuccess: () => {
-        setOtp(["", "", "", "", "", ""]);
-        setIsSuccessModalOpen(true);
+        setIsSuccess(true);
       },
-      onError: (err) => {
-        setIsFailedModalOpen(true);
+      onError: (error) => {
+        toast.error("Verifikasi gagal. Pastikan kode benar dan coba lagi.");
       }
     });
   };
@@ -95,11 +95,17 @@ export default function VerifyRightSection() {
     if (!canResend || isResending) return;
 
     // Set cooldown 5 menit (300 detik)
-    setResendCooldown(300);
-    setCanResend(false);
     localStorage.setItem('lastResendTime', Date.now().toString());
 
-    resendMutate();
+    resendMutate(undefined, {
+      onSuccess: () => {
+        setCanResend(false);
+        setResendCooldown(300);
+      },
+      onError: () => {
+        toast.error("Gagal mengirim ulang kode. Silakan coba lagi nanti.");
+      }
+    });
   };
 
   // Format waktu mm:ss
