@@ -11,10 +11,10 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function RegisterRightSection() {
-  const { mutate: registerMutate, isPending, isSuccess } = useRegister();
+  const { mutate: registerMutate, isPending } = useRegister();
   const router = useRouter();
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:8080/auth/google";
+    window.location.href = "https://taskquestku.online/api/auth/google";
   };
 
   const form = useForm({

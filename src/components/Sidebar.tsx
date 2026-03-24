@@ -7,7 +7,6 @@ import {
   Calendar,
   Clock,
   User,
-  Briefcase,
   Folder,
   Plus,
   LogOut,
@@ -30,6 +29,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface MenuItem {
   name: string;
@@ -44,9 +45,21 @@ interface VoiceProps {
 
 export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
   const { data: user } = useGetProfile()
+  const router = useRouter();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
   const [mounted, setMounted] = React.useState(false);
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: (err) => {
+        toast.error(err.message || "Gagal logout. Silakan coba lagi.");
+      }
+    })
+  }
 
   React.useEffect(() => {
     setMounted(true);
@@ -236,7 +249,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Batal</AlertDialogCancel>
-              <AlertDialogAction onClick={() => logout()} className="bg-red-500 hover:bg-red-600 text-white">
+              <AlertDialogAction onClick={() => handleLogout()} className="bg-red-500 hover:bg-red-600 text-white">
                 Keluar
               </AlertDialogAction>
             </AlertDialogFooter>
