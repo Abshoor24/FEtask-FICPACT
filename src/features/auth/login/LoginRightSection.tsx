@@ -14,7 +14,8 @@ export default function LoginRightSection() {
   const router = useRouter();
   const { mutate: loginMutate, isPending, isSuccess } = useLogin();
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:8080/auth/google";
+    window.location.href = `https://taskquestku.online/api/auth/google`;
+    console.log("Redirecting to Google OAuth...");
   };
 
   const form = useForm({
