@@ -5,6 +5,7 @@ import { Award, Info, TrendingUp, Loader2, Search } from 'lucide-react';
 import { useWeeklyLeaderboard, useMonthlyLeaderboard, useLeaderboardAllTime } from '@/data/hooks/useLeaderboard';
 import { useGetProfile } from '@/data/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const LeaderboardContent = () => {
     const [filter, setFilter] = useState<'weekly' | 'monthly' | 'all-time'>('weekly');
@@ -118,7 +119,10 @@ const LeaderboardContent = () => {
                                     ${isFirst ? 'w-24 h-24 border-violet-600' : 'w-20 h-20 border-slate-200'}
                                 `}>
                                     {user.profile.avatar ? (
-                                        <img className="w-full h-full object-cover" alt={user.profile.name} src={user.profile.avatar} />
+                                        <Image
+                                            className="w-full h-full object-cover" alt={user.profile.name} src={user.profile.avatar}
+                                            width={200} height={200} unoptimized
+                                        />
                                     ) : (
                                         <span className="text-2xl font-bold text-slate-400 capitalize">{user.profile.name?.charAt(0) || '?'}</span>
                                     )}
@@ -262,7 +266,7 @@ const LeaderboardContent = () => {
                                                     ${user.profile.email === currentUser?.email ? 'bg-violet-600 border-2 border-violet-600' : 'bg-slate-200'}
                                                 `}>
                                                     {user.profile.avatar ? (
-                                                        <img className="w-full h-full object-cover" alt={user.profile.name} src={user.profile.avatar} />
+                                                        <Image className="w-full h-full object-cover" alt={user.profile.name} src={user.profile.avatar} unoptimized width={200} height={200} />
                                                     ) : (
                                                         <span className={`font-bold ${user.profile.email === currentUser?.email ? 'text-white text-xs' : 'text-slate-400'}`}>
                                                             {user.profile.email === currentUser?.email ? 'ME' : user.profile.name?.charAt(0) || '?'}
