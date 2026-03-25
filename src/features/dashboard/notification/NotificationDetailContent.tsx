@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   ArrowLeft,
   Bell,
@@ -97,13 +97,15 @@ export default function NotificationDetailContent({
   const [punishmentModalOpen, setPunishmentModalOpen] = useState(false);
 
   const notification = data?.data;
+  const hasMarkedAsRead = useRef(false);
 
-  // Mark as read when detail is opened
-  React.useEffect(() => {
-    if (notification && !notification.isRead) {
+  // Mark as read when detail is opened (only once)
+  useEffect(() => {
+    if (notification && !notification.isRead && !hasMarkedAsRead.current) {
+      hasMarkedAsRead.current = true;
       markAsRead(notification.id);
     }
-  }, [notification, markAsRead]);
+  }, [notification]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (

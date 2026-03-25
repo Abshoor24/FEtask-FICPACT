@@ -22,8 +22,9 @@ export function useMarkNotificationAsRead() {
   return useMutation({
     mutationKey: ["mark_notification_as_read"],
     mutationFn: (id: string) => notificationService.markAsRead(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       queryClient.invalidateQueries({ queryKey: ["get_all_notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["get_notification", id] });
     },
   });
 }
