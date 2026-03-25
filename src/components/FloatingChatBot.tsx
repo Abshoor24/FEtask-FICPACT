@@ -20,7 +20,7 @@ export function FloatingChatBot() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, isLoading } = useChat({
-    connection: fetchServerSentEvents("/api/chat"),
+    connection: fetchServerSentEvents("/ai/chat"),
   });
 
   const scrollToBottom = () => {
