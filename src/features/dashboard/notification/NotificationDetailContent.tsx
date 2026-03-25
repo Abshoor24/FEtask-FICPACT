@@ -101,11 +101,13 @@ export default function NotificationDetailContent({
 
   // Mark as read when detail is opened (only once)
   useEffect(() => {
-    if (notification && !notification.isRead && !hasMarkedAsRead.current) {
+    if (!notification) return;
+
+    if (!notification.isRead && !hasMarkedAsRead.current) {
       hasMarkedAsRead.current = true;
-      markAsRead(notification.id);
+      markAsRead(notificationId);
     }
-  }, [notification]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [notification]);
 
   if (isLoading) {
     return (
@@ -182,12 +184,7 @@ export default function NotificationDetailContent({
       {/* Main Card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         {/* Header Banner */}
-        <div
-          className={clsx(
-            "bg-gradient-to-r p-6",
-            config.gradient
-          )}
-        >
+        <div className={clsx("bg-gradient-to-r p-6", config.gradient)}>
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm">
               <Icon size={22} className="text-white" />
@@ -228,7 +225,7 @@ export default function NotificationDetailContent({
               <span
                 className={clsx(
                   "font-medium",
-                  notification.isRead ? "text-emerald-600" : "text-amber-500"
+                  notification.isRead ? "text-emerald-600" : "text-amber-500",
                 )}
               >
                 {notification.isRead ? "Sudah dibaca" : "Belum dibaca"}
@@ -244,7 +241,10 @@ export default function NotificationDetailContent({
               </h3>
               <div className="bg-gray-50 rounded-xl p-4 space-y-2">
                 {Object.entries(notification.data).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between text-sm">
+                  <div
+                    key={key}
+                    className="flex items-center justify-between text-sm"
+                  >
                     <span className="text-gray-500 capitalize">
                       {key.replace(/([A-Z])/g, " $1").trim()}
                     </span>
@@ -268,40 +268,66 @@ export default function NotificationDetailContent({
                 <div className="p-2 rounded-lg bg-amber-100">
                   <Sparkles size={18} className="text-amber-600" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-bold text-amber-800">
-                    Saatnya Refleksi! ✨
-                  </h4>
-                  <p className="text-sm text-amber-700 mt-1">
-                    Luangkan waktu sejenak untuk merefleksikan progress quest kamu.
-                    Refleksi membantu kamu memahami pola dan meningkatkan
-                    produktivitas.
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={handleCreateReflection}
-                disabled={isCreatingReflection}
-                className={clsx(
-                  "w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all",
-                  "bg-gradient-to-r from-amber-500 to-yellow-500 text-white",
-                  "hover:from-amber-600 hover:to-yellow-600 hover:shadow-lg hover:shadow-amber-500/25",
-                  "active:scale-[0.98]",
-                  isCreatingReflection && "opacity-60 cursor-not-allowed"
-                )}
-              >
-                {isCreatingReflection ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Membuat refleksi...
-                  </>
+                {notification.status === "DONE" ? (
+                  <div>
+                    <h4 className="text-sm font-bold text-amber-800">
+                      Kamu sudah melakukan refleksi! ✨
+                    </h4>
+                    <p className="text-sm text-amber-700 mt-1">
+                      Kunjungi ke halaman profil untuk melihat hasil refleksi
+                      Kamu
+                    </p>
+                  </div>
                 ) : (
-                  <>
-                    <Sparkles size={16} />
-                    Mulai Refleksi Sekarang
-                  </>
+                  <div>
+                    <h4 className="text-sm font-bold text-amber-800">
+                      Saatnya Refleksi! ✨
+                    </h4>
+                    <p className="text-sm text-amber-700 mt-1">
+                      Luangkan waktu sejenak untuk merefleksikan progress quest
+                      kamu. Refleksi membantu kamu memahami pola dan
+                      meningkatkan produktivitas.
+                    </p>
+                  </div>
                 )}
-              </button>
+              </div>
+              {notification.status === "PENDING" ? (
+                <button
+                  onClick={handleCreateReflection}
+                  disabled={isCreatingReflection}
+                  className={clsx(
+                    "w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all",
+                    "bg-gradient-to-r from-amber-500 to-yellow-500 text-white",
+                    "hover:from-amber-600 hover:to-yellow-600 hover:shadow-lg hover:shadow-amber-500/25",
+                    "active:scale-[0.98]",
+                    isCreatingReflection && "opacity-60 cursor-not-allowed",
+                  )}
+                >
+                  {isCreatingReflection ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Membuat refleksi...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={16} />
+                      Mulai Refleksi Sekarang
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  disabled={notification.status === "DONE"}
+                  className={clsx(
+                    "w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all",
+                    "bg-gradient-to-r from-amber-500 to-yellow-500 text-white",
+                    "active:scale-[0.98]",
+                    isCreatingReflection && "opacity-60 cursor-not-allowed",
+                  )}
+                >
+                  Kamu Sudah melakukan refleksi
+                </button>
+              )}
             </div>
           )}
 
@@ -317,8 +343,8 @@ export default function NotificationDetailContent({
                     Punishment Menunggu! ⚠️
                   </h4>
                   <p className="text-sm text-orange-700 mt-1">
-                    Kamu memiliki punishment yang harus diselesaikan. Buka detail
-                    punishment untuk melihat apa yang perlu kamu lakukan.
+                    Kamu memiliki punishment yang harus diselesaikan. Buka
+                    detail punishment untuk melihat apa yang perlu kamu lakukan.
                   </p>
                 </div>
               </div>
@@ -328,7 +354,7 @@ export default function NotificationDetailContent({
                   "w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all",
                   "bg-gradient-to-r from-orange-500 to-red-500 text-white",
                   "hover:from-orange-600 hover:to-red-600 hover:shadow-lg hover:shadow-orange-500/25",
-                  "active:scale-[0.98]"
+                  "active:scale-[0.98]",
                 )}
               >
                 <ShieldAlert size={16} />
