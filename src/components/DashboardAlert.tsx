@@ -64,6 +64,7 @@ export default function DashboardAlert({
     reflect(undefined, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["latest_reflection"] });
+        queryClient.invalidateQueries({ queryKey: ["is_first_reflection"] });
         setVisible(false);
         router.push("/dashboard/profile");
       },
@@ -79,6 +80,10 @@ export default function DashboardAlert({
     visible: { opacity: 1, y: 0, scale: 1 },
     exit: { opacity: 0, y: -8, scale: 0.995 },
   };
+
+  useEffect(() => {
+    setVisible(!!isOpen);
+  }, [isOpen]);
 
   return (
     <div className="w-full">
