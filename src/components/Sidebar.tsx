@@ -12,6 +12,7 @@ import {
   LogOut,
   Mic,
   Trophy,
+  Bell,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -74,6 +75,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
   ];
 
   const extraItems: MenuItem[] = [
+    { name: "Notification", icon: Bell, path: "/dashboard/notification" },
     { name: "Leaderboard", icon: Trophy, path: "/dashboard/leaderboard" },
     { name: "Profile", icon: User, path: "/dashboard/profile" },
   ];
