@@ -9,6 +9,7 @@ import AddTaskButton from "@/components/AddTaskBtn";
 import AddTaskDrawer from "@/components/AddTaskDrawer";
 import VoiceCommand from "@/components/VoiceCommand/index";
 import DashboardAlert from "@/components/DashboardAlert";
+import QuestReflectionModal from "@/components/QuestReflectionModal";
 import {
   useGetUserQuests,
   useUpdateCompletedQuest,
@@ -21,6 +22,13 @@ import { useIsFirstReflection } from "@/data/hooks/useUser";
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const [reflectionOpen, setReflectionOpen] = useState(false);
+  const [reflectionMode, setReflectionMode] = useState<"success" | "failed">(
+    "success",
+  );
+  const [reflectionQuestId, setReflectionQuestId] = useState<
+    string | undefined
+  >(undefined);
   const queryInvalidate = useQueryClient();
 
   const { data: session } = useGetProfile();
@@ -41,7 +49,17 @@ export default function DashboardContent() {
   const handleClick = (questId: string) => {
     updateCompletedQuest(questId, {
       onSuccess: () => {
+        // refresh quests list
         queryInvalidate.invalidateQueries({ queryKey: ["get_user_quests"] });
+
+        // open reflection modal for this quest (success flow)
+        setReflectionMode("success");
+        setReflectionQuestId(questId);
+        setReflectionOpen(true);
+      },
+      onError: () => {
+        // If marking completed failed, you could open failed modal or notify the user.
+        // For now we simply keep behavior minimal: no modal on error.
       },
     });
   };
@@ -158,6 +176,15 @@ export default function DashboardContent() {
         open={voiceOpen}
         onClose={() => setVoiceOpen(false)}
         locked={(session?.data.level || 0) < 2}
+      />
+
+      {/* Quest reflection modal: opens after completing a quest (or can be opened manually) */}
+      <QuestReflectionModal
+        isOpen={true}
+        setIsOpen={setReflectionOpen}
+        mode={"failed"}
+        questId={reflectionQuestId}
+        questSuccessed={true}
       />
     </>
   );
