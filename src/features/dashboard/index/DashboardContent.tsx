@@ -18,6 +18,7 @@ import EmptyTask from "./EmptyTask";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "@/data/hooks/useAuth";
 import { useIsFirstReflection } from "@/data/hooks/useUser";
+import toast from "react-hot-toast";
 
 export default function DashboardContent() {
   const [open, setOpen] = useState(false);
@@ -57,9 +58,8 @@ export default function DashboardContent() {
         setReflectionQuestId(questId);
         setReflectionOpen(true);
       },
-      onError: () => {
-        // If marking completed failed, you could open failed modal or notify the user.
-        // For now we simply keep behavior minimal: no modal on error.
+      onError: (err) => {
+        toast.error(err.message || "Gagal menambahkan quest baru");
       },
     });
   };
@@ -180,9 +180,9 @@ export default function DashboardContent() {
 
       {/* Quest reflection modal: opens after completing a quest (or can be opened manually) */}
       <QuestReflectionModal
-        isOpen={true}
+        isOpen={reflectionOpen}
         setIsOpen={setReflectionOpen}
-        mode={"failed"}
+        mode={reflectionMode}
         questId={reflectionQuestId}
         questSuccessed={true}
       />

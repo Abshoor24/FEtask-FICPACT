@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { XCircle, X, Sparkles, Send, Flame } from "lucide-react";
+import { Sparkles, Send, Flame } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   useCreateUserReflection,
@@ -169,7 +169,7 @@ export default function QuestReflectionModal({
         reasons: allReasons,
       };
 
-      createSuccess(payload as any, {
+      createSuccess(payload, {
         onSuccess: () => {
           persistChoices(selectedReasons, selectedDifficulty, otherText);
           try {
@@ -185,7 +185,7 @@ export default function QuestReflectionModal({
         reasons: allReasons,
         addOns: otherText?.trim() ? otherText.trim() : undefined,
       };
-      createFailed(payload as any, {
+      createFailed(payload, {
         onSuccess: () => {
           persistChoices(selectedReasons, null, otherText);
           try {
@@ -217,14 +217,6 @@ export default function QuestReflectionModal({
             onClick={(e) => e.stopPropagation()}
             className="relative bg-white rounded-[2rem] p-6 sm:p-8 w-full max-w-[420px] shadow-2xl flex flex-col"
           >
-            {/* Close Button */}
-            <button
-              onClick={close}
-              className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-            >
-              <X size={20} />
-            </button>
-
             {/* Header / Icon */}
             <div className="flex flex-col items-center text-center mt-2">
               <div className="relative mb-5">
@@ -306,36 +298,35 @@ export default function QuestReflectionModal({
             </div>
 
             {/* Form Content - Difficulty (Success Only) */}
-            {mode === "success" && (
-              <div className="mt-6">
-                <label className="block text-center text-sm font-bold text-slate-700 mb-3">
-                  Tingkat Kesulitan
-                </label>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {difficultyMap.map((d) => {
-                    const active = selectedDifficulty === d.value;
-                    return (
-                      <motion.button
-                        whileTap={{ scale: 0.96 }}
-                        key={d.value}
-                        type="button"
-                        onClick={() => {
-                          setSelectedDifficulty(d.value);
-                          setValidationMessage(null);
-                        }}
-                        className={`py-2.5 px-1 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 tracking-wide ${
-                          active
-                            ? "bg-[#7C3BED] border-[#7C3BED] text-white shadow-md shadow-[#7C3BED]/30"
-                            : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
-                        }`}
-                      >
-                        {d.label}
-                      </motion.button>
-                    );
-                  })}
-                </div>
+
+            <div className="mt-6">
+              <label className="block text-center text-sm font-bold text-slate-700 mb-3">
+                Tingkat Kesulitan
+              </label>
+              <div className="grid grid-cols-3 gap-2.5">
+                {difficultyMap.map((d) => {
+                  const active = selectedDifficulty === d.value;
+                  return (
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      key={d.value}
+                      type="button"
+                      onClick={() => {
+                        setSelectedDifficulty(d.value);
+                        setValidationMessage(null);
+                      }}
+                      className={`py-2.5 px-1 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 tracking-wide ${
+                        active
+                          ? "bg-[#7C3BED] border-[#7C3BED] text-white shadow-md shadow-[#7C3BED]/30"
+                          : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700"
+                      }`}
+                    >
+                      {d.label}
+                    </motion.button>
+                  );
+                })}
               </div>
-            )}
+            </div>
 
             {/* Validation / Success Message area */}
             <div className="mt-5 min-h-[20px] flex items-center justify-center text-center">
@@ -366,19 +357,11 @@ export default function QuestReflectionModal({
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-5 grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-              <button
-                onClick={close}
-                disabled={submitting}
-                className="py-3.5 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-50"
-              >
-                Nanti Saja
-              </button>
-
+            <div className="mt-5 flex gap-3 pt-2 border-t border-slate-100">
               <button
                 onClick={handleSubmit}
                 disabled={!canSubmit && validationMessage === null}
-                className={`flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all ${
+                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all ${
                   canSubmit || validationMessage !== null
                     ? "bg-[#7C3BED] text-white hover:bg-[#6b33cc] hover:shadow-lg shadow-[#7C3BED]/30 hover:-translate-y-0.5 active:translate-y-0"
                     : "bg-slate-200 text-slate-400 cursor-not-allowed"
