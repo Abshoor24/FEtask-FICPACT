@@ -11,8 +11,9 @@ export interface NotificationModel {
   type: NotificationType;
   title: string | null;
   message: string | null;
-  data: Record<string, any> | null;
+  data: Record<string, any>;
   isRead: boolean;
+  status: "PENDING" | "DONE";
   createdAt: string;
   readedAt: string | null;
 }
