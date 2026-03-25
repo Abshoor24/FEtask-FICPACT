@@ -1,5 +1,9 @@
 export type QuestLevel = "HIGH" | "NORMAL" | "LOW";
 
+export interface CreateReflection {
+  notificationId: string;
+}
+
 export interface CreateUserReflection {
   questId: string;
   questLevel: QuestLevel;

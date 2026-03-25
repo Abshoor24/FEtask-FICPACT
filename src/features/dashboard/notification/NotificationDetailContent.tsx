@@ -149,7 +149,7 @@ export default function NotificationDetailContent({
   const Icon = config.icon;
 
   const handleCreateReflection = () => {
-    createReflection(undefined, {
+    createReflection(notificationId, {
       onSuccess: () => {
         toast.success("Refleksi berhasil dibuat! 🎉");
         router.push("/dashboard/notification");

@@ -97,7 +97,10 @@ export default function DashboardContent() {
           </div>
         </div>
         {/* First-reflection alert (shows once after completing first quest) */}
-        <DashboardAlert isOpen={isFirstReflection?.data === true} />
+        <DashboardAlert
+          isOpen={isFirstReflection?.data.status === true}
+          notificationId={isFirstReflection?.data.notificationId || ""}
+        />
         {/* ================= PROGRESS ================= */}
         <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between mb-2">

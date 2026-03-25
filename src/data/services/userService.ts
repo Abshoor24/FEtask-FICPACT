@@ -10,7 +10,9 @@ class UserService {
   }
 
   public async isFirstReflection() {
-    return await apiClient<{ data: boolean }>({
+    return await apiClient<{
+      data: { status: boolean; notificationId: string };
+    }>({
       url: "/user/is-first-reflection",
       method: "GET",
     });

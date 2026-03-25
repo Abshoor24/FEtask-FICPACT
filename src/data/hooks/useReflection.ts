@@ -31,6 +31,7 @@ export function useCreateUserFailed() {
 export function useCreateReflection() {
   return useMutation({
     mutationKey: ["create_reflection"],
-    mutationFn: () => reflectionService.createReflection(),
+    mutationFn: (notificationId: string) =>
+      reflectionService.createReflection({ notificationId }),
   });
 }

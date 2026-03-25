@@ -1,5 +1,6 @@
 import { apiClient } from "@/common/libs/api-client";
 import {
+  CreateReflection,
   CreateUserReflection,
   ReflectionModel,
   UserFailedReflection,
@@ -35,10 +36,11 @@ class RefelectionService {
     });
   }
 
-  public async createReflection() {
+  public async createReflection(data: CreateReflection) {
     return await apiClient<{ data: ReflectionModel }>({
       url: "/reflection/create-reflection",
       method: "POST",
+      data,
     });
   }
   // public async createUserWeekly(): Promise<{data: UserWeeklyReflection[]}> {

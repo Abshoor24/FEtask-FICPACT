@@ -8,7 +8,6 @@ import {
   Flame,
   Zap,
   XCircle,
-  Filter,
   ChevronRight,
 } from "lucide-react";
 import { useGetAllNotifications, useMarkNotificationAsRead } from "@/data/hooks/useNotification";

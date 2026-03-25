@@ -15,6 +15,8 @@ interface DashboardAlertProps {
   autoHideMs?: number;
   // optional callback when the alert is dismissed
   onClose?: () => void;
+  // Notif id to mark as Done
+  notificationId: string;
 }
 
 /**
@@ -28,6 +30,7 @@ interface DashboardAlertProps {
 export default function DashboardAlert({
   isOpen = false,
   autoHideMs,
+  notificationId,
 }: DashboardAlertProps) {
   const router = useRouter();
   const { mutate: reflect, isPending } = useCreateReflection();
@@ -61,7 +64,7 @@ export default function DashboardAlert({
   };
 
   const handleReflect = () => {
-    reflect(undefined, {
+    reflect(notificationId, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["latest_reflection"] });
         queryClient.invalidateQueries({ queryKey: ["is_first_reflection"] });
