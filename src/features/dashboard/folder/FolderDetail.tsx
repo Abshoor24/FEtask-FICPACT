@@ -21,6 +21,7 @@ import { useUpdateCompletedQuest } from "@/data/hooks/useQuest";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import QuestReflectionModal from "@/components/QuestReflectionModal";
+import AddTaskDrawer from "@/components/AddTaskDrawer";
 
 type Quest = {
   id: string;
@@ -90,6 +91,7 @@ export default function FolderDetail() {
   const [reflectionQuestId, setReflectionQuestId] = useState<
     string | undefined
   >(undefined);
+  const [questDrawerOpen, setQuestDrawerOpen] = useState<boolean>(false);
 
   const params = useParams();
   const router = useRouter();
@@ -287,6 +289,7 @@ export default function FolderDetail() {
                   Belum ada quest yang ditambahkan ke dalam folder ini.
                 </p>
                 <button
+                  onClick={() => setQuestDrawerOpen(true)}
                   className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
                   style={{ backgroundColor: folderColor }}
                 >
@@ -445,6 +448,10 @@ export default function FolderDetail() {
         mode={reflectionMode}
         questId={reflectionQuestId}
         questSuccessed={true}
+      />
+      <AddTaskDrawer
+        open={questDrawerOpen}
+        onClose={() => setQuestDrawerOpen(false)}
       />
     </>
   );
