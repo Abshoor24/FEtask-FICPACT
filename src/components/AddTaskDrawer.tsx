@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CreateQuestSchema,
   createQuestSchema,
 } from "@/common/validations/questValidation";
 import { useGetUserAvailableFolders } from "@/data/hooks/useFolder";
