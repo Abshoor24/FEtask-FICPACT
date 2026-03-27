@@ -3,14 +3,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Sparkles, Send, Flame } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  useCreateUserReflection,
-  useCreateUserFailed,
-} from "@/data/hooks/useReflection";
+import { useCreateUserReflection } from "@/data/hooks/useReflection";
 import { useQueryClient } from "@tanstack/react-query";
 import type {
   CreateUserReflection,
-  UserFailedReflection,
   QuestLevel,
 } from "@/data/models/reflectionModel";
 

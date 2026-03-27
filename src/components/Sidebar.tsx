@@ -34,6 +34,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import VoiceCommand from "./VoiceCommand";
+import AddTaskDrawer from "./AddTaskDrawer";
 
 interface MenuItem {
   name: string;
@@ -41,18 +43,15 @@ interface MenuItem {
   path: string;
 }
 
-interface VoiceProps {
-  onAdd?: () => void;
-  onVoiceClick?: () => void;
-}
-
-export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
+export default function Sidebar() {
   const { data: user } = useGetProfile();
   const router = useRouter();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
   const [mounted, setMounted] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [createQuestModalOpen, setCreateQuestModalOpen] = React.useState(false);
+  const [voiceQuestModalOpen, setVoiceQuestModalOpen] = React.useState(false);
 
   const handleLogout = () => {
     logout(undefined, {
@@ -207,7 +206,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
                   {/* Manual */}
                   <AlertDialogCancel asChild>
                     <button
-                      onClick={() => onAdd?.()}
+                      onClick={() => setCreateQuestModalOpen(true)}
                       className="flex items-center justify-center gap-2 w-full rounded-lg bg-[#7C3BED] px-4 py-2 text-sm font-medium text-black hover:bg-[#6A2EE8] transition"
                     >
                       <Plus size={16} />
@@ -218,7 +217,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
                   {/* Voice */}
                   <AlertDialogCancel asChild>
                     <button
-                      onClick={() => onVoiceClick?.()}
+                      onClick={() => setVoiceQuestModalOpen(true)}
                       className="flex items-center justify-center gap-2 w-full rounded-lg border-2 border-dashed border-[#7C3BED]/40 text-[#7C3BED] bg-[#7C3BED]/5 px-4 py-2 text-sm font-medium transition hover:bg-[#7C3BED]/10 hover:border-[#7C3BED]"
                     >
                       <Mic size={16} />
@@ -314,12 +313,21 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
 
   return (
     <>
+      <AddTaskDrawer
+        open={createQuestModalOpen}
+        onClose={() => setCreateQuestModalOpen(false)}
+      />
+      <VoiceCommand
+        open={voiceQuestModalOpen}
+        onClose={() => setVoiceQuestModalOpen(false)}
+        locked={(user?.data.level || 0) < 2}
+      />
       {/* ═══════ Mobile hamburger button ═══════ */}
       <button
         onClick={() => setMobileOpen(true)}
         className={clsx(
           "fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white shadow-md border border-gray-200 transition-all duration-300",
-          mobileOpen && "opacity-0 pointer-events-none"
+          mobileOpen && "opacity-0 pointer-events-none",
         )}
         aria-label="Open sidebar"
       >
@@ -332,7 +340,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
           "fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
           mobileOpen
             ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            : "opacity-0 pointer-events-none",
         )}
         onClick={() => setMobileOpen(false)}
         aria-hidden="true"
@@ -342,7 +350,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
       <aside
         className={clsx(
           "fixed top-0 left-0 z-50 w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6 transition-transform duration-300 ease-in-out lg:hidden",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {sidebarContent}
