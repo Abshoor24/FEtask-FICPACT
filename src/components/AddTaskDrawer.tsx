@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CreateQuestSchema,
   createQuestSchema,
 } from "@/common/validations/questValidation";
 import { useGetUserAvailableFolders } from "@/data/hooks/useFolder";
@@ -17,12 +16,14 @@ import PunishmentModal from "./modals/PunishmentModal";
 interface AddTaskDrawerProps {
   open: boolean;
   onClose: () => void;
+  folderId?: string
 }
 
-export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
+export default function AddTaskDrawer({ open, onClose, folderId }: AddTaskDrawerProps) {
   const { data: foldersData } = useGetUserAvailableFolders();
   const { mutate: createQuestMutate, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
+  const [selectedFolderDeadline, setSelectedFolderDeadline] = useState<Date | null>(null);
   const [isPunishmentOpen, setIsPunishmentOpen] = useState(false);
   const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
   const [minDateTime, setMinDateTime] = useState("");
@@ -38,9 +39,8 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
       setMinDateTime(localISOTime);
     }
   }, [open]);
-
   // Mock folders - nanti diganti dengan data dari API
-
+  
   const form = useForm({
     defaultValues: {
       name: "",
@@ -62,6 +62,11 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             form.reset();
             toast.success("Quest created successfully!");
 
+            if (folderId) {
+              invalidateQuery.invalidateQueries({
+                queryKey: ["get_folder_by_id", folderId],
+              });
+            }
             invalidateQuery.invalidateQueries({
               queryKey: ["get_user_quests"],
             });
@@ -71,8 +76,8 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             setIsPunishmentOpen(true);
           },
           onError: (err) => {
-            toast.error(err.message || "Gagal menambahkan quest baru")
-          }
+            toast.error(err.message || "Gagal menambahkan quest baru");
+          },
         },
       );
     },
@@ -238,6 +243,9 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
                                     type="button"
                                     onClick={() => {
                                       field.handleChange(folder.id);
+                                      setSelectedFolderDeadline(
+                                        new Date(folder.endedAt ?? ""),
+                                      );
                                       setIsDropdownOpen(false);
                                     }}
                                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 group ${
@@ -305,11 +313,15 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
                         onChange={(e) => field.handleChange(e.target.value)}
                         type="datetime-local"
                         min={minDateTime}
+                        max={selectedFolderDeadline?.toISOString().slice(0, 16)}
                         className="w-full rounded-lg border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3BED] focus:border-transparent"
                         required
                       />
                       {field.state.meta.errors?.map((err) => (
-                        <p key={err?.message} className="text-red-500 text-xs mt-1">
+                        <p
+                          key={err?.message}
+                          className="text-red-500 text-xs mt-1"
+                        >
                           {err?.message}
                         </p>
                       ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import toast from "react-hot-toast";
 
@@ -20,8 +20,9 @@ export default function PunishmentModal({
   onClose,
 }: PunishmentModalProps) {
   const [step, setStep] = useState<"confirm" | "form">("confirm");
+  const [minDateTime, setMinDateTime] = useState<string>("");
   const { mutate: createPunishment, isPending } = useCreatePunishment();
-  
+
   const form = useForm({
     defaultValues: {
       name: "",
@@ -32,8 +33,6 @@ export default function PunishmentModal({
     },
     onSubmit: ({ value }) => {
       if (!questId) return;
-      console.log("Form submitted", value, questId);
-
       createPunishment(
         {
           name: value.name,
@@ -42,8 +41,12 @@ export default function PunishmentModal({
         },
         {
           onSuccess: () => {
+            form.reset();
             toast.success("Punishment berhasil ditambahkan!");
             handleClose();
+          },
+          onError: (err) => {
+            toast.error(err.message || "Gagal menambahkan punishment!");
           },
         },
       );
@@ -55,6 +58,17 @@ export default function PunishmentModal({
     form.reset();
     onClose();
   };
+
+  useEffect(() => {
+    if (open) {
+      const now = new Date();
+      const tzOffset = now.getTimezoneOffset() * 60000;
+      const localISOTime = new Date(now.getTime() - tzOffset)
+        .toISOString()
+        .slice(0, 16);
+      setMinDateTime(localISOTime);
+    }
+  }, [open]);
 
   return (
     <AnimatePresence>
@@ -116,7 +130,7 @@ export default function PunishmentModal({
                 {step === "form" && (
                   <form
                     onSubmit={(e) => {
-                      console.log("FORM KE SUBMIT");
+                      e.preventDefault();
                       form.handleSubmit(e);
                     }}
                     className="space-y-4"
@@ -162,6 +176,7 @@ export default function PunishmentModal({
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
+                            min={minDateTime}
                             className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
                           />
                           {field.state.meta.errors?.map((err) => (

@@ -206,7 +206,7 @@ export default function LoginRightSection() {
           className="text-center  text-sm text-slate-500 mt-6"
           variants={fadeUp}
         >
-          Belum punya guild?{" "}
+          Belum punya akun?{" "}
           <Link
             href="/auth/register"
             className="font-bold text-violet-600 hover:text-violet-700 transition"

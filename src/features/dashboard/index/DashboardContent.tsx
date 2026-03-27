@@ -64,7 +64,6 @@ export default function DashboardContent() {
     });
   };
 
-  console.log("Session data:", session);
   return (
     <>
       <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-10 py-8 gap-5">
@@ -74,7 +73,7 @@ export default function DashboardContent() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">All Tasks</h1>
             <p className="text-sm text-gray-500">
-              You have {questRemaining} tasks remaining for today
+              Kamu memiliki {questRemaining} quest tersisa untuk hari ini
             </p>
           </div>
 

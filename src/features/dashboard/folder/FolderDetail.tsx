@@ -85,9 +85,6 @@ function formatDeadline(value?: string | null) {
 
 export default function FolderDetail() {
   const [reflectionOpen, setReflectionOpen] = useState(false);
-  const [reflectionMode, setReflectionMode] = useState<"success" | "failed">(
-    "success",
-  );
   const [reflectionQuestId, setReflectionQuestId] = useState<
     string | undefined
   >(undefined);
@@ -445,13 +442,14 @@ export default function FolderDetail() {
       <QuestReflectionModal
         isOpen={reflectionOpen}
         setIsOpen={setReflectionOpen}
-        mode={reflectionMode}
+        mode={"success"}
         questId={reflectionQuestId}
         questSuccessed={true}
       />
       <AddTaskDrawer
         open={questDrawerOpen}
         onClose={() => setQuestDrawerOpen(false)}
+        folderId={folderId}
       />
     </>
   );
