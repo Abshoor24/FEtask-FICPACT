@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import QuestReflectionModal from "@/components/QuestReflectionModal";
+import { UpdatePunishmentModal } from "@/components/modals/UpdatePunishmentModal";
 
 const typeConfig: Record<
   NotificationType,
@@ -95,7 +96,9 @@ export default function NotificationDetailContent({
   const { mutate: markAsRead } = useMarkNotificationAsRead();
   const { mutate: createReflection, isPending: isCreatingReflection } =
     useCreateReflection();
-  const [punishmentModalOpen, setPunishmentModalOpen] = useState(false);
+
+  const [punishmentModalOpen, setPunishmentModalOpen] =
+    useState<boolean>(false);
   const [questReflectionModalOpen, setQuestReflectionModalOpen] =
     useState(false);
 
@@ -178,6 +181,13 @@ export default function NotificationDetailContent({
         mode={"failed"}
         questId={notification?.data?.questId || ""}
         questSuccessed={false}
+        notificationId={notification?.id}
+      />
+      <UpdatePunishmentModal
+        punishmentModalOpen={punishmentModalOpen}
+        onClose={() => setPunishmentModalOpen(false)}
+        punishmentId={notification?.data?.questId || ""}
+        questName={notification?.data?.questName || ""}
         notificationId={notification?.id}
       />
       <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-10 py-8 gap-6">
@@ -350,16 +360,28 @@ export default function NotificationDetailContent({
                   <div className="p-2 rounded-lg bg-orange-100">
                     <ShieldAlert size={18} className="text-orange-600" />
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-orange-800">
-                      Punishment Menunggu! ⚠️
-                    </h4>
-                    <p className="text-sm text-orange-700 mt-1">
-                      Kamu memiliki punishment yang harus diselesaikan. Buka
-                      detail punishment untuk melihat apa yang perlu kamu
-                      lakukan.
-                    </p>
-                  </div>
+                  {notification.status === "DONE" ? (
+                    <div>
+                      <h4 className="text-sm font-bold text-orange-800">
+                        Punishment Diperbarui ✅
+                      </h4>
+                      <p className="text-sm text-orange-700 mt-1">
+                        Kamu telah memperbarui status punishment ini. Klik
+                        tombol dibawah untuk melihat detail!
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <h4 className="text-sm font-bold text-orange-800">
+                        Punishment Menunggu! ⚠️
+                      </h4>
+                      <p className="text-sm text-orange-700 mt-1">
+                        Kamu memiliki punishment yang harus diselesaikan. Buka
+                        detail punishment untuk melihat apa yang perlu kamu
+                        lakukan.
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <button
                   onClick={handleOpenPunishmentModal}
@@ -373,26 +395,6 @@ export default function NotificationDetailContent({
                   <ShieldAlert size={16} />
                   Lihat Punishment
                 </button>
-              </div>
-            )}
-
-            {/* QUEST_COMPLETED info */}
-            {notification.type === "QUEST_COMPLETED" && (
-              <div className="mt-4 p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-100">
-                    <CheckCircle2 size={18} className="text-emerald-600" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-emerald-800">
-                      Selamat! 🎉
-                    </h4>
-                    <p className="text-sm text-emerald-700 mt-1">
-                      Quest berhasil diselesaikan. Terus pertahankan
-                      momentum-mu!
-                    </p>
-                  </div>
-                </div>
               </div>
             )}
 
@@ -452,37 +454,6 @@ export default function NotificationDetailContent({
         </div>
 
         {/* Punishment Modal Placeholder */}
-        {punishmentModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl mx-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-900">
-                  Detail Punishment
-                </h2>
-                <button
-                  onClick={() => setPunishmentModalOpen(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 transition"
-                >
-                  <XCircle size={20} className="text-gray-400" />
-                </button>
-              </div>
-              <div className="text-center py-8">
-                <div className="p-4 rounded-2xl bg-orange-50 inline-block mb-4">
-                  <ShieldAlert size={32} className="text-orange-500" />
-                </div>
-                <p className="text-sm text-gray-500">
-                  Fitur punishment modal akan segera hadir.
-                </p>
-              </div>
-              <button
-                onClick={() => setPunishmentModalOpen(false)}
-                className="w-full px-4 py-2.5 rounded-xl text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

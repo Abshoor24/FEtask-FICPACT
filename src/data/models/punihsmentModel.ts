@@ -1,3 +1,31 @@
+export enum PunishmentStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export interface Punishment {
+  questId: string;
+  userId: string;
+  name: string;
+  status: PunishmentStatus;
+  createdAt: Date;
+  deadlineAt: Date;
+}
+
+// model QuestPunishment {
+//   questId String @id
+//   userId  String
+
+//   name   String
+//   status QuestPunishmentStatus @default(PENDING)
+
+//   user  User  @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+//   quest Quest @relation(fields: [questId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+//   createdAt  DateTime @default(now())
+//   deadlineAt DateTime
+// }
 export interface GetPunishment {
   punishmentId: string;
 }

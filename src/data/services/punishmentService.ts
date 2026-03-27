@@ -1,16 +1,20 @@
 import { apiClient } from "@/common/libs/api-client";
-import { CreatePunishment, UpdatePunishment } from "../models/punihsmentModel";
+import {
+  CreatePunishment,
+  Punishment,
+  UpdatePunishment,
+} from "../models/punihsmentModel";
 
 class PunishmentService {
   async getPunishment(punishmentId: string) {
-    return apiClient({
+    return apiClient<{ data: Punishment }>({
       url: `/punishments/${punishmentId}/quest`,
       method: "GET",
     });
   }
 
   async createPunishment(data: CreatePunishment) {
-    return apiClient({
+    return apiClient<{ data: Punishment }>({
       url: `/punishments`,
       method: "POST",
       data,
@@ -18,9 +22,9 @@ class PunishmentService {
   }
 
   async updatePunishment(punishmentId: string, data: UpdatePunishment) {
-    return apiClient({
-      url: `/punishments/${punishmentId}`,
-      method: "PATCH", 
+    return apiClient<{ data: Punishment }>({
+      url: `/punishments/${punishmentId}/status`,
+      method: "PATCH",
       data,
     });
   }
