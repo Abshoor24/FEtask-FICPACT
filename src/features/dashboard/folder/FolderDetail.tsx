@@ -15,6 +15,7 @@ import {
   Folder as FolderIcon,
   Clock,
   Plus,
+  XCircle,
 } from "lucide-react";
 import { useGetFolderById } from "@/data/hooks/useFolder";
 import { useUpdateCompletedQuest } from "@/data/hooks/useQuest";
@@ -47,7 +48,7 @@ type FolderDetailResponse = {
   quests: Quest[];
 };
 
-type QuestUiStatus = "COMPLETED" | "IN_PROGRESS" | "LOCKED";
+type QuestUiStatus = "COMPLETED" | "IN_PROGRESS" | "LOCKED" | "FAILED";
 
 function formatTime(value?: string | null) {
   if (!value) return "-";
@@ -169,12 +170,19 @@ export default function FolderDetail() {
   const remaining = Math.max(totalCount - completedCount, 0);
   const isAllCompleted = totalCount > 0 && completedCount === totalCount;
 
-  const firstPendingIndex = quests.findIndex((q) => !q.isSuccess);
+  // Temukan quest pertama yang belum sukses dan belum kadaluwarsa
+  const firstActiveIndex = quests.findIndex((q) => {
+    if (q.isSuccess) return false;
+    if (q.deadLineAt && new Date(q.deadLineAt) < new Date()) return false;
+    return true;
+  });
 
   const getQuestStatus = (quest: Quest, index: number): QuestUiStatus => {
     if (quest.isSuccess) return "COMPLETED";
-    if (firstPendingIndex === -1) return "LOCKED";
-    return index === firstPendingIndex ? "IN_PROGRESS" : "LOCKED";
+    if (quest.deadLineAt && new Date(quest.deadLineAt) < new Date())
+      return "FAILED";
+    if (firstActiveIndex === -1) return "LOCKED";
+    return index === firstActiveIndex ? "IN_PROGRESS" : "LOCKED";
   };
 
   return (
@@ -299,6 +307,7 @@ export default function FolderDetail() {
                 const status = getQuestStatus(quest, index);
                 const isCompleted = status === "COMPLETED";
                 const isInProgress = status === "IN_PROGRESS";
+                const isFailed = status === "FAILED";
 
                 return (
                   <div
@@ -306,9 +315,11 @@ export default function FolderDetail() {
                     className={`group relative flex flex-col gap-4 overflow-hidden rounded-xl border bg-white p-5 shadow-sm transition-all hover:shadow-md sm:flex-row sm:items-center sm:justify-between ${
                       isCompleted
                         ? "border-emerald-200 bg-emerald-50/30"
-                        : isInProgress
-                          ? "border-gray-300"
-                          : "border-gray-200 opacity-75"
+                        : isFailed
+                          ? "border-red-200 bg-red-50/30"
+                          : isInProgress
+                            ? "border-gray-300"
+                            : "border-gray-200 opacity-75"
                     }`}
                     style={{
                       borderColor: isInProgress
@@ -334,6 +345,10 @@ export default function FolderDetail() {
                               className="fill-emerald-100"
                             />
                           </div>
+                        ) : isFailed ? (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600">
+                            <XCircle size={20} className="fill-red-100" />
+                          </div>
                         ) : isInProgress ? (
                           <div
                             className="flex h-10 w-10 items-center justify-center rounded-full shadow-sm"
@@ -358,7 +373,13 @@ export default function FolderDetail() {
                       {/* Quest Info */}
                       <div className="min-w-0 flex-1">
                         <h4
-                          className={`truncate text-lg font-semibold ${isCompleted ? "text-gray-600 line-through" : "text-gray-900"}`}
+                          className={`truncate text-lg font-semibold ${
+                            isCompleted
+                              ? "text-gray-600 line-through"
+                              : isFailed
+                                ? "text-red-700 line-through"
+                                : "text-gray-900"
+                          }`}
                         >
                           {quest.name}
                         </h4>
@@ -369,9 +390,11 @@ export default function FolderDetail() {
                             className={`inline-flex items-center rounded-md px-2 py-1 uppercase tracking-wide ${
                               isCompleted
                                 ? "bg-emerald-100 text-emerald-700"
-                                : isInProgress
-                                  ? "text-white shadow-sm"
-                                  : "bg-gray-100 text-gray-500"
+                                : isFailed
+                                  ? "bg-red-100 text-red-700"
+                                  : isInProgress
+                                    ? "text-white shadow-sm"
+                                    : "bg-gray-100 text-gray-500"
                             }`}
                             style={{
                               backgroundColor: isInProgress
@@ -381,9 +404,11 @@ export default function FolderDetail() {
                           >
                             {isCompleted
                               ? "Selesai"
-                              : isInProgress
-                                ? "Sedang Jalan"
-                                : "Terkunci"}
+                              : isFailed
+                                ? "Kadaluwarsa"
+                                : isInProgress
+                                  ? "Sedang Jalan"
+                                  : "Terkunci"}
                           </span>
 
                           {/* Deadline / Time Info */}
@@ -392,9 +417,11 @@ export default function FolderDetail() {
                               <Clock size={12} />
                               {isCompleted
                                 ? `Selesai: ${formatDeadline(quest.completedAt)}`
-                                : quest.deadLineAt
-                                  ? `Tenggat: ${formatDeadline(quest.deadLineAt)}`
-                                  : "Tidak ada tenggat"}
+                                : isFailed
+                                  ? `Terlewat: ${formatDeadline(quest.deadLineAt)}`
+                                  : quest.deadLineAt
+                                    ? `Tenggat: ${formatDeadline(quest.deadLineAt)}`
+                                    : "Tidak ada tenggat"}
                             </span>
                           )}
 
