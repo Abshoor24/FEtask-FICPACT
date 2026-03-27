@@ -16,9 +16,10 @@ import PunishmentModal from "./modals/PunishmentModal";
 interface AddTaskDrawerProps {
   open: boolean;
   onClose: () => void;
+  folderId?: string
 }
 
-export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
+export default function AddTaskDrawer({ open, onClose, folderId }: AddTaskDrawerProps) {
   const { data: foldersData } = useGetUserAvailableFolders();
   const { mutate: createQuestMutate, isPending } = useCreateQuest();
   const invalidateQuery = useQueryClient();
@@ -61,6 +62,11 @@ export default function AddTaskDrawer({ open, onClose }: AddTaskDrawerProps) {
             form.reset();
             toast.success("Quest created successfully!");
 
+            if (folderId) {
+              invalidateQuery.invalidateQueries({
+                queryKey: ["get_folder_by_id", folderId],
+              });
+            }
             invalidateQuery.invalidateQueries({
               queryKey: ["get_user_quests"],
             });
