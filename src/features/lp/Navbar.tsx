@@ -3,6 +3,7 @@
 import React from "react";
 import QuestButton from "../../components/Button";
 import Link from "next/link";
+import Image from "next/image";
 import { SessionModel } from "@/data/models/sessionModel";
 
 interface Props {
@@ -26,8 +27,8 @@ export default function Navbar({ session }: Props) {
               className="flex cursor-pointer items-center gap-2"
               onClick={() => scrollTo("home")}
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C3BED] font-bold text-white">
-                T
+              <div className="flex h-8 w-8 items-center justify-center">
+                <Image src="/icon.png" width={32} height={32} alt="Logo" className="drop-shadow-sm" />
               </div>
               <span className="text-lg font-semibold text-black">
                 TaskQuest
