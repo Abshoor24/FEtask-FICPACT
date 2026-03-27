@@ -1,4 +1,5 @@
 import { Lock, Shield } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/components/motion";
@@ -14,8 +15,8 @@ export default function ForgotPasswordLeftSection() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-          <Shield className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-center">
+          <Image src="/icon.png" width={32} height={32} alt="TaskQuest Logo" className="drop-shadow-lg" />
         </div>
         <span className="text-xl lg:text-2xl font-bold text-white">
           TaskQuest

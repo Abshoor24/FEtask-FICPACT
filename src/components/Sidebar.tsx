@@ -110,7 +110,7 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
           <Image src="/icon.png" width={40} height={40} alt="Logo" />
 
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">TaskMaster</h1>
+            <h1 className="text-lg font-semibold text-gray-900">TaskQuest</h1>
             <p className="text-xs text-[#7C3BED]">Productivity Hub</p>
           </div>
 

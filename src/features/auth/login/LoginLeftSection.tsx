@@ -36,8 +36,8 @@ export default function LoginLeftSection() {
             >
                 {/* Logo */}
                 <motion.div className="flex items-center gap-3 mb-12" variants={fadeUp}>
-                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                        <Sword className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 flex items-center justify-center">
+                        <Image src="/icon.png" width={40} height={40} alt="TaskQuest Logo" className="drop-shadow-lg" />
                     </div>
                     <span className="text-3xl font-bold text-white">TaskQuest</span>
                 </motion.div>
