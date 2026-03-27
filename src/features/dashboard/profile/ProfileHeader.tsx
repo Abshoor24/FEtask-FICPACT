@@ -13,8 +13,8 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     : 0;
 
   return (
-    <div className="flex items-center gap-6">
-<div className="relative w-24 h-24 rounded-full border-2 border-[#7C3BED] flex items-center justify-center">
+    <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 text-center md:text-left">
+<div className="relative shrink-0 w-24 h-24 rounded-full border-2 border-[#7C3BED] flex items-center justify-center">
   {user.profile?.avatar ? (
     <Image  
       src={user.profile?.avatar}
@@ -40,7 +40,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
           Guardian Level {user.level} • {user.isVerified ? "Terverifikasi" : "Belum Verifikasi"}
         </p>
 
-        <div className="mt-3 w-[320px]">
+        <div className="mt-4 w-full md:w-[320px]">
           <div className="flex justify-between text-xs mb-1 text-gray-500">
             <span>Experience Points</span>
             <span>{user.currentExp} / {user.expToNextLevel} XP</span>

@@ -13,6 +13,8 @@ import {
   Mic,
   Trophy,
   Bell,
+  Menu,
+  X,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -45,11 +47,12 @@ interface VoiceProps {
 }
 
 export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
-  const { data: user } = useGetProfile()
+  const { data: user } = useGetProfile();
   const router = useRouter();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
   const [mounted, setMounted] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleLogout = () => {
     logout(undefined, {
@@ -58,13 +61,30 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
       },
       onError: (err) => {
         toast.error(err.message || "Gagal logout. Silakan coba lagi.");
-      }
-    })
-  }
+      },
+    });
+  };
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Close sidebar on route change (mobile)
+  React.useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile sidebar is open
+  React.useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   const menuItems: MenuItem[] = [
     { name: "All Tasks", icon: LayoutGrid, path: "/dashboard" },
@@ -80,24 +100,9 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
     { name: "Profile", icon: User, path: "/dashboard/profile" },
   ];
 
-  if (!mounted) {
-    return (
-      <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
-        <div>
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 bg-gray-100 animate-pulse rounded-lg" />
-            <div>
-              <div className="h-4 w-24 bg-gray-100 animate-pulse rounded mb-1" />
-              <div className="h-3 w-16 bg-gray-100 animate-pulse rounded" />
-            </div>
-          </div>
-        </div>
-      </aside>
-    );
-  }
-
-  return (
-    <aside className="w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6">
+  /* ── Sidebar content (shared between mobile & desktop) ── */
+  const sidebarContent = (
+    <>
       {/* TOP */}
       <div>
         {/* Logo */}
@@ -108,6 +113,15 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
             <h1 className="text-lg font-semibold text-gray-900">TaskMaster</h1>
             <p className="text-xs text-[#7C3BED]">Productivity Hub</p>
           </div>
+
+          {/* Close button – mobile only */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="ml-auto lg:hidden p-1.5 rounded-lg hover:bg-gray-100 transition"
+            aria-label="Close sidebar"
+          >
+            <X size={20} className="text-gray-500" />
+          </button>
         </div>
 
         {/* MENU */}
@@ -233,31 +247,111 @@ export default function Sidebar({ onAdd, onVoiceClick }: VoiceProps) {
             unoptimized
             className="w-9 h-9 rounded-full"
           />
-          <p className="text-sm font-semibold text-gray-900">{user?.data.profile?.name || "Guardian"}</p>
+          <p className="text-sm font-semibold text-gray-900">
+            {user?.data.profile?.name || "Guardian"}
+          </p>
         </Link>
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <div className="cursor-pointer flex items-center gap-2 p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors group">
-              <LogOut size={16} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+              <LogOut
+                size={16}
+                className="text-gray-400 group-hover:text-red-500 transition-colors"
+              />
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Konfirmasi Logout</AlertDialogTitle>
               <AlertDialogDescription>
-                Apakah kamu yakin ingin keluar dari akun ini? Kamu harus login kembali untuk mengakses tugas-tugasmu.
+                Apakah kamu yakin ingin keluar dari akun ini? Kamu harus login
+                kembali untuk mengakses tugas-tugasmu.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Batal</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleLogout()} className="bg-red-500 hover:bg-red-600 text-white">
+              <AlertDialogAction
+                onClick={() => handleLogout()}
+                className="bg-red-500 hover:bg-red-600 text-white"
+              >
                 Keluar
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </aside>
+    </>
+  );
+
+  /* ── Loading skeleton (same structure) ── */
+  if (!mounted) {
+    return (
+      <>
+        {/* Mobile toggle */}
+        <button
+          className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white shadow-md border border-gray-200"
+          aria-label="Open sidebar"
+        >
+          <Menu size={22} className="text-gray-700" />
+        </button>
+
+        {/* Desktop skeleton */}
+        <aside className="hidden lg:flex w-72 h-screen bg-white border-r flex-col justify-between px-5 py-6 shrink-0">
+          <div>
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 bg-gray-100 animate-pulse rounded-lg" />
+              <div>
+                <div className="h-4 w-24 bg-gray-100 animate-pulse rounded mb-1" />
+                <div className="h-3 w-16 bg-gray-100 animate-pulse rounded" />
+              </div>
+            </div>
+          </div>
+        </aside>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {/* ═══════ Mobile hamburger button ═══════ */}
+      <button
+        onClick={() => setMobileOpen(true)}
+        className={clsx(
+          "fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white shadow-md border border-gray-200 transition-all duration-300",
+          mobileOpen && "opacity-0 pointer-events-none"
+        )}
+        aria-label="Open sidebar"
+      >
+        <Menu size={22} className="text-gray-700" />
+      </button>
+
+      {/* ═══════ Mobile overlay ═══════ */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
+          mobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* ═══════ Mobile sidebar (slide-in drawer) ═══════ */}
+      <aside
+        className={clsx(
+          "fixed top-0 left-0 z-50 w-72 h-screen bg-white border-r flex flex-col justify-between px-5 py-6 transition-transform duration-300 ease-in-out lg:hidden",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {sidebarContent}
+      </aside>
+
+      {/* ═══════ Desktop sidebar (always visible) ═══════ */}
+      <aside className="hidden lg:flex w-72 h-screen bg-white border-r flex-col justify-between px-5 py-6 shrink-0">
+        {sidebarContent}
+      </aside>
+    </>
   );
 }

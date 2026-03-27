@@ -20,9 +20,9 @@ export default function FolderContent() {
 
   return (
     <>
-      <div className="h-full overflow-y-auto px-10 py-8">
+      <div className="h-full overflow-y-auto px-4 md:px-10 py-6 md:py-8">
         {/* ── HEADER ── */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Folders</h1>
             <p className="text-sm text-gray-500">
@@ -32,26 +32,28 @@ export default function FolderContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             {/* SEARCH */}
-            <div className="flex h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm text-gray-500">
-              <Search size={16} />
+            <div className="flex w-full sm:w-auto sm:flex-1 h-10 shrink-0 items-center gap-2 rounded-lg border bg-white px-3 text-sm text-gray-500">
+              <Search size={16} className="shrink-0" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Cari folder..."
-                className="bg-transparent outline-none w-40"
+                className="bg-transparent outline-none w-full min-w-0"
               />
             </div>
 
             {/* ADD FOLDER BUTTON */}
-            <button
-              onClick={() => setOpenAddFolder(true)}
-              className="flex h-10 items-center gap-2 rounded-lg bg-[#7C3BED] px-4 text-sm font-medium text-white transition hover:bg-[#6B2FDB]"
-            >
-              <Plus size={18} />
-              New Folder
-            </button>
+            <div className="shrink-0 flex items-center justify-end">
+              <button
+                onClick={() => setOpenAddFolder(true)}
+                className="flex h-10 items-center justify-center gap-2 rounded-lg bg-[#7C3BED] px-4 text-sm font-medium text-white transition hover:bg-[#6B2FDB]"
+              >
+                <Plus size={18} />
+                New Folder
+              </button>
+            </div>
           </div>
         </div>
 

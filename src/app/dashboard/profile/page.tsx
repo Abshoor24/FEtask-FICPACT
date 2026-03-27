@@ -16,7 +16,7 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <main className="flex-1 px-10 py-8 space-y-6">
+      <main className="flex-1 px-4 md:px-10 py-6 md:py-8 space-y-6">
         <div className="h-28 rounded-2xl bg-gray-200 animate-pulse" />
         <div className="h-32 rounded-2xl bg-gray-200 animate-pulse" />
         <div className="h-40 rounded-2xl bg-gray-200 animate-pulse" />
@@ -26,7 +26,7 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <main className="flex-1 px-10 py-8">
+      <main className="flex-1 px-4 md:px-10 py-6 md:py-8">
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
           Data profile tidak ditemukan.
         </div>
@@ -36,7 +36,7 @@ export default function ProfilePage() {
 
   return (
     <motion.main
-      className="flex-1 px-10 py-8 space-y-10"
+      className="flex-1 px-4 md:px-10 py-6 md:py-8 space-y-10"
       variants={stagger}
       initial="hidden"
       animate="show"

@@ -114,7 +114,7 @@ export default function NotificationContent() {
   ];
 
   return (
-    <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-10 py-8 gap-5">
+    <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-4 md:px-10 py-6 md:py-8 gap-5">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
@@ -133,7 +133,7 @@ export default function NotificationContent() {
       </div>
 
       {/* FILTER TABS */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {tabs.map((tab) => (
           <button
             key={tab.key}

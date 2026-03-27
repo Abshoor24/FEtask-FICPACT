@@ -165,9 +165,9 @@ const LeaderboardContent = () => {
         <div className="max-w-5xl mx-auto p-4 md:p-8">
             {/* Header */}
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Papan Peringkat Guardian</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2">Kompetisi persahabatan antar pelajar TaskQuest. Terus selesaikan tugasmu!</p>
+                <div className="w-full">
+                    <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Papan Peringkat Guardian</h2>
+                    <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">Kompetisi persahabatan antar pelajar TaskQuest. Terus selesaikan tugasmu!</p>
                 </div>
                 {isLoading && (
                     <div className="flex items-center gap-2 text-violet-600 font-medium">
@@ -189,7 +189,7 @@ const LeaderboardContent = () => {
                                 key={t}
                                 onClick={() => setFilter(t)}
                                 className={`
-                                    px-6 py-2 text-sm font-bold flex-1 md:flex-none transition-all duration-200
+                                    px-3 md:px-6 py-2 text-xs md:text-sm font-bold flex-1 md:flex-none whitespace-nowrap transition-all duration-200
                                     ${filter === t
                                         ? 'bg-white dark:bg-slate-700 shadow-sm rounded-lg text-violet-600'
                                         : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}
@@ -200,13 +200,13 @@ const LeaderboardContent = () => {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 w-full sm:w-72">
-                        <Search className="w-4 h-4 text-slate-400" />
+                    <div className="flex w-full sm:w-72 sm:flex-1 shrink-0 items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                        <Search className="w-4 h-4 text-slate-400 shrink-0" />
                         <input
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Cari Guardian..."
-                            className="w-full bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 outline-none"
+                            className="w-full min-w-0 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 outline-none"
                         />
                     </div>
                 </div>
@@ -224,24 +224,24 @@ const LeaderboardContent = () => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Peringkat</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Level</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">EXP</th>
+                                <th className="px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider">Peringkat</th>
+                                <th className="px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian</th>
+                                <th className="px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Level</th>
+                                <th className="px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider text-right">EXP</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {isLoading ? (
                                 [1, 2, 3, 4, 5].map((i) => (
                                     <tr key={i}>
-                                        <td colSpan={4} className="px-6 py-4">
+                                        <td colSpan={4} className="px-3 md:px-6 py-3 md:py-4">
                                             <div className="h-8 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg" />
                                         </td>
                                     </tr>
                                 ))
                             ) : leaderboardData.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="px-6 py-12 text-center text-slate-400 italic">
+                                    <td colSpan={4} className="px-3 md:px-6 py-8 md:py-12 text-center text-sm text-slate-400 italic">
                                         Belum ada data peringkat untuk periode ini
                                     </td>
                                 </tr>
@@ -256,13 +256,13 @@ const LeaderboardContent = () => {
                                                 : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/50'}
                                         `}
                                     >
-                                        <td className={`px-6 py-4 font-bold text-lg ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 text-xl font-black' : 'text-slate-700 dark:text-slate-300'}`}>
+                                        <td className={`px-3 md:px-6 py-3 md:py-4 font-bold ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 text-lg md:text-xl font-black' : 'text-slate-700 dark:text-slate-300 text-base md:text-lg'}`}>
                                             #{user.rank}
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
+                                        <td className="px-3 md:px-6 py-3 md:py-4 min-w-0">
+                                            <div className="flex items-center gap-2 md:gap-3">
                                                 <div className={`
-                                                    w-10 h-10 rounded-full overflow-hidden flex items-center justify-center
+                                                    shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden flex items-center justify-center
                                                     ${user.profile.email === currentUser?.email ? 'bg-violet-600 border-2 border-violet-600' : 'bg-slate-200'}
                                                 `}>
                                                     {user.profile.avatar ? (
@@ -273,23 +273,23 @@ const LeaderboardContent = () => {
                                                         </span>
                                                     )}
                                                 </div>
-                                                <div>
-                                                    <span className={`block leading-tight font-semibold ${user.profile.email === currentUser?.email ? 'font-black text-slate-900 dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                                                <div className="min-w-0">
+                                                    <span className={`block truncate leading-tight font-semibold text-sm md:text-base ${user.profile.email === currentUser?.email ? 'font-black text-slate-900 dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
                                                         {user.profile.name || "Anonymous"}
                                                     </span>
                                                     {user.profile.email === currentUser?.email && (
-                                                        <span className="text-[10px] bg-violet-600 text-white px-1.5 py-0.5 rounded-full uppercase font-bold tracking-wider leading-none mt-1 inline-block">Anda</span>
+                                                        <span className="text-[9px] md:text-[10px] bg-violet-600 text-white px-1.5 md:px-2 py-0.5 rounded-full uppercase font-bold tracking-wider leading-none mt-1 inline-block">Anda</span>
                                                     )}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <span className={`px-3 py-1 rounded-lg text-sm font-medium ${user.profile.email === currentUser?.email ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
+                                        <td className="px-3 md:px-6 py-3 md:py-4 text-center">
+                                            <span className={`px-2 py-0.5 md:px-3 md:py-1 rounded-md md:rounded-lg text-xs md:text-sm font-medium ${user.profile.email === currentUser?.email ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                                                 Lvl {user.level}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <span className={`font-bold ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 font-black' : 'text-slate-900 dark:text-white'}`}>
+                                        <td className="px-3 md:px-6 py-3 md:py-4 text-right">
+                                            <span className={`block font-bold text-xs md:text-base whitespace-nowrap ${user.profile.email === currentUser?.email ? 'text-violet-600 dark:text-violet-400 font-black' : 'text-slate-900 dark:text-white'}`}>
                                                 {user.exp.toLocaleString()} EXP
                                             </span>
                                         </td>
@@ -303,8 +303,8 @@ const LeaderboardContent = () => {
 
             {/* Motivation Footer */}
             {myRankData && (
-                <div className="mt-8 p-6 bg-violet-50 dark:bg-violet-900/10 rounded-2xl flex flex-col md:flex-row items-center justify-between border border-violet-200 dark:border-violet-800/30 gap-4">
-                    <div className="flex items-center gap-4">
+                <div className="mt-8 p-6 bg-violet-50 dark:bg-violet-900/10 rounded-2xl flex flex-col md:flex-row items-center justify-between border border-violet-200 dark:border-violet-800/30 gap-6 text-center md:text-left">
+                    <div className="flex flex-col md:flex-row items-center gap-4">
                         <div className="size-12 rounded-full bg-violet-600 flex items-center justify-center text-white shrink-0">
                             <TrendingUp className="w-6 h-6" />
                         </div>
