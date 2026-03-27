@@ -9,6 +9,7 @@ export interface CreateUserReflection {
   questLevel: QuestLevel;
   questStatus: boolean;
   reasons: string[];
+  notificationId?: string;
 }
 
 export interface UserFailedReflection {

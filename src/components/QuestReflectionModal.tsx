@@ -20,6 +20,7 @@ interface QuestReflectionModalProps {
   mode: "success" | "failed";
   questId?: string;
   questSuccessed?: boolean;
+  notificationId?: string;
 }
 
 const LOCALSTORAGE_KEY = "reflection_last_choices_v2";
@@ -50,13 +51,12 @@ export default function QuestReflectionModal({
   mode,
   questId,
   questSuccessed,
+  notificationId,
 }: QuestReflectionModalProps) {
   const queryClient = useQueryClient();
 
-  const { mutate: createSuccess, isPending: creatingSuccess } =
+  const { mutate: createReflection, isPending: creatingReflection } =
     useCreateUserReflection();
-  const { mutate: createFailed, isPending: creatingFailed } =
-    useCreateUserFailed();
 
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [otherText, setOtherText] = useState<string>("");
@@ -68,7 +68,7 @@ export default function QuestReflectionModal({
   );
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const submitting = creatingSuccess || creatingFailed;
+  const submitting = creatingReflection;
 
   const reasonOptions =
     mode === "success" ? successReasonOptions : failedReasonOptions;
@@ -161,42 +161,28 @@ export default function QuestReflectionModal({
       return;
     }
 
-    if (mode === "success") {
-      const payload: CreateUserReflection = {
-        questId: questId ?? "",
-        questLevel: selectedDifficulty ?? "NORMAL",
-        questStatus: !!questSuccessed || mode === "success",
-        reasons: allReasons,
-      };
+    const payload: CreateUserReflection = {
+      questId: questId ?? "",
+      questLevel: selectedDifficulty ?? "NORMAL",
+      questStatus: !!questSuccessed || mode === "success",
+      reasons: allReasons,
+      notificationId: notificationId ?? "",
+    };
 
-      createSuccess(payload, {
-        onSuccess: () => {
-          persistChoices(selectedReasons, selectedDifficulty, otherText);
-          try {
-            queryClient.invalidateQueries({ queryKey: ["latest_reflection"] });
-          } catch (e) {}
-          setSuccessMessage("Refleksi berhasil disimpan! ✨");
-          setTimeout(() => close(), 1000);
-        },
-        onError: () => setValidationMessage("Gagal menyimpan. Coba lagi."),
-      });
-    } else {
-      const payload: UserFailedReflection = {
-        reasons: allReasons,
-        addOns: otherText?.trim() ? otherText.trim() : undefined,
-      };
-      createFailed(payload, {
-        onSuccess: () => {
-          persistChoices(selectedReasons, null, otherText);
-          try {
-            queryClient.invalidateQueries({ queryKey: ["latest_reflection"] });
-          } catch (e) {}
-          setSuccessMessage("Refleksi tersimpan. Tetap semangat! 💪");
-          setTimeout(() => close(), 1000);
-        },
-        onError: () => setValidationMessage("Gagal menyimpan. Coba lagi."),
-      });
-    }
+    createReflection(payload, {
+      onSuccess: () => {
+        persistChoices(selectedReasons, selectedDifficulty, otherText);
+        queryClient.invalidateQueries({ queryKey: ["latest_reflection"] });
+        setSuccessMessage("Refleksi berhasil disimpan! ✨");
+        setTimeout(() => close(), 1000);
+        if (notificationId) {
+          queryClient.invalidateQueries({
+            queryKey: ["get_notification", notificationId],
+          });
+        }
+      },
+      onError: () => setValidationMessage("Gagal menyimpan. Coba lagi."),
+    });
   };
 
   return (
