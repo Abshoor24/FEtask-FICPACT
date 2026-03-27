@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { punishmentService } from "@/data/services/punishmentService";
 import { CreatePunishment, UpdatePunishment } from "../models/punihsmentModel";
 
-export function usePunishment(punishmentId: string) {
+export function useGetPunishment(punishmentId: string) {
   return useQuery({
     queryKey: ["punishment", punishmentId],
     queryFn: () => punishmentService.getPunishment(punishmentId),
