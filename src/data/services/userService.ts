@@ -17,6 +17,14 @@ class UserService {
       method: "GET",
     });
   }
+
+  public async updateReflectionTime(days: number, hours: number) {
+    return await apiClient({
+      url: "/user/reflection-time",
+      method: "PATCH",
+      data: { days, hours },
+    });
+  }
 }
 
 export const userService = new UserService();

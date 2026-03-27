@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { userService } from "../services/userService";
 
 export const useUserProfile = () => {
@@ -14,5 +14,11 @@ export const useIsFirstReflection = () => {
     queryKey: ["is_first_reflection"],
     queryFn: userService.isFirstReflection,
     staleTime: 1000 * 60 * 3,
+  });
+};
+export const useUpdateReflectionTime = () => {
+  return useMutation({
+    mutationFn: ({ days, hours }: { days: number; hours: number }) =>
+      userService.updateReflectionTime(days, hours),
   });
 };
