@@ -72,7 +72,7 @@ export default function AddTaskDrawer({ open, onClose, folderId }: AddTaskDrawer
             });
 
             if (!res) return;
-            setSelectedQuestId(res.id);
+            setSelectedQuestId(res?.data.id);
             setIsPunishmentOpen(true);
           },
           onError: (err) => {

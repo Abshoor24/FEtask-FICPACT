@@ -1,6 +1,6 @@
 export interface GetPunishment {
-    punishmentId: string,
-}   
+  punishmentId: string;
+}
 
 export interface CreatePunishment {
   name: string;
@@ -9,5 +9,6 @@ export interface CreatePunishment {
 }
 
 export interface UpdatePunishment {
-    status: boolean;
+  status: boolean;
+  notificationId?: string;
 }
