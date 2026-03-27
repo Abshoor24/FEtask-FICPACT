@@ -211,7 +211,7 @@ export default function RegisterRightSection() {
               type="submit"
               className="relative w-full py-4 bg-violet-600 text-white rounded-xl font-bold text-base hover:bg-violet-700 transition hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-lg"
             >
-              {isPending ? "Loading..." : "Daftar & Mulai Ques"}
+              {isPending ? "Loading..." : "Daftar & Mulai Quest"}
             </button>
           </div>
         </motion.form>
@@ -262,7 +262,7 @@ export default function RegisterRightSection() {
           className="text-center text-sm text-slate-500"
           variants={fadeUp}
         >
-          Sudah punya guild?{" "}
+          Sudah punya akun?{" "}
           <Link
             href="/auth/login"
             className="font-bold text-violet-600 hover:text-violet-700 transition"
