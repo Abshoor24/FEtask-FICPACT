@@ -99,10 +99,10 @@ export default function UpcomingContent() {
 
   return (
     <>
-      <div className="h-full overflow-y-auto px-10 py-8">
+      <div className="h-full overflow-y-auto px-4 md:px-10 py-6 md:py-8">
         {/* ================= HEADER ================= */}
         <motion.div
-          className="flex items-center justify-between mb-8"
+          className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4"
           variants={stagger}
           initial="hidden"
           animate="show"
@@ -124,23 +124,25 @@ export default function UpcomingContent() {
           </motion.div>
 
           {/* RIGHT */}
-          <motion.div variants={fadeUp} className="flex items-center gap-3">
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             {/* SEARCH */}
-            <div className="flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-500 shadow-sm focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
-              <Search size={16} className="text-gray-400" />
+            <div className="flex w-full sm:w-auto sm:flex-1 h-10 shrink-0 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-500 shadow-sm focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+              <Search size={16} className="text-gray-400 shrink-0" />
               <input
                 placeholder="Cari quest..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent outline-none w-40 placeholder:text-gray-300"
+                className="bg-transparent outline-none w-full placeholder:text-gray-300 min-w-0"
               />
             </div>
 
             {/* ADD TASK BUTTON + VOICE BUTTON */}
-            <AddTaskButton
-              onClick={() => setOpen(true)}
-              onVoiceClick={() => setVoiceOpen(true)}
-            />
+            <div className="shrink-0 flex items-center justify-end">
+              <AddTaskButton
+                onClick={() => setOpen(true)}
+                onVoiceClick={() => setVoiceOpen(true)}
+              />
+            </div>
           </motion.div>
         </motion.div>
 

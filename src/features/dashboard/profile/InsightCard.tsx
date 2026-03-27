@@ -43,7 +43,7 @@ export default function InsightCard({ user }: InsightCardProps) {
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="max-w-md bg-linear-to-br from-[#7C3BED] to-purple-500 text-white rounded-2xl p-6"
+      className="w-full max-w-md bg-linear-to-br from-[#7C3BED] to-purple-500 text-white rounded-2xl p-6"
     >
       <h3 className="font-semibold mb-2">Insight AI Pertama</h3>
 

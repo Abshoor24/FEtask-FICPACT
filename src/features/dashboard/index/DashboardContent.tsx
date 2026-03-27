@@ -66,9 +66,9 @@ export default function DashboardContent() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-10 py-8 gap-5">
+      <div className="flex flex-col w-full h-full justify-start overflow-y-auto px-4 md:px-10 py-6 md:py-8 gap-5">
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-4">
           {/* LEFT */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">All Tasks</h1>
@@ -78,21 +78,23 @@ export default function DashboardContent() {
           </div>
 
           {/* RIGHT */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             {/* SEARCH */}
-            <div className="flex h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm text-gray-500">
+            <div className="flex w-full sm:w-auto sm:flex-1 h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm text-gray-500 shrink-0">
               <Search size={16} />
               <input
                 placeholder="Search tasks..."
-                className="bg-transparent outline-none"
+                className="bg-transparent outline-none w-full"
               />
             </div>
 
             {/* ADD TASK BUTTON + VOICE BUTTON */}
-            <AddTaskButton
-              onClick={() => setOpen(true)}
-              onVoiceClick={() => setVoiceOpen(true)}
-            />
+            <div className="shrink-0 flex items-center justify-end">
+              <AddTaskButton
+                onClick={() => setOpen(true)}
+                onVoiceClick={() => setVoiceOpen(true)}
+              />
+            </div>
           </div>
         </div>
         {/* First-reflection alert (shows once after completing first quest) */}
