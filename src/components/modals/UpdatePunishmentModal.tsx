@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShieldAlert, Check, X, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -8,11 +8,13 @@ import {
   useUpdatePunishment,
 } from "@/data/hooks/usePunishment";
 import { PunishmentStatus } from "@/data/models/punihsmentModel";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 interface UpdatePunishmentModalProps {
   punishmentModalOpen: boolean;
+  setPunishmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   punishmentId: string;
-  onClose: () => void;
   questName: string;
   notificationId: string;
 }
@@ -20,10 +22,11 @@ interface UpdatePunishmentModalProps {
 export function UpdatePunishmentModal({
   punishmentModalOpen,
   punishmentId,
-  onClose,
+  setPunishmentModalOpen,
   questName,
   notificationId,
 }: UpdatePunishmentModalProps) {
+  const queryClient = useQueryClient();
   const { data, isLoading } = useGetPunishment(punishmentId);
   const { mutate: updatePunishment, isPending: isUpdating } =
     useUpdatePunishment();
@@ -31,6 +34,10 @@ export function UpdatePunishmentModal({
   const [selectedStatus, setSelectedStatus] = useState<boolean | null>(null);
   const punishment = data?.data;
 
+  const onClose = () => {
+    setPunishmentModalOpen(false);
+  };
+  
   const handleSubmit = () => {
     if (selectedStatus === null) return;
 
@@ -44,7 +51,14 @@ export function UpdatePunishmentModal({
       },
       {
         onSuccess: () => {
-          // Parent component should handle closing the modal via state or refetch
+          if (notificationId) {
+            queryClient.invalidateQueries({
+              queryKey: ["get_notification", notificationId],
+            });
+          }
+        },
+        onError: () => {
+          toast.error("Gagal mengupdate Punishment");
         },
       },
     );
@@ -55,6 +69,11 @@ export function UpdatePunishmentModal({
   const isFailed = status === PunishmentStatus.FAILED;
   const isPending = !status || status === PunishmentStatus.PENDING;
 
+  useEffect(() => {
+    if (punishment?.status === "PENDING") {
+      setPunishmentModalOpen(true);
+    }
+  }, [setPunishmentModalOpen, punishment?.status]);
   return (
     <AnimatePresence>
       {punishmentModalOpen && (
@@ -71,7 +90,6 @@ export function UpdatePunishmentModal({
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="relative bg-white rounded-[2rem] p-6 sm:p-8 w-full max-w-[420px] shadow-2xl flex flex-col"
           >
-            
             {/* Close button */}
             {!isPending && (
               <button
