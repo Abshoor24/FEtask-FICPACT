@@ -184,6 +184,7 @@ export default function NotificationDetailContent({
         notificationId={notification?.id}
       />
       <UpdatePunishmentModal
+        isPunishmentType={notification?.type === "PUNISHMENT_REQUIRED"}
         punishmentModalOpen={punishmentModalOpen}
         setPunishmentModalOpen={setPunishmentModalOpen}
         punishmentId={notification?.data?.questId || ""}

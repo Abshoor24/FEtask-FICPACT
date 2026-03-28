@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 interface UpdatePunishmentModalProps {
+  isPunishmentType: boolean;
   punishmentModalOpen: boolean;
   setPunishmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   punishmentId: string;
@@ -25,6 +26,7 @@ export function UpdatePunishmentModal({
   setPunishmentModalOpen,
   questName,
   notificationId,
+  isPunishmentType,
 }: UpdatePunishmentModalProps) {
   const queryClient = useQueryClient();
   const { data, isLoading } = useGetPunishment(punishmentId);
@@ -37,7 +39,7 @@ export function UpdatePunishmentModal({
   const onClose = () => {
     setPunishmentModalOpen(false);
   };
-  
+
   const handleSubmit = () => {
     if (selectedStatus === null) return;
 
@@ -70,10 +72,11 @@ export function UpdatePunishmentModal({
   const isPending = !status || status === PunishmentStatus.PENDING;
 
   useEffect(() => {
-    if (punishment?.status === "PENDING") {
+    if (punishment?.status === "PENDING" && isPunishmentType) {
       setPunishmentModalOpen(true);
     }
-  }, [setPunishmentModalOpen, punishment?.status]);
+  }, [punishment?.status, isPunishmentType, setPunishmentModalOpen]);
+
   return (
     <AnimatePresence>
       {punishmentModalOpen && (
