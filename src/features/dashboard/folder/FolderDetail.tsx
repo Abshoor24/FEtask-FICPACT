@@ -97,22 +97,13 @@ export default function FolderDetail() {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError, refetch } = useGetFolderById(folderId);
-  const {
-    mutate: updateCompleteQuestMutate,
-    isPending,
-    isSuccess,
-  } = useUpdateCompletedQuest();
-
-  useEffect(() => {
-    if (isSuccess) {
-      refetch();
-    }
-  }, [isSuccess]);
+  const { mutate: updateCompleteQuestMutate, isPending } = useUpdateCompletedQuest();
 
   const handleCompleteQuest = (questId: string) => {
     if (isPending) return;
     updateCompleteQuestMutate(questId, {
       onSuccess: () => {
+        refetch();
         setReflectionQuestId(questId);
         setReflectionOpen(true);
         queryClient.invalidateQueries({ queryKey: ["is_first_reflection"] });

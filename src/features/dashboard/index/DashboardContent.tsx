@@ -52,6 +52,9 @@ export default function DashboardContent() {
       onSuccess: () => {
         // refresh quests list
         queryInvalidate.invalidateQueries({ queryKey: ["get_user_quests"] });
+        queryInvalidate.invalidateQueries({
+          queryKey: ["is_first_reflection"],
+        });
 
         // open reflection modal for this quest (success flow)
         setReflectionMode("success");
